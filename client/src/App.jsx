@@ -1,14 +1,14 @@
+import Sidebar from "./components/Sidebar";
+import Home1 from "./pages/Home";
+
 
 
 export default function App() {
   return (
     <>
-
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    <div>
-      
+    <div className="flex w-full">
+      <Sidebar/>
+      <Home1/>
     </div>
     </>
   )
