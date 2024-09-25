@@ -23,51 +23,7 @@ import {
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
 const Peoples = () => {
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ];
-  const {setOpenPersonForm} = useContext(Context)
+  const { setOpenPersonForm, storePeopleData } = useContext(Context);
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
       <div className="w-[94%] bg-white px-10 py-10">
@@ -100,9 +56,15 @@ const Peoples = () => {
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
-          <Button className={'bg-[#172332] flex gap-3'}><RefreshCw size={16} /> Refresh</Button>
-          <Button className={'bg-[#172332]'} onClick={() => setOpenPersonForm(true)} >Add New Person</Button>
-       
+          <Button className={"bg-[#172332] flex gap-3"}>
+            <RefreshCw size={16} /> Refresh
+          </Button>
+          <Button
+            className={"bg-[#172332]"}
+            onClick={() => setOpenPersonForm(true)}
+          >
+            Add New Person
+          </Button>
         </div>
         <Table className={"bg-white"}>
           <TableCaption>A list of your recent invoices.</TableCaption>
@@ -118,16 +80,20 @@ const Peoples = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="font-medium">1</TableCell>
-                <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                <TableCell>{invoice.paymentStatus}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
+            {storePeopleData.map((people,id) => (
+              <TableRow key={people._id}>
+                <TableCell className="font-medium">
+                  {id + 1}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {people.firstName}
+                </TableCell>
+                <TableCell>{people.lastName}</TableCell>
+                <TableCell>{people.company || "none" }</TableCell>
+                <TableCell>{people.country}</TableCell>
+                <TableCell>{people.phone}</TableCell>
                 <TableCell className="text-right">
-                  {invoice.totalAmount}
+                  {people.email}
                 </TableCell>
               </TableRow>
             ))}

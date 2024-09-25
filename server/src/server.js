@@ -2,6 +2,7 @@ import express from 'express'
 import 'dotenv/config'
 import connectingDb from './config/Db.js'
 import cors from "cors"
+import MainRoutes from './routes/Main.routes.js'
 const PORT = process.env.PORT || 4000
 
 const app = express()
@@ -15,6 +16,7 @@ app.use(
         allowedHeaders: ['Content-Type', 'Authorization'],
     })
 )
+MainRoutes(app)
 
 connectingDb().then(() => {
     app.listen(PORT, async (req, res) => {
