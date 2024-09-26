@@ -14,21 +14,24 @@ const ContextProvider = (props) => {
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState("");
   const [storePeopleData, setStorePeopleData] = useState([]);
-const [countryData,setCountryData] = useState([])
+  const [countryData, setCountryData] = useState([]);
   // ### PEOPLE FORM API ###
 
   // post
 
   const setPeople = async () => {
     try {
-      const result = await axios.post(`http://localhost:1337/api/form/`, {
-        firstName: firstName,
-        lastName: lastName,
-        company: company,
-        country: country,
-        phone: phone,
-        email: email,
-      });
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-people`,
+        {
+          firstName: firstName,
+          lastName: lastName,
+          company: company,
+          country: country,
+          phone: phone,
+          email: email,
+        }
+      );
       setOpenPersonForm(false);
       setFirstName("");
       setLastName("");
@@ -47,16 +50,31 @@ const [countryData,setCountryData] = useState([])
 
   const getPeople = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:1337/api/form/`);
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-people`
+      );
       setStorePeopleData(data.message);
     } catch (error) {
       console.log(error);
     }
   };
 
-//   ## GET COUNTRY
+  // delete
+  const deletePeople = async (id) => {
+    try {
+      const result = await axios.delete(
+        `http://localhost:1337/api/form/delete-people/${id}`
+      );
+      getPeople()
+      console.log("people delete SuccessFully !", result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-const getCountry = async () => {
+  //   ## GET COUNTRY
+
+  const getCountry = async () => {
     try {
       const response = await axios.get(`https://restcountries.com/v3.1/all`);
       setCountryData(response.data);
@@ -67,7 +85,7 @@ const getCountry = async () => {
 
   useEffect(() => {
     getPeople();
-    getCountry()
+    getCountry();
   }, []);
 
   const contextValue = {
@@ -88,7 +106,8 @@ const getCountry = async () => {
     setEmail,
     setPeople,
     storePeopleData,
-    countryData
+    countryData,
+    deletePeople
   };
 
   return (

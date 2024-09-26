@@ -1,15 +1,22 @@
 import React, { useContext } from "react";
 // import Image from "next/image"
 // import Link from "react-router-dom"
-import { RefreshCw, Search, UserRound } from "lucide-react";
+import { FilePenLine, RefreshCw, Search, Trash2, TvMinimal, UserRound } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbEllipsis,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,7 +30,8 @@ import {
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
 const Peoples = () => {
-  const { setOpenPersonForm, storePeopleData } = useContext(Context);
+  const { setOpenPersonForm, storePeopleData, deletePeople } =
+    useContext(Context);
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
       <div className="w-[94%] bg-white px-10 py-10">
@@ -67,7 +75,6 @@ const Peoples = () => {
           </Button>
         </div>
         <Table className={"bg-white"}>
-          <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow className={"bg-[#172332]"}>
               <TableHead className="w-[100px]">Sr.No</TableHead>
@@ -76,28 +83,53 @@ const Peoples = () => {
               <TableHead>Company</TableHead>
               <TableHead>Country</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead className="text-right">Email</TableHead>
+              <TableHead className="text-left">Email</TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {storePeopleData.map((people,id) => (
-              <TableRow key={people._id}>
-                <TableCell className="font-medium">
-                  {id + 1}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {people.firstName}
-                </TableCell>
-                <TableCell>{people.lastName}</TableCell>
-                <TableCell>{people.company || "none" }</TableCell>
-                <TableCell>{people.country}</TableCell>
-                <TableCell>{people.phone}</TableCell>
-                <TableCell className="text-right">
-                  {people.email}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+          {!storePeopleData.length ? (
+            <TableCaption className="w-full">NO DATA FOUND</TableCaption>
+          ) : (
+            <TableBody>
+              {storePeopleData.map((people,id) => {
+                return (
+                  <TableRow key={people._id}>
+                    <TableCell className="font-medium">{id + 1}</TableCell>
+                    <TableCell className="font-medium">
+                      {people.firstName}
+                    </TableCell>
+                    <TableCell>{people.lastName}</TableCell>
+                    <TableCell>{people.company || "none"}</TableCell>
+                    <TableCell>{people.country}</TableCell>
+                    <TableCell>{people.phone}</TableCell>
+                    <TableCell className="text-left">{people.email}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-1">
+                          <BreadcrumbEllipsis className="h-4 w-4" />
+                          <span className="sr-only">Toggle menu</span>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                          <DropdownMenuItem>
+                          <TvMinimal size={16} />
+                          Show</DropdownMenuItem>
+                          <DropdownMenuItem>
+                          <FilePenLine size={16} />
+                           Edit</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => deletePeople(people._id)}
+                          >
+                          <Trash2 size={16} />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          )}
         </Table>
       </div>
     </div>
