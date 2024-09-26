@@ -1,7 +1,14 @@
 import React, { useContext } from "react";
 // import Image from "next/image"
 // import Link from "react-router-dom"
-import { FilePenLine, RefreshCw, Search, Trash2, TvMinimal, UserRound } from "lucide-react";
+import {
+  FilePenLine,
+  RefreshCw,
+  Search,
+  Trash2,
+  TvMinimal,
+  UserRound,
+} from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,7 +37,7 @@ import {
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
 const Peoples = () => {
-  const { setOpenPersonForm, storePeopleData, deletePeople } =
+  const { setOpenPersonForm, storePeopleData, deletePeople, getSinglePeople } =
     useContext(Context);
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
@@ -91,7 +98,7 @@ const Peoples = () => {
             <TableCaption className="w-full">NO DATA FOUND</TableCaption>
           ) : (
             <TableBody>
-              {storePeopleData.map((people,id) => {
+              {storePeopleData.map((people, id) => {
                 return (
                   <TableRow key={people._id}>
                     <TableCell className="font-medium">{id + 1}</TableCell>
@@ -111,15 +118,17 @@ const Peoples = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
                           <DropdownMenuItem>
-                          <TvMinimal size={16} />
-                          Show</DropdownMenuItem>
-                          <DropdownMenuItem>
-                          <FilePenLine size={16} />
-                           Edit</DropdownMenuItem>
+                            <TvMinimal size={16} />
+                            Show
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => getSinglePeople(people)}>
+                            <FilePenLine size={16} />
+                            Edit
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => deletePeople(people._id)}
                           >
-                          <Trash2 size={16} />
+                            <Trash2 size={16} />
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -37,7 +37,9 @@ const PeopleForm = () => {
     email,
     setEmail,
     setPeople,
-    countryData
+    countryData,
+    showButton,
+    updatePeople
   } = useContext(Context);
   
   // State for selected company
@@ -154,11 +156,20 @@ console.log(country,"AHmMAM")
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                   />
+                  {
+                    !showButton ?
                   <Button className="mt-10" onClick={() => {
                     setPeople();
                   }}>
                     Save
                   </Button>
+                  :
+                  <Button className="mt-10" onClick={() => {
+                    updatePeople();
+                  }}>
+                    Update
+                  </Button>
+                  }
                 </div>
                 <div className="relative mt-6 flex-1 px-4 sm:px-6">
                   {/* Your content */}
