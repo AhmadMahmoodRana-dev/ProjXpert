@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-// import Image from "next/image"
-// import Link from "react-router-dom"
+import React, { useContext, useState } from "react";
 import {
   FilePenLine,
+  Inbox,
   RefreshCw,
   Search,
   Trash2,
   TvMinimal,
-  UserRound,
 } from "lucide-react";
 import {
   Breadcrumb,
@@ -36,9 +34,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
+
 const Peoples = () => {
-  const { setOpenPersonForm, storePeopleData, deletePeople, getSinglePeople } =
-    useContext(Context);
+  const {
+    setOpenPersonForm,
+    deletePeople,
+    getSinglePeople,
+    getPeopleDetail,
+    filteredPeopleData,
+    searchTerm,
+    setSearchTerm,
+  } = useContext(Context);
+
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
       <div className="w-[94%] bg-white px-10 py-10">
@@ -54,7 +61,6 @@ const Peoples = () => {
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <li>aaaa</li>
-                  {/* <Link href="#">Orders</Link> */}
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -67,6 +73,8 @@ const Peoples = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -94,49 +102,57 @@ const Peoples = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!storePeopleData.length ? (
-            <TableCaption className="w-full">NO DATA FOUND</TableCaption>
+          {!filteredPeopleData.length ? (
+            <TableCaption className="w-full">
+              <Inbox size={40} />
+              NO DATA FOUND
+            </TableCaption>
           ) : (
             <TableBody>
-              {storePeopleData.map((people, id) => {
-                return (
-                  <TableRow key={people._id}>
-                    <TableCell className="font-medium">{id + 1}</TableCell>
-                    <TableCell className="font-medium">
-                      {people.firstName}
-                    </TableCell>
-                    <TableCell>{people.lastName}</TableCell>
-                    <TableCell>{people.company || "none"}</TableCell>
-                    <TableCell>{people.country}</TableCell>
-                    <TableCell>{people.phone}</TableCell>
-                    <TableCell className="text-left">{people.email}</TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center gap-1">
-                          <BreadcrumbEllipsis className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                          <DropdownMenuItem>
-                            <TvMinimal size={16} />
-                            Show
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => getSinglePeople(people)}>
-                            <FilePenLine size={16} />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => deletePeople(people._id)}
-                          >
-                            <Trash2 size={16} />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {filteredPeopleData.map((people, id) => (
+                <TableRow key={people._id}>
+                  <TableCell className="font-medium">{id + 1}</TableCell>
+                  <TableCell className="font-medium">
+                    {people.firstName}
+                  </TableCell>
+                  <TableCell>{people.lastName}</TableCell>
+                  <TableCell>{people.company || "none"}</TableCell>
+                  <TableCell>{people.country}</TableCell>
+                  <TableCell>{people.phone}</TableCell>
+                  <TableCell className="text-left">{people.email}</TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="flex items-center gap-1">
+                        <BreadcrumbEllipsis className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        <DropdownMenuItem
+                          className="flex gap-3"
+                          onClick={() => getPeopleDetail(people._id)}
+                        >
+                          <TvMinimal size={16} />
+                          Show
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="flex gap-3"
+                          onClick={() => getSinglePeople(people)}
+                        >
+                          <FilePenLine size={16} />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="flex gap-3"
+                          onClick={() => deletePeople(people._id)}
+                        >
+                          <Trash2 size={16} />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           )}
         </Table>

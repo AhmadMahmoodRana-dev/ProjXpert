@@ -41,9 +41,8 @@ const PeopleForm = () => {
     showButton,
     updatePeople
   } = useContext(Context);
-  
-  // State for selected company
-  // const [selectedCompany, setSelectedCompany] = useState('');
+  console.log(phone,"zero")
+
 console.log(country,"AHmMAM")
   return (
     <Dialog

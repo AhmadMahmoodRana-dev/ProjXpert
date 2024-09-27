@@ -7,6 +7,7 @@ const ContextProvider = (props) => {
   // ## PEOPLE
 
   const [openPersonForm, setOpenPersonForm] = useState(false);
+  const [openPersonDetail, setOpenPersonDetail] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [company, setCompany] = useState("");
@@ -17,6 +18,8 @@ const ContextProvider = (props) => {
   const [countryData, setCountryData] = useState([]);
   const [showButton, setShowButton] = useState(false);
   const [updateId, setUpdateId] = useState("");
+  const [personDetail,setPersonDetail] = useState({})
+  const [searchTerm, setSearchTerm] = useState("");
   // ### PEOPLE FORM API ###
 
   // post
@@ -125,6 +128,26 @@ const ContextProvider = (props) => {
     }
   };
 
+  // detailpageInfo
+const getPeopleDetail = async (id) =>{
+const result = await axios.get(`http://localhost:1337/api/form/get-single-people/${id}`)
+    setPersonDetail(result.data)
+    console.log(result.data)
+    setOpenPersonDetail(true)
+}
+
+// search
+
+const filteredPeopleData = storePeopleData.filter((people) => {
+  const fullName = `${people.firstName} ${people.lastName}`.toLowerCase();
+  return (
+    fullName.includes(searchTerm.toLowerCase()) ||
+    people.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    people.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    people.country?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+});
+
   //   ## GET COUNTRY
 
   const getCountry = async () => {
@@ -163,7 +186,13 @@ const ContextProvider = (props) => {
     deletePeople,
     showButton,
     getSinglePeople,
-    updatePeople
+    updatePeople,
+    openPersonDetail,
+     setOpenPersonDetail,
+     getPeopleDetail,
+     personDetail,
+     filteredPeopleData,
+     searchTerm,setSearchTerm
   };
 
   return (
