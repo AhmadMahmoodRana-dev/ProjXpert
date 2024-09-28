@@ -1,18 +1,18 @@
 import mongoose from 'mongoose'
 
-const PeopleSchema = new mongoose.Schema(
+const CompanySchema = new mongoose.Schema(
     {
-        firstName: {
+        name: {
             type: String,
             required: true,
             trim: true,
         },
-        lastName: {
+        contact: {
             type: String,
             required: true,
             trim: true,
         },
-        company: {
+        website: {
             type: String,
             default: "none",
             trim: true,
@@ -29,9 +29,9 @@ const PeopleSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
+            unique: true, 
             trim: true,
-            lowercase: true,
+            lowercase: true, 
             validate: {
                 validator: function (v) {
                     // Basic email validation regex
@@ -44,4 +44,4 @@ const PeopleSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-export const People = mongoose.model("People",PeopleSchema)
+export const Company = mongoose.model("Company",CompanySchema)
