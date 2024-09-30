@@ -34,18 +34,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
-import PeopleForm from "@/components/PeopleForm";
-import DetailShow from "@/components/DetailShow";
+import CompanyForm from "@/components/CompanyForm";
 
-const Peoples = () => {
+const Companies = () => {
   const {
-    setOpenPersonForm,
-    deletePeople,
-    getSinglePeople,
-    getPeopleDetail,
-    filteredPeopleData,
-    searchTerm,
-    setSearchTerm,
+    setOpenCompanyForm,
+    deleteCompany,
+    getSingleCompany,
+    getCompanyDetail,
+    filteredCompanyData,
+    cmpSearchTerm,
+    setCmpSearchTerm,
   } = useContext(Context);
 
   return (
@@ -75,8 +74,8 @@ const Peoples = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={cmpSearchTerm}
+              onChange={(e) => setCmpSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -86,7 +85,7 @@ const Peoples = () => {
           </Button>
           <Button
             className={"bg-[#172332]"}
-            onClick={() => setOpenPersonForm(true)}
+            onClick={() => setOpenCompanyForm(true)}
           >
             Add New Person
           </Button>
@@ -95,7 +94,7 @@ const Peoples = () => {
           <TableHeader>
             <TableRow className={"bg-[#172332]"}>
               <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Firstname</TableHead>
+              <TableHead>Firstname1</TableHead>
               <TableHead>Lastname</TableHead>
               <TableHead>Company</TableHead>
               <TableHead>Country</TableHead>
@@ -104,24 +103,24 @@ const Peoples = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!filteredPeopleData.length ? (
+          {!filteredCompanyData.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {filteredPeopleData.map((people, id) => (
-                <TableRow key={people._id}>
+              {filteredCompanyData.map((company, id) => (
+                <TableRow key={company._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
-                    {people.firstName}
+                    {company.name}
                   </TableCell>
-                  <TableCell>{people.lastName}</TableCell>
-                  <TableCell>{people.company || "none"}</TableCell>
-                  <TableCell>{people.country}</TableCell>
-                  <TableCell>{people.phone}</TableCell>
-                  <TableCell className="text-left">{people.email}</TableCell>
+                  <TableCell>{company.contact}</TableCell>
+                  <TableCell>{company.website || "none"}</TableCell>
+                  <TableCell>{company.country}</TableCell>
+                  <TableCell>{company.phone}</TableCell>
+                  <TableCell className="text-left">{company.email}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center gap-1">
@@ -131,21 +130,21 @@ const Peoples = () => {
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getPeopleDetail(people._id)}
+                          onClick={() => getCompanyDetail(company._id)}
                         >
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getSinglePeople(people)}
+                          onClick={() => getSingleCompany(company)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => deletePeople(people._id)}
+                          onClick={() => deleteCompany(company._id)}
                         >
                           <Trash2 size={16} />
                           Delete
@@ -159,10 +158,9 @@ const Peoples = () => {
           )}
         </Table>
       </div>
-      <PeopleForm/>
-      <DetailShow/>
+      <CompanyForm/>
     </div>
   );
 };
 
-export default Peoples;
+export default Companies;

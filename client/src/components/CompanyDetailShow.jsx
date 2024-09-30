@@ -1,3 +1,4 @@
+import { Context } from "@/context/Context";
 "use client";
 import { useContext } from "react";
 import {
@@ -7,19 +8,13 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { X } from "lucide-react";
-import { Context } from "@/context/Context";
-
-const DetailShow = () => {
-  const { setOpenPersonDetail, openPersonDetail, personDetail} =
+const CompanyDetailShow = () => {
+  const { companyDetail, openCompanyDetail, setOpenCompanyDetail } =
     useContext(Context);
-
   return (
-    <>
-
- 
     <Dialog
-      open={openPersonDetail}
-      onClose={setOpenPersonDetail}
+      open={openCompanyDetail}
+      onClose={setOpenCompanyDetail}
       className="relative z-10"
     >
       <DialogBackdrop
@@ -38,7 +33,7 @@ const DetailShow = () => {
                 <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
                   <button
                     type="button"
-                    onClick={() => setOpenPersonDetail(false)}
+                    onClick={() => setOpenCompanyDetail(false)}
                     className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                   >
                     <span className="absolute -inset-2.5" />
@@ -47,37 +42,37 @@ const DetailShow = () => {
                   </button>
                 </div>
               </TransitionChild>
-              
+
               <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl px-4">
                 <h1 className="text-2xl  font-bold italic mt-[-1rem] underline">
-                  PERSON DETAIL
+                  Company DETAIL
                 </h1>
                 <hr className="border border-gray-300 mt-6" />
-                <h1 className="mt-4 font-bold text-xl italic text-gray-600">{`${personDetail.firstName}${personDetail.lastName}`}</h1>
+                <h1 className="mt-4 font-bold text-xl italic text-gray-600">{`${companyDetail.name}$`}</h1>
                 <hr className="border border-gray-300 mt-6" />
                 <div className="flex flex-col justify-around w-full h-[50%] mt-10">
                   <div className="flex  items-center gap-4">
                     <label className="block text-md font-bold italic text-gray-700 min-w-[100px] max-w-[100px]">
-                      First Name:
+                      Name:
                     </label>
                     <p className=" text-lg font-bold italic text-gray-600">
-                      {personDetail.firstName}
+                      {companyDetail.name}
                     </p>
                   </div>
                   <div className="flex  items-center gap-4">
                     <label className="block text-md font-bold italic text-gray-700 min-w-[100px] max-w-[100px]">
-                      Last Name:
+                      Contact:
                     </label>
                     <p className=" text-lg font-bold italic text-gray-600">
-                      {personDetail.lastName}
+                      {companyDetail.contact}
                     </p>
                   </div>
                   <div className="flex  items-center gap-4">
                     <label className="block text-md font-bold italic text-gray-700 min-w-[100px] max-w-[100px]">
-                      Company:
+                      website:
                     </label>
                     <p className=" text-lg font-bold italic text-gray-600">
-                      {personDetail.company || "Null"} 
+                      {companyDetail.website || "Null"}
                     </p>
                   </div>
                   <div className="flex  items-center gap-4">
@@ -85,7 +80,7 @@ const DetailShow = () => {
                       Country:
                     </label>
                     <p className=" text-lg font-bold italic text-gray-600">
-                      {personDetail.country}
+                      {companyDetail.country}
                     </p>
                   </div>
                   <div className="flex  items-center gap-4">
@@ -93,7 +88,7 @@ const DetailShow = () => {
                       Phone:
                     </label>
                     <p className=" text-lg font-bold italic text-gray-600">
-                      {personDetail.phone}
+                      {companyDetail.phone}
                     </p>
                   </div>
                   <div className="flex  items-center gap-4">
@@ -101,24 +96,17 @@ const DetailShow = () => {
                       Email:
                     </label>
                     <p className=" text-lg font-bold italic text-gray-600">
-                      {personDetail.email}
+                      {companyDetail.email}
                     </p>
                   </div>
-                  
                 </div>
-              </div> 
-              
+              </div>
             </DialogPanel>
           </div>
         </div>
       </div>
-    </Dialog> 
-    
-    
-     
-    </>
-    
+    </Dialog>
   );
 };
 
-export default DetailShow;
+export default CompanyDetailShow;
