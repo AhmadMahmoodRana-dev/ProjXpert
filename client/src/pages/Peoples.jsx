@@ -88,7 +88,7 @@ const Peoples = () => {
             className={"bg-[#172332]"}
             onClick={() => setOpenPersonForm(true)}
           >
-            Add New Person
+            Add Person
           </Button>
         </div>
         <Table className={"bg-white"}>

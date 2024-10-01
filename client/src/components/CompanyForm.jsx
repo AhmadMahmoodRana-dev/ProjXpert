@@ -1,12 +1,4 @@
 "use client";
-
-import {
-  Label,
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-} from "@headlessui/react";
 import { useContext, useState } from "react";
 import {
   Dialog,
@@ -15,10 +7,24 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
-import { CheckIcon, ChevronsUpDownIcon, X } from "lucide-react";
+import { Check, CheckIcon, ChevronsUpDown, ChevronsUpDownIcon, X } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
 import { Context } from "@/context/Context";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 const CompanyForm = () => {
   const {
@@ -41,7 +47,7 @@ const CompanyForm = () => {
     cmpShowButton,
     updateCompany
   } = useContext(Context);
-
+  const [open, setOpen] = useState(false)
   return (
     <Dialog
       open={openCompanyForm}
@@ -88,52 +94,53 @@ const CompanyForm = () => {
                     value={contact}
                   />
                   <DialogTitle>Country</DialogTitle>
-                  <Listbox value={cmpCountry} onChange={setCmpCountry}>
-                    <div className="relative mt-2">
-                      <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
-                        <span className="block truncate">
-                          {cmpCountry || "Select a company"}
-                        </span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                          <ChevronsUpDownIcon
-                            aria-hidden="true"
-                            className="h-5 w-5 text-gray-400"
-                          />
-                        </span>
-                      </ListboxButton>
-
-                      <ListboxOptions
-                        transition
-                        className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="w-full justify-between"
                       >
-                        {countryData.map((country) => (
-                          <ListboxOption
-                            key={country.cca3}
-                            className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
-                            value={country.name.common} 
-                          >
-                            <div className="flex items-center">
-                              <img
+                        {cmpCountry || "Select country..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search country..." />
+                        <CommandList>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {countryData.map((country) => (
+                              <CommandItem
+                                key={country.cca3}
+                                value={country.name.common}
+                                onSelect={(currentValue) => {
+                                  setCmpCountry(currentValue === country ? "" : currentValue);
+                                  setOpenCountryPopover(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    country === country.name.common ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                 <img
                                 src={country.flags.svg} alt={`${country.name.common} flag`}
                                 className="h-5 w-5 flex-shrink-0 rounded-full"
                               />
                               <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
                                 {country.name.common}
                               </span>
-                            </div>
-
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
-                              <CheckIcon
-                                aria-hidden="true"
-                                className="h-5 w-5"
-                              />
-                            </span>
-                          </ListboxOption>
-                          
-                        ))}
-                      </ListboxOptions>
-                    </div>
-                  </Listbox>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
 
                   <DialogTitle>Company</DialogTitle>
                   <Input

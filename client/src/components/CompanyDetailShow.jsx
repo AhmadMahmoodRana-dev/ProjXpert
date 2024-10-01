@@ -48,7 +48,7 @@ const CompanyDetailShow = () => {
                   Company DETAIL
                 </h1>
                 <hr className="border border-gray-300 mt-6" />
-                <h1 className="mt-4 font-bold text-xl italic text-gray-600">{`${companyDetail.name}$`}</h1>
+                <h1 className="mt-4 font-bold text-4xl italic text-gray-600">{`${companyDetail.name}`}</h1>
                 <hr className="border border-gray-300 mt-6" />
                 <div className="flex flex-col justify-around w-full h-[50%] mt-10">
                   <div className="flex  items-center gap-4">

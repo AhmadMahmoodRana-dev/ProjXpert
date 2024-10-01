@@ -87,16 +87,16 @@ const Companies = () => {
             className={"bg-[#172332]"}
             onClick={() => setOpenCompanyForm(true)}
           >
-            Add New Person
+            Add Company
           </Button>
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
             <TableRow className={"bg-[#172332]"}>
               <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Firstname1</TableHead>
-              <TableHead>Lastname</TableHead>
-              <TableHead>Company</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Contact</TableHead>
+              <TableHead>website</TableHead>
               <TableHead>Country</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead className="text-left">Email</TableHead>

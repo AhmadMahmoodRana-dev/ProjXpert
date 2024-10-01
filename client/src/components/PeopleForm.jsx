@@ -1,13 +1,3 @@
-"use client";
-
-import {
-  Label,
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-} from "@headlessui/react";
-import { useContext, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -15,11 +5,25 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
-import { CheckIcon, ChevronsUpDownIcon, X } from "lucide-react";
+import { cn } from "@/lib/utils"
+import { useContext, useState } from "react";
+import { ChevronsUpDown, Check, X } from "lucide-react";
 import { Context } from "@/context/Context";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
 const PeopleForm = () => {
   const {
     setOpenPersonForm,
@@ -39,12 +43,14 @@ const PeopleForm = () => {
     setPeople,
     countryData,
     showButton,
-    updatePeople
+    updatePeople,
+    storeCompanyData
   } = useContext(Context);
-  console.log(phone,"zero")
 
-console.log(country,"AHmMAM")
+  const [open, setOpen] = useState(false)
+  const [open1, setOpen1] = useState(false)
   return (
+
     <Dialog
       open={openPersonForm}
       onClose={setOpenPersonForm}
@@ -54,7 +60,6 @@ console.log(country,"AHmMAM")
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
       />
-
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
@@ -90,59 +95,104 @@ console.log(country,"AHmMAM")
                     value={lastName}
                   />
                   <DialogTitle>Country</DialogTitle>
-                  <Listbox value={country} onChange={setCountry}>
-                    <div className="relative mt-2">
-                      <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
-                        <span className="block truncate">
-                          {country || "Select a company"}
-                        </span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                          <ChevronsUpDownIcon
-                            aria-hidden="true"
-                            className="h-5 w-5 text-gray-400"
-                          />
-                        </span>
-                      </ListboxButton>
-
-                      <ListboxOptions
-                        transition
-                        className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  {/* Popover Component for Country Selection */}
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="w-full justify-between"
                       >
-                        {countryData.map((country) => (
-                          <ListboxOption
-                            key={country.cca3}
-                            className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
-                            value={country.name.common} 
-                          >
-                            <div className="flex items-center">
-                              <img
+                        {country || "Select country..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search country..." />
+                        <CommandList>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {countryData.map((country) => (
+                              <CommandItem
+                                key={country.cca3}
+                                value={country.name.common}
+                                onSelect={(currentValue) => {
+                                  setCountry(currentValue === country ? "" : currentValue);
+                                  setOpenCountryPopover(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    country === country.name.common ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                 <img
                                 src={country.flags.svg} alt={`${country.name.common} flag`}
                                 className="h-5 w-5 flex-shrink-0 rounded-full"
                               />
                               <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
                                 {country.name.common}
                               </span>
-                            </div>
-
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
-                              <CheckIcon
-                                aria-hidden="true"
-                                className="h-5 w-5"
-                              />
-                            </span>
-                          </ListboxOption>
-                          
-                        ))}
-                      </ListboxOptions>
-                    </div>
-                  </Listbox>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
 
                   <DialogTitle>Company</DialogTitle>
-                  <Input
-                    type="text"
-                    onChange={(e) => setCompany(e.target.value)}
-                    value={company}
-                  />
+                 
+                  <Popover open={open1} onOpenChange={setOpen1}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open1}
+                        className="w-full justify-between"
+                      >
+                        {company || "Select Company..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search country..." />
+                        <CommandList>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {storeCompanyData.map((company) => (
+                              <CommandItem
+                                key={company._id}
+                                value={company.name}
+                                onSelect={(currentValue) => {
+                                  setCompany(currentValue === company ? "" : currentValue);
+                                  setOpenCountryPopover(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    company === company.name ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                 <img
+                                src="akjsalksal" alt={`${company.name} flag`}
+                                className="h-5 w-5 flex-shrink-0 rounded-full"
+                              />
+                              <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
+                                {company.name}
+                              </span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <DialogTitle>Phone</DialogTitle>
                   <Input
                     type="number"
@@ -155,23 +205,15 @@ console.log(country,"AHmMAM")
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                   />
-                  {
-                    !showButton ?
-                  <Button className="mt-10" onClick={() => {
-                    setPeople();
-                  }}>
-                    Save
-                  </Button>
-                  :
-                  <Button className="mt-10" onClick={() => {
-                    updatePeople();
-                  }}>
-                    Update
-                  </Button>
-                  }
-                </div>
-                <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                  {/* Your content */}
+                  {!showButton ? (
+                    <Button className="mt-10" onClick={setPeople}>
+                      Save
+                    </Button>
+                  ) : (
+                    <Button className="mt-10" onClick={updatePeople}>
+                      Update
+                    </Button>
+                  )}
                 </div>
               </div>
             </DialogPanel>
