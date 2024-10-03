@@ -4,6 +4,7 @@ import Peoples from "./pages/Peoples";
 import Companies from "./pages/Companies";
 import CompanyDetailShow from "./components/CompanyDetailShow";
 import PrivateRoutes from "./pages/PrivateRoutes";
+import CustomerForm from "./components/CustomerForm";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           </Route>
         </Routes>
         <CompanyDetailShow />
+        <CustomerForm/>
       </div>
     </>
   );

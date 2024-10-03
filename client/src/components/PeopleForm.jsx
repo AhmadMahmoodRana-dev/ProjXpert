@@ -24,6 +24,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { Link } from "react-router-dom";
 const PeopleForm = () => {
   const {
     setOpenPersonForm,
@@ -161,7 +162,7 @@ const PeopleForm = () => {
                     <PopoverContent className="w-full p-0">
                       <Command>
                         <CommandInput placeholder="Search country..." />
-                        <CommandList>
+                        <CommandList className="flex justify-center">
                           <CommandEmpty>No country found.</CommandEmpty>
                           <CommandGroup>
                             {storeCompanyData.map((company) => (
@@ -188,6 +189,7 @@ const PeopleForm = () => {
                               </span>
                               </CommandItem>
                             ))}
+                           {/* <Link to={'/company'}> <Button>Add a Company</Button></Link> */}
                           </CommandGroup>
                         </CommandList>
                       </Command>

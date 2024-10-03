@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
-import { Check, CheckIcon, ChevronsUpDown, ChevronsUpDownIcon, X } from "lucide-react";
+import { Check, ChevronsUpDown,X } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -25,6 +25,7 @@ import { Context } from "@/context/Context";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 const CompanyForm = () => {
   const {
@@ -45,9 +46,11 @@ const CompanyForm = () => {
     setCompanies,
     countryData,
     cmpShowButton,
-    updateCompany
+    updateCompany,
+    storePeopleData
   } = useContext(Context);
   const [open, setOpen] = useState(false)
+  const [open1, setOpen1] = useState(false)
   return (
     <Dialog
       open={openCompanyForm}
@@ -88,11 +91,54 @@ const CompanyForm = () => {
                     value={name}
                   />
                   <DialogTitle>Contact</DialogTitle>
-                  <Input
-                    type="text"
-                    onChange={(e) => setContact(e.target.value)}
-                    value={contact}
-                  />
+                  <Popover open={open1} onOpenChange={setOpen1}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open1}
+                        className="w-full justify-between"
+                      >
+                        {contact || "Select Contact..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search country..." />
+                        <CommandList className="flex justify-center">
+                          <CommandEmpty>No Contact found.</CommandEmpty>
+                          <CommandGroup>
+                            {storePeopleData.map((contact) => (
+                              <CommandItem
+                                key={contact._id}
+                                value={`${contact.firstName}${contact.lastName}`}
+                                onSelect={(currentValue) => {
+                                  setContact(currentValue === contact ? "" : currentValue);
+                                  setOpenCountryPopover(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    contact === contact.firstName ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                 <img
+                                src="akjsalksal" alt={`${contact.firstName} flag`}
+                                className="h-5 w-5 flex-shrink-0 rounded-full"
+                              />
+                              <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
+                                {contact.firstName}
+                              </span>
+                              </CommandItem>
+                            ))}
+                           {/* <Link to={'/people'}> <Button>Add a Contact</Button></Link> */}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <DialogTitle>Country</DialogTitle>
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
@@ -142,7 +188,7 @@ const CompanyForm = () => {
                     </PopoverContent>
                   </Popover>
 
-                  <DialogTitle>Company</DialogTitle>
+                  <DialogTitle>Website</DialogTitle>
                   <Input
                     type="text"
                     onChange={(e) => setWebsite(e.target.value)}

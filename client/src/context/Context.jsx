@@ -5,6 +5,7 @@ export const Context = createContext();
 
 const ContextProvider = (props) => {
   const [countryData, setCountryData] = useState([]);
+  const [openCustomerForm, setOpenCustomerForm] = useState(true);
   // ## PEOPLE
 
   const [openPersonForm, setOpenPersonForm] = useState(false);
@@ -295,6 +296,20 @@ const ContextProvider = (props) => {
     );
   });
 
+  
+  //           #########################################################################################          //
+  // CUSTOMERS
+  const [customerPeople,setCustomerPeople] = useState("")
+  const [customerCompany,setCustomerCompany] = useState("")
+  const [type, setType] = useState("email");
+  
+  
+  //           #########################################################################################          //
+
+  //   ## LEAD
+
+
+  
   //           #########################################################################################          //
 
   //   ## GET COUNTRY
@@ -313,8 +328,8 @@ const ContextProvider = (props) => {
     getCompany();
     getCountry();
   }, []);
-
   const contextValue = {
+    // #######################
     // ## PEOPLE
     setOpenPersonForm,
     openPersonForm,
@@ -344,8 +359,8 @@ const ContextProvider = (props) => {
     filteredPeopleData,
     searchTerm,
     setSearchTerm,
-
-    // ## COMPANY FORM
+    // #######################
+    // ## COMPANY
     setOpenCompanyForm,
     openCompanyForm,
     name,
@@ -373,6 +388,23 @@ const ContextProvider = (props) => {
     filteredCompanyData,
     cmpSearchTerm,
     setCmpSearchTerm,
+
+    // #######################
+    // Customer
+    openCustomerForm,
+    setOpenCustomerForm,
+    customerPeople,
+    setCustomerPeople,
+    customerCompany,
+    setCustomerCompany,
+    type, 
+    setType,
+    storeCompanyData
+
+// #######################
+    // Lead
+
+
   };
 
   return (
