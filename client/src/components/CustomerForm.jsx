@@ -40,8 +40,8 @@ const CompanyForm = () => {
     setCustomerCompany
   } = useContext(Context);
   const [open1, setOpen1] = useState(false);
-  console.log(customerPeople, "customerPeople");
-  console.log(customerCompany, "customerCompany");
+  // console.log(customerPeople, "customerPeople");
+  // console.log(customerCompany, "customerCompany");
   return (
     <Dialog
       open={openCustomerForm}

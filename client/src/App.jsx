@@ -5,6 +5,7 @@ import Companies from "./pages/Companies";
 import CompanyDetailShow from "./components/CompanyDetailShow";
 import PrivateRoutes from "./pages/PrivateRoutes";
 import CustomerForm from "./components/CustomerForm";
+import Lead from "./pages/Lead";
 
 export default function App() {
   return (
@@ -15,10 +16,12 @@ export default function App() {
             <Route path="/" element={<Home1 />} />
             <Route path="/people" element={<Peoples />} />
             <Route path="/company" element={<Companies />} />
+            <Route path="/lead" element={<Lead />} />
           </Route>
         </Routes>
         <CompanyDetailShow />
         <CustomerForm/>
+        
       </div>
     </>
   );

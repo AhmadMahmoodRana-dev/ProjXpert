@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from "mongoose"
 
 const leadSchema = new mongoose.Schema(
     {
@@ -9,8 +9,8 @@ const leadSchema = new mongoose.Schema(
         type: {
             type: String,
             required: true,
-            enum: ['people,company'],
-            default: 'people',
+            enum: ['People','Company'],
+            default: 'People',
         },
         name: {
             type: String,
@@ -52,12 +52,22 @@ const leadSchema = new mongoose.Schema(
             required: true,
         },
         phone: {
-            type: String,
+            type: Number,
             required: true,
         },
-        email: {
+       email: {
             type: String,
             required: true,
+            unique: true, 
+            trim: true,
+            lowercase: true, 
+            validate: {
+                validator: function (v) {
+                    // Basic email validation regex
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+                },
+                message: (props) => `${props.value} is not a valid email!`,
+            },
         },
         project: {
             type: String,

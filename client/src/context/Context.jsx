@@ -5,7 +5,7 @@ export const Context = createContext();
 
 const ContextProvider = (props) => {
   const [countryData, setCountryData] = useState([]);
-  const [openCustomerForm, setOpenCustomerForm] = useState(true);
+  const [openCustomerForm, setOpenCustomerForm] = useState(false);
   // ## PEOPLE
 
   const [openPersonForm, setOpenPersonForm] = useState(false);
@@ -36,6 +36,21 @@ const ContextProvider = (props) => {
   const [cmpUpdateId, setCmpUpdateId] = useState("");
   const [companyDetail, setCompanyDetail] = useState({});
   const [cmpSearchTerm, setCmpSearchTerm] = useState("");
+
+  // ## LEAD
+  const [openLeadForm, setOpenLeadForm] = useState(false);
+  const [storeLeadData, setStoreLeadData] = useState([]);
+  const [leadFormData, setLeadFormData] = useState({
+    branch: "",
+    type: "",
+    name: "",
+    status: "",
+    source: "",
+    country: "",
+    phone: "",
+    email: "",
+    project: "",
+  });
 
   // ### PEOPLE FORM API ###
 
@@ -296,20 +311,89 @@ const ContextProvider = (props) => {
     );
   });
 
-  
   //           #########################################################################################          //
   // CUSTOMERS
-  const [customerPeople,setCustomerPeople] = useState("")
-  const [customerCompany,setCustomerCompany] = useState("")
+  const [customerPeople, setCustomerPeople] = useState("");
+  const [customerCompany, setCustomerCompany] = useState("");
   const [type, setType] = useState("email");
-  
-  
+
   //           #########################################################################################          //
 
-  //   ## LEAD
-
-
+  //   ## LEAD FORM APIS
   
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLeadFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSelectChange = (name, value) => {
+    setLeadFormData((prevData) => ({
+      ...prevData,
+      [name]: value, // Update the specific field by name
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitted Data:", leadFormData);
+    setLeads()
+    
+  };
+
+  // ## Get DATA
+  const getLeadData = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-lead`
+      );
+      setStoreLeadData(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log("lead data", storeLeadData);
+  // ## Post DATA
+
+  const setLeads = async () => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-lead`,
+        {
+          branch:leadFormData.branch,
+          type:leadFormData.type,
+          name:leadFormData.name,
+          status:leadFormData.status,
+          source:leadFormData.source,
+          country:leadFormData.country,
+          phone:leadFormData.phone,
+          email:leadFormData.email,
+          project:leadFormData.project
+        }
+      );
+      setOpenCompanyForm(false);
+      setLeadFormData({
+        branch: '',
+        type: '',
+        name: '',
+        status: '',
+        source: '',
+        country: '',
+        phone: '',
+        email: '',
+        project: ''
+      });
+      setOpenLeadForm(false)
+      getLeadData();
+      console.log("CompanyForm submitted", result);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+
+
   //           #########################################################################################          //
 
   //   ## GET COUNTRY
@@ -327,7 +411,14 @@ const ContextProvider = (props) => {
     getPeople();
     getCompany();
     getCountry();
+    getLeadData();
   }, []);
+
+
+
+
+
+
   const contextValue = {
     // #######################
     // ## PEOPLE
@@ -359,8 +450,10 @@ const ContextProvider = (props) => {
     filteredPeopleData,
     searchTerm,
     setSearchTerm,
+
     // #######################
     // ## COMPANY
+
     setOpenCompanyForm,
     openCompanyForm,
     name,
@@ -391,20 +484,26 @@ const ContextProvider = (props) => {
 
     // #######################
     // Customer
+
     openCustomerForm,
     setOpenCustomerForm,
     customerPeople,
     setCustomerPeople,
     customerCompany,
     setCustomerCompany,
-    type, 
+    type,
     setType,
-    storeCompanyData
+    storeCompanyData,
 
-// #######################
+    // #######################
     // Lead
-
-
+    
+    openLeadForm,
+    setOpenLeadForm,
+    storeLeadData,
+    handleChange,
+    handleSubmit,
+    handleSelectChange,
   };
 
   return (

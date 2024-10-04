@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { deletePeople, getPeople, getSinglePeople, postPeople, updatePeopleData } from "../controller/People.controller.js";
 import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompanyData } from "../controller/Company.controller.js";
+import { deleteLead, getLead, getSingleLead, postLead, updateLeadData } from "../controller/Lead.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -15,4 +16,10 @@ route.get("/get-single-company/:id",getSingleCompany)
 route.post("/post-company",postCompany)
 route.delete("/delete-company/:id",deleteCompany)
 route.put("/update-company/:id",updateCompanyData)
+// ## LEADS
+route.get("/get-lead",getLead)
+route.get("/get-single-lead/:id",getSingleLead)
+route.post("/post-lead",postLead)
+route.delete("/delete-lead/:id",deleteLead)
+route.put("/update-lead/:id",updateLeadData)
 export default route;
