@@ -37,15 +37,33 @@ import { cn } from "@/lib/utils";
 
 const LeadForm = () => {
   const {
+    countryData,
+    setLeadType,
+    setLeadBranch,
+    setLeadCountry,
+    setLeadEmail,
+    setLeadPhone,
+    setLeadProject,
+    setLeadName,
+    setLeadStatus,
+    setLeadSource,
+    leadBranch,
+    leadType,
+    leadCountry,
+    leadEmail,
+    leadPhone,
+    leadProject,
+    leadName,
+    leadStatus,
+    leadSource,
     openLeadForm,
     setOpenLeadForm,
-    leadFormData,
-    handleChange,
-    handleSubmit,
-    handleSelectChange,
-    countryData,
+    updateLead,
+    setLeads,
+    showLeadButton,
   } = useContext(Context);
   const [open, setOpen] = useState(false);
+  console.log(leadType);
   return (
     <Dialog
       open={openLeadForm}
@@ -78,16 +96,12 @@ const LeadForm = () => {
                 </div>
               </TransitionChild>
               <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                <form
-                  className="px-4 sm:px-6 flex flex-col gap-4"
-                  onSubmit={handleSubmit}
-                >
+                <form className="px-4 sm:px-6 flex flex-col gap-4">
                   <DialogTitle> Branch</DialogTitle>
-                  
+
                   <Select
-                    onValueChange={(value) => handleSelectChange("branch", value)}
-                    name="type"
-                    value={leadFormData?.branch}
+                     onValueChange={(value) => setLeadBranch(value)}  // Accept value directly
+                     value={leadBranch}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a Branch" />
@@ -101,9 +115,8 @@ const LeadForm = () => {
                   </Select>
                   <DialogTitle>Type</DialogTitle>
                   <Select
-                    onValueChange={(value) => handleSelectChange("type", value)}
-                    name="type"
-                    value={leadFormData?.type}
+                    onValueChange={(value) => setLeadType(value)}
+                    value={leadType}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a Type" />
@@ -119,17 +132,13 @@ const LeadForm = () => {
                   <DialogTitle>Name</DialogTitle>
                   <Input
                     type="text"
-                    onChange={handleChange}
-                    name="name"
-                    value={leadFormData?.name}
+                    onChange={(e) => setLeadName(e.target.value)}
+                    value={leadName}
                   />
                   <DialogTitle>Status</DialogTitle>
                   <Select
-                    onValueChange={(value) =>
-                      handleSelectChange("status", value)
-                    }
-                    name="status"
-                    value={leadFormData?.status}
+                    onValueChange={(value) => setLeadStatus(value)}
+                    value={leadStatus}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a Status" />
@@ -152,11 +161,8 @@ const LeadForm = () => {
                   </Select>
                   <DialogTitle>Source</DialogTitle>
                   <Select
-                    onValueChange={(value) =>
-                      handleSelectChange("source", value)
-                    }
-                    name="source"
-                    value={leadFormData?.source}
+                    onValueChange={(value) => setLeadSource(value)}
+                    value={leadSource}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a Source" />
@@ -193,8 +199,7 @@ const LeadForm = () => {
                         aria-expanded={open}
                         className="w-full justify-between"
                       >
-                        {leadFormData?.country || "Select country..."}
-                        {/* Access country from leadFormData */}
+                        {leadCountry || "Select country..."}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
@@ -204,35 +209,32 @@ const LeadForm = () => {
                         <CommandList>
                           <CommandEmpty>No country found.</CommandEmpty>
                           <CommandGroup>
-                            {countryData.map((countryItem) => (
+                            {countryData.map((country) => (
                               <CommandItem
-                                key={countryItem.cca3}
-                                value={countryItem.name.common}
+                                key={country.cca3}
+                                value={country.name.common}
                                 onSelect={(currentValue) => {
-                                  if (currentValue === leadFormData?.country) {
-                                    handleSelectChange("country"); 
-                                  } else {
-                                    handleSelectChange("country", currentValue); 
-                                  }
-                                  setOpen(false); 
+                                  setLeadCountry(
+                                    currentValue === country ? "" : currentValue
+                                  );
+                                  setOpenCountryPopover(false);
                                 }}
                               >
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    leadFormData?.country ===
-                                      countryItem.name.common
+                                    country === country.name.common
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
                                 />
                                 <img
-                                  src={countryItem.flags.svg}
-                                  alt={`${countryItem.name.common} flag`}
+                                  src={country.flags.svg}
+                                  alt={`${country.name.common} flag`}
                                   className="h-5 w-5 flex-shrink-0 rounded-full"
                                 />
                                 <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
-                                  {countryItem.name.common}
+                                  {country.name.common}
                                 </span>
                               </CommandItem>
                             ))}
@@ -245,29 +247,33 @@ const LeadForm = () => {
                   <DialogTitle>Phone</DialogTitle>
                   <Input
                     type="number"
-                    onChange={handleChange}
-                    name="phone"
-                    value={leadFormData?.phone}
+                    onChange={(e) => setLeadPhone(e.target.value)}
+                    value={leadPhone}
                   />
                   <DialogTitle>Email</DialogTitle>
                   <Input
                     type="email"
-                    onChange={handleChange}
-                    name="email"
-                    value={leadFormData?.email}
+                    onChange={(e) => setLeadEmail(e.target.value)}
+                    value={leadEmail}
                   />
                   <DialogTitle>Project</DialogTitle>
                   <textarea
-                    onChange={handleChange}
+                    onChange={(e) => setLeadProject(e.target.value)}
                     className="block w-full px-3 py-2 text-sm text-gray-700 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm sm:leading-5"
                     rows={5}
-                    name="project"
-                    value={leadFormData?.project}
+                    value={leadProject}
                   ></textarea>
-                  <Button>Submit</Button>
+                  {!showLeadButton ? (
+                    <Button className="mt-10" onClick={() => setLeads()}>
+                      Save
+                    </Button>
+                  ) : (
+                    <Button className="mt-10" onClick={() => updateLead()}>
+                      Update
+                    </Button>
+                  )}
                 </form>
-                <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                </div>
+                <div className="relative mt-6 flex-1 px-4 sm:px-6"></div>
               </div>
             </DialogPanel>
           </div>

@@ -83,3 +83,43 @@ export const updateLeadData = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+// app.get('/api/data', async (req, res) => {
+//     const { status } = req.query; // Get status from query parameters
+//     try {
+//         const data = await Data.find({ status });
+//         res.json(data);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Error retrieving data', error });
+//     }
+// });
+
+export const leadStatusFilter = async (req,res) =>{
+    const { status } = req.query; 
+        try {
+            const data = await Lead.find({ status });
+            res.json(data);
+        } catch (error) {
+            res.status(500).json({ message: 'Error retrieving data', error });
+        }
+}
+export const leadStatusUpdate= async (req,res) =>{
+    try {
+        const { leadId, newStatus } = req.body;
+    
+        // Find the lead by ID and update the status
+        const updatedLead = await Lead.findByIdAndUpdate(
+          leadId,
+          { status: newStatus },
+          { new: true }
+        );
+    
+        if (!updatedLead) {
+          return res.status(404).json({ message: "Lead not found" });
+        }
+    
+        res.json({ message: "Lead status updated successfully", lead: updatedLead });
+      } catch (error) {
+        res.status(500).json({ message: "Error updating lead status", error });
+      }
+}

@@ -6,6 +6,7 @@ import CompanyDetailShow from "./components/CompanyDetailShow";
 import PrivateRoutes from "./pages/PrivateRoutes";
 import CustomerForm from "./components/CustomerForm";
 import Lead from "./pages/Lead";
+import DragLeadSatus from "./pages/DragLeadSatus";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
             <Route path="/people" element={<Peoples />} />
             <Route path="/company" element={<Companies />} />
             <Route path="/lead" element={<Lead />} />
+            <Route path="/drag" element={<DragLeadSatus />} />
           </Route>
         </Routes>
         <CompanyDetailShow />

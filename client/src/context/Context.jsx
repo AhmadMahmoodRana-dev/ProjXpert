@@ -38,19 +38,18 @@ const ContextProvider = (props) => {
   const [cmpSearchTerm, setCmpSearchTerm] = useState("");
 
   // ## LEAD
+  const [leadBranch, setLeadBranch] = useState("");
+  const [leadType, setLeadType] = useState("");
+  const [leadName, setLeadName] = useState("");
+  const [leadStatus, setLeadStatus] = useState("");
+  const [leadSource, setLeadSource] = useState("");
+  const [leadCountry, setLeadCountry] = useState("");
+  const [leadPhone, setLeadPhone] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadProject, setLeadProject] = useState("");
   const [openLeadForm, setOpenLeadForm] = useState(false);
   const [storeLeadData, setStoreLeadData] = useState([]);
-  const [leadFormData, setLeadFormData] = useState({
-    branch: "",
-    type: "",
-    name: "",
-    status: "",
-    source: "",
-    country: "",
-    phone: "",
-    email: "",
-    project: "",
-  });
+  const [showLeadButton,setShowLeadButton] = useState(false)
 
   // ### PEOPLE FORM API ###
 
@@ -302,7 +301,7 @@ const ContextProvider = (props) => {
   // search
 
   const filteredCompanyData = storeCompanyData.filter((company) => {
-    const fullName = `${company.Name}`.toLowerCase();
+    const fullName = `${company.name}`.toLowerCase();
     return (
       fullName.includes(cmpSearchTerm.toLowerCase()) ||
       company.email?.toLowerCase().includes(cmpSearchTerm.toLowerCase()) ||
@@ -320,29 +319,9 @@ const ContextProvider = (props) => {
   //           #########################################################################################          //
 
   //   ## LEAD FORM APIS
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLeadFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const handleSelectChange = (name, value) => {
-    setLeadFormData((prevData) => ({
-      ...prevData,
-      [name]: value, // Update the specific field by name
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted Data:", leadFormData);
-    setLeads()
-    
-  };
 
   // ## Get DATA
+
   const getLeadData = async () => {
     try {
       const { data } = await axios.get(
@@ -354,6 +333,7 @@ const ContextProvider = (props) => {
     }
   };
   console.log("lead data", storeLeadData);
+
   // ## Post DATA
 
   const setLeads = async () => {
@@ -361,30 +341,27 @@ const ContextProvider = (props) => {
       const result = await axios.post(
         `http://localhost:1337/api/form/post-lead`,
         {
-          branch:leadFormData.branch,
-          type:leadFormData.type,
-          name:leadFormData.name,
-          status:leadFormData.status,
-          source:leadFormData.source,
-          country:leadFormData.country,
-          phone:leadFormData.phone,
-          email:leadFormData.email,
-          project:leadFormData.project
+          branch: leadBranch,
+          type: leadType,
+          name: leadName,
+          status: leadStatus,
+          source: leadSource,
+          country: leadCountry,
+          phone: leadPhone,
+          email: leadEmail,
+          project: leadProject,
         }
       );
-      setOpenCompanyForm(false);
-      setLeadFormData({
-        branch: '',
-        type: '',
-        name: '',
-        status: '',
-        source: '',
-        country: '',
-        phone: '',
-        email: '',
-        project: ''
-      });
-      setOpenLeadForm(false)
+      setLeadType(""),
+        setLeadBranch(""),
+        setLeadCountry(""),
+        setLeadEmail(""),
+        setLeadPhone(""),
+        setLeadProject(""),
+        setLeadName(""),
+        setLeadStatus(""),
+        setLeadSource(""),
+        setOpenLeadForm(false);
       getLeadData();
       console.log("CompanyForm submitted", result);
     } catch (error) {
@@ -392,7 +369,74 @@ const ContextProvider = (props) => {
     }
   };
 
+  // ## DELETE
+  const deleteLead = async (id) => {
+    try {
+      const result = await axios.delete(
+        `http://localhost:1337/api/form/delete-lead/${id}`
+      );
+      getLeadData();
+      console.log("Lead delete SuccessFully !", result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  // ## UPDATE
+  // update
+
+  const getSingleLead = async (lead) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-lead/${lead._id}`
+      );
+
+      // Since setLeadFormData is async, log data directly here:
+      console.log("leadSingleData", data);
+      setLeadType(data.type),
+      setLeadBranch(data.branch),
+      setLeadCountry(data.country),
+      setLeadEmail(data.email),
+      setLeadPhone(data.phone),
+      setLeadProject(data.project),
+      setLeadName(data.name),
+      setLeadStatus(data.status),
+      setLeadSource(data.source),
+      setOpenLeadForm(!openLeadForm);
+      setShowLeadButton(!showLeadButton);
+      setUpdateId(data._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+ 
+
+  const updateLead = async () => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-lead/${updateId}`,
+        {
+          branch: leadBranch,
+          type: leadType,
+          name: leadName,
+          status: leadStatus,
+          source: leadSource,
+          country: leadCountry,
+          phone: leadPhone,
+          email: leadEmail,
+          project: leadProject,
+        }
+      );
+      console.log("Succesfully Updated");
+      setShowButton(!showButton);
+      setOpenLeadForm(!openLeadForm);
+
+      getLeadData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
 
@@ -414,10 +458,7 @@ const ContextProvider = (props) => {
     getLeadData();
   }, []);
 
-
-
-
-
+  // ######################################################################################################################################
 
   const contextValue = {
     // #######################
@@ -497,13 +538,32 @@ const ContextProvider = (props) => {
 
     // #######################
     // Lead
-    
+    setLeadType,
+    setLeadBranch,
+    setLeadCountry,
+    setLeadEmail,
+    setLeadPhone,
+    setLeadProject,
+    setLeadName,
+    setLeadStatus,
+    setLeadSource,
+    leadBranch,
+    leadType,
+    leadCountry,
+    leadEmail,
+    leadPhone,
+    leadProject,
+    leadName,
+    leadStatus,
+    leadSource,
     openLeadForm,
     setOpenLeadForm,
     storeLeadData,
-    handleChange,
-    handleSubmit,
-    handleSelectChange,
+    getSingleLead,
+    deleteLead,
+    updateLead,
+    setLeads,
+    showLeadButton
   };
 
   return (

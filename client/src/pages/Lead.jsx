@@ -41,12 +41,14 @@ const Lead = () => {
   const {
     setOpenLeadForm,
     storeLeadData,
-    deleteCompany,
     getSingleCompany,
     getCompanyDetail,
     filteredCompanyData,
     cmpSearchTerm,
     setCmpSearchTerm,
+    deleteLead,
+    updateLead,
+    getSingleLead
   } = useContext(Context);
 
   return (
@@ -143,14 +145,14 @@ const Lead = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getSingleCompany(company)}
+                          onClick={() => getSingleLead(lead)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => deleteCompany(company._id)}
+                          onClick={() => deleteLead(lead._id)}
                         >
                           <Trash2 size={16} />
                           Delete
