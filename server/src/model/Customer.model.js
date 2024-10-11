@@ -1,22 +1,13 @@
 import mongoose from 'mongoose'
 
-const PeopleSchema = new mongoose.Schema(
+const CustomerSchema = new mongoose.Schema(
     {
-        firstName: {
+        name: {
             type: String,
             required: true,
             trim: true,
         },
-        lastName: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        company: {
-            type: String,
-            default: "none",
-            trim: true,
-        },
+
         country: {
             type: String,
             required: true,
@@ -48,4 +39,4 @@ const PeopleSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-export const People = mongoose.model("People",PeopleSchema)
+export const Customer = mongoose.model('Customer', CustomerSchema)

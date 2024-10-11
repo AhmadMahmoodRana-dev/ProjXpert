@@ -14,7 +14,7 @@ const CompanySchema = new mongoose.Schema(
         },
         website: {
             type: String,
-            default: "none",
+            default: 'none',
             trim: true,
         },
         country: {
@@ -26,12 +26,16 @@ const CompanySchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        type: {
+            type: String,
+            required: true,
+        },
         email: {
             type: String,
             required: true,
-            unique: true, 
+            unique: true,
             trim: true,
-            lowercase: true, 
+            lowercase: true,
             validate: {
                 validator: function (v) {
                     // Basic email validation regex
@@ -44,4 +48,4 @@ const CompanySchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-export const Company = mongoose.model("Company",CompanySchema)
+export const Company = mongoose.model('Company', CompanySchema)

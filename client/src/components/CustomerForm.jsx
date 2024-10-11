@@ -7,41 +7,33 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Context } from "@/context/Context";
-import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 
 const CompanyForm = () => {
   const {
     openCustomerForm,
     setOpenCustomerForm,
-    storePeopleData,
-    customerPeople,
-    setCustomerPeople,
-    type,
-    setType,
     storeCompanyData,
-    customerCompany,
-    setCustomerCompany
+    storePeopleData,
+    getSingleCompanyId,
+    setGetSingleCompanyId,
+    getSinglePeopleId,
+    setGetSinglePeopleId,
+    storeSingleCustomerCompany,
+    storeSingleCustomerPeople
   } = useContext(Context);
-  const [open1, setOpen1] = useState(false);
-  // console.log(customerPeople, "customerPeople");
-  // console.log(customerCompany, "customerCompany");
+  const [selectType, setSelectType] = useState("");
+  console.log(getSinglePeopleId);
   return (
     <Dialog
       open={openCustomerForm}
@@ -76,137 +68,73 @@ const CompanyForm = () => {
               <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                 <div className="px-4 sm:px-6 flex flex-col gap-4">
                   <DialogTitle> Type</DialogTitle>
-                  <select
-                    name="cars"
-                    id="cars"
-                    className="border-gray-200 border py-[8px] px-2 rounded-md"
-                    onChange={(e) => setType(e.target.value)}
+                  <Select
+                    onValueChange={(value) => setSelectType(value)}
+                    value={selectType}
                   >
-                    <option value="people">People</option>
-                    <option value="company">Company</option>
-                  </select>
-                  {type == "people" ? (
-                    <>
-                      <DialogTitle>People</DialogTitle>
-                      <Popover open={open1} onOpenChange={setOpen1}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={open1}
-                            className="w-full justify-between"
-                          >
-                            {customerPeople || "Select Contact..."}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command className>
-                            <CommandInput placeholder="Search country..." />
-                            <CommandList className="flex justify-center">
-                              <CommandEmpty>No Contact found.</CommandEmpty>
-                              <CommandGroup>
-                                {storePeopleData.map((contact) => (
-                                  <CommandItem
-                                    key={contact._id}
-                                    value={`${contact.firstName}${contact.lastName}`}
-                                    onSelect={(currentValue) => {
-                                      setCustomerPeople(
-                                        currentValue === contact
-                                          ? ""
-                                          : currentValue
-                                      );
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        contact === contact.firstName
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    <img
-                                      src="akjsalksal"
-                                      alt={`${contact.firstName} flag`}
-                                      className="h-5 w-5 flex-shrink-0 rounded-full"
-                                    />
-                                    <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
-                                      {contact.firstName}
-                                    </span>
-                                  </CommandItem>
-                                ))}
-                                {/* <Link to={'/people'}> <Button>Add a Contact</Button></Link> */}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                      <Button className="px-4">Send</Button>
-                    </>
-                  ) : (
-                    <>
-                      <DialogTitle>Company</DialogTitle>
-                      <Popover open={open1} onOpenChange={setOpen1}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={open1}
-                            className="w-full justify-between"
-                          >
-                            {customerCompany || "Select Contact..."}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
-                          <Command className>
-                            <CommandInput placeholder="Search country..." />
-                            <CommandList className="flex justify-center">
-                              <CommandEmpty>No Contact found.</CommandEmpty>
-                              <CommandGroup>
-                                {storeCompanyData.map((contact) => (
-                                  <CommandItem
-                                    key={contact._id}
-                                    value={`${contact.name}`}
-                                    onSelect={(currentValue) => {
-                                      setCustomerCompany(
-                                        currentValue === contact
-                                          ? ""
-                                          : currentValue
-                                      );
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        contact === contact.name
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    <img
-                                      src="akjsalksal"
-                                      alt={`${contact.name} flag`}
-                                      className="h-5 w-5 flex-shrink-0 rounded-full"
-                                    />
-                                    <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
-                                      {contact.name}
-                                    </span>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                      <Button className="px-4">Send</Button>
-                    </>
-                  )}
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="people">People</SelectItem>
+                        <SelectItem value="company">Company</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
-                {/* <div className="relative mt-6 flex-1 px-4 sm:px-6 justify-center flex">
-                  <Button className="px-4">Send</Button>
-                </div> */}
+
+                <div className="px-4 sm:px-6 flex flex-col gap-4 mt-4">
+                  {selectType == "people" ? (
+                    <>
+                      <DialogTitle> People</DialogTitle>
+                      <Select
+                        onValueChange={(value) => setGetSinglePeopleId(value)}
+                        value={getSinglePeopleId}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a People" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {storePeopleData.map((val, ind) => {
+                              return (
+                                <SelectItem key={ind} value={val._id}>
+                                  {val.firstName} {val.lastName}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <Button onClick={() => storeSingleCustomerPeople()}>Submit</Button>
+                    </>
+                  ) : selectType == "company" ? (
+                    <>
+                      <DialogTitle> Company</DialogTitle>
+                      <Select
+                        onValueChange={(value) => setGetSingleCompanyId(value)}
+                        value={getSingleCompanyId}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a Company" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {storeCompanyData.map((val, ind) => {
+                              return (
+                                <SelectItem key={ind} value={val._id}>
+                                  {val.name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <Button onClick={() => storeSingleCustomerCompany()}>Submit</Button>
+                    </>
+                  ) : null}
+                </div>
               </div>
             </DialogPanel>
           </div>

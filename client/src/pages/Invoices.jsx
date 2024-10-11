@@ -34,29 +34,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
-import PeopleForm from "@/components/PeopleForm";
-import DetailShow from "@/components/DetailShow";
-import useDebounce from "@/hooks/useDebounce";
+// import CompanyForm from "@/components/CompanyForm";
+import LeadForm from "@/components/LeadForm";
 
-const Peoples = () => {
+const Invoices = () => {
   const {
-    setOpenPersonForm,
-    deletePeople,
-    getSinglePeople,
-    getPeopleDetail,
-    storePeopleData,
-    searchTerm,
-    setSearchTerm,
+    setOpenLeadForm,
+    storeLeadData,
+    getCompanyDetail,
+    filteredCompanyData,
+    cmpSearchTerm,
+    setCmpSearchTerm,
+    deleteLead,
+    getSingleLead
   } = useContext(Context);
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const filteredData = storePeopleData.filter((people) =>
-    people.firstName.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-  people.lastName.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
-  people.country.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
-  people.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
-  people.company.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-  );
 
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
@@ -66,7 +57,7 @@ const Peoples = () => {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <li>aaa</li>
+                  <li>LEAD</li>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -85,8 +76,8 @@ const Peoples = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={cmpSearchTerm}
+              onChange={(e) => setCmpSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -96,42 +87,46 @@ const Peoples = () => {
           </Button>
           <Button
             className={"bg-[#172332]"}
-            onClick={() => setOpenPersonForm(true)}
+            onClick={() => setOpenLeadForm(true)}
           >
-            Add Person
+            Add Lead
           </Button>
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
             <TableRow className={"bg-[#172332]"}>
               <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Firstname</TableHead>
-              <TableHead>Lastname</TableHead>
-              <TableHead>Company</TableHead>
+              <TableHead>Branch</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>status</TableHead>
+              <TableHead>Source</TableHead>
               <TableHead>Country</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead className="text-left">Email</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!filteredData.length ? (
+          {!filteredCompanyData.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {filteredData.map((people, id) => (
-                <TableRow key={people._id}>
+              {storeLeadData.map((lead, id) => (
+                <TableRow key={lead?._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
-                    {people.firstName}
+                    {lead?.branch}
                   </TableCell>
-                  <TableCell>{people.lastName}</TableCell>
-                  <TableCell>{people.company || "none"}</TableCell>
-                  <TableCell>{people.country}</TableCell>
-                  <TableCell>{people.phone}</TableCell>
-                  <TableCell className="text-left">{people.email}</TableCell>
+                  <TableCell>{lead?.type}</TableCell>
+                  <TableCell>{lead?.name || "none"}</TableCell>
+                  <TableCell>{lead?.status}</TableCell>
+                  <TableCell>{lead?.source}</TableCell>
+                  <TableCell>{lead?.country}</TableCell>
+                  <TableCell>{lead?.phone}</TableCell>
+                  <TableCell className="text-left">{lead?.email}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center gap-1">
@@ -141,21 +136,21 @@ const Peoples = () => {
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getPeopleDetail(people._id)}
+                          onClick={() => getCompanyDetail(company._id)}
                         >
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getSinglePeople(people)}
+                          onClick={() => getSingleLead(lead)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => deletePeople(people._id)}
+                          onClick={() => deleteLead(lead._id)}
                         >
                           <Trash2 size={16} />
                           Delete
@@ -169,10 +164,9 @@ const Peoples = () => {
           )}
         </Table>
       </div>
-      <PeopleForm/>
-      <DetailShow/>
+      <LeadForm/>
     </div>
   );
 };
 
-export default Peoples;
+export default Invoices;

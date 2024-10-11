@@ -122,7 +122,13 @@ const Lead = () => {
                   <TableCell className="font-medium">
                     {lead?.branch}
                   </TableCell>
-                  <TableCell>{lead?.type}</TableCell>
+                  <TableCell>  <h1
+                    className={`${
+                      lead?.type === "People" ? "bg-blue-400" : "bg-red-400"
+                    } text-center py-1 rounded-lg text-white`}
+                  >
+                    {lead?.type}
+                  </h1></TableCell>
                   <TableCell>{lead?.name || "none"}</TableCell>
                   <TableCell>{lead?.status}</TableCell>
                   <TableCell>{lead?.source}</TableCell>

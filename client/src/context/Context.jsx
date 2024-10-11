@@ -5,7 +5,6 @@ export const Context = createContext();
 
 const ContextProvider = (props) => {
   const [countryData, setCountryData] = useState([]);
-  const [openCustomerForm, setOpenCustomerForm] = useState(false);
   // ## PEOPLE
 
   const [openPersonForm, setOpenPersonForm] = useState(false);
@@ -49,8 +48,14 @@ const ContextProvider = (props) => {
   const [leadProject, setLeadProject] = useState("");
   const [openLeadForm, setOpenLeadForm] = useState(false);
   const [storeLeadData, setStoreLeadData] = useState([]);
-  const [showLeadButton,setShowLeadButton] = useState(false)
+  const [showLeadButton, setShowLeadButton] = useState(false);
 
+  // ## CUSTOMER
+
+  const [openCustomerForm, setOpenCustomerForm] = useState(false);
+  const [getSingleCompanyId, setGetSingleCompanyId] = useState("");
+  const [getSinglePeopleId, setGetSinglePeopleId] = useState("");
+  const [storeCustomerData, setStoreCustomerData] = useState([]);
   // ### PEOPLE FORM API ###
 
   // post
@@ -66,6 +71,7 @@ const ContextProvider = (props) => {
           country: country,
           phone: phone,
           email: email,
+          type: "people",
         }
       );
       setOpenPersonForm(false);
@@ -168,17 +174,8 @@ const ContextProvider = (props) => {
     setOpenPersonDetail(true);
   };
 
-  // search
 
-  const filteredPeopleData = storePeopleData.filter((people) => {
-    const fullName = `${people.firstName} ${people.lastName}`.toLowerCase();
-    return (
-      fullName.includes(searchTerm.toLowerCase()) ||
-      people.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      people.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      people.country?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  
   //           #########################################################################################          //
 
   // ## COMPANIES FORM APIS
@@ -196,6 +193,7 @@ const ContextProvider = (props) => {
           country: cmpCountry,
           phone: cmpPhone,
           email: cmpEmail,
+          type: "company",
         }
       );
       setOpenCompanyForm(false);
@@ -311,12 +309,6 @@ const ContextProvider = (props) => {
   });
 
   //           #########################################################################################          //
-  // CUSTOMERS
-  const [customerPeople, setCustomerPeople] = useState("");
-  const [customerCompany, setCustomerCompany] = useState("");
-  const [type, setType] = useState("email");
-
-  //           #########################################################################################          //
 
   //   ## LEAD FORM APIS
 
@@ -383,7 +375,6 @@ const ContextProvider = (props) => {
   };
 
   // ## UPDATE
-  // update
 
   const getSingleLead = async (lead) => {
     try {
@@ -394,23 +385,21 @@ const ContextProvider = (props) => {
       // Since setLeadFormData is async, log data directly here:
       console.log("leadSingleData", data);
       setLeadType(data.type),
-      setLeadBranch(data.branch),
-      setLeadCountry(data.country),
-      setLeadEmail(data.email),
-      setLeadPhone(data.phone),
-      setLeadProject(data.project),
-      setLeadName(data.name),
-      setLeadStatus(data.status),
-      setLeadSource(data.source),
-      setOpenLeadForm(!openLeadForm);
+        setLeadBranch(data.branch),
+        setLeadCountry(data.country),
+        setLeadEmail(data.email),
+        setLeadPhone(data.phone),
+        setLeadProject(data.project),
+        setLeadName(data.name),
+        setLeadStatus(data.status),
+        setLeadSource(data.source),
+        setOpenLeadForm(!openLeadForm);
       setShowLeadButton(!showLeadButton);
       setUpdateId(data._id);
     } catch (error) {
       console.log(error);
     }
   };
-
- 
 
   const updateLead = async () => {
     try {
@@ -440,6 +429,62 @@ const ContextProvider = (props) => {
 
   //           #########################################################################################          //
 
+  // CUSTOMER FORM API
+
+  const storeSingleCustomerCompany = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-company/${getSingleCompanyId}`
+      );
+      data
+        ? await axios.post(`http://localhost:1337/api/form/post-customer`, {
+            name: data.name,
+            country: data.country,
+            phone: data.phone,
+            email: data.email,
+            type: data.type,
+          })
+        : console.log("null");
+    } catch (error) {
+      console.log("Error fetching company data:", error);
+    }
+  };
+  const storeSingleCustomerPeople = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-people/${getSinglePeopleId}`
+      );
+      data
+        ? await axios.post(`http://localhost:1337/api/form/post-customer`, {
+            name: data.firstName + data.lastName,
+            country: data.country,
+            phone: data.phone,
+            email: data.email,
+            type: data.type,
+          })
+        : console.log("null");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+const getCustomerData = async () =>{
+  try {
+    const  {data}  = await axios.get(
+      `http://localhost:1337/api/form/get-customer`
+    );
+    setStoreCustomerData(data.message);
+    console.log("customer data", storeCustomerData);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+// ## GET DATA
+
+
+  //           #########################################################################################          //
   //   ## GET COUNTRY
 
   const getCountry = async () => {
@@ -456,6 +501,7 @@ const ContextProvider = (props) => {
     getCompany();
     getCountry();
     getLeadData();
+    getCustomerData()
   }, []);
 
   // ######################################################################################################################################
@@ -488,7 +534,6 @@ const ContextProvider = (props) => {
     setOpenPersonDetail,
     getPeopleDetail,
     personDetail,
-    filteredPeopleData,
     searchTerm,
     setSearchTerm,
 
@@ -524,19 +569,6 @@ const ContextProvider = (props) => {
     setCmpSearchTerm,
 
     // #######################
-    // Customer
-
-    openCustomerForm,
-    setOpenCustomerForm,
-    customerPeople,
-    setCustomerPeople,
-    customerCompany,
-    setCustomerCompany,
-    type,
-    setType,
-    storeCompanyData,
-
-    // #######################
     // Lead
     setLeadType,
     setLeadBranch,
@@ -563,7 +595,20 @@ const ContextProvider = (props) => {
     deleteLead,
     updateLead,
     setLeads,
-    showLeadButton
+    showLeadButton,
+
+    // #######################
+    // Customer
+
+    setOpenCustomerForm,
+    openCustomerForm,
+    getSingleCompanyId,
+    setGetSingleCompanyId,
+    getSinglePeopleId,
+    setGetSinglePeopleId,
+    storeSingleCustomerCompany,
+    storeSingleCustomerPeople,
+    storeCustomerData
   };
 
   return (

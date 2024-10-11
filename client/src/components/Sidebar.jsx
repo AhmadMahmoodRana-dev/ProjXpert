@@ -103,6 +103,15 @@ const Sidebar = ({ children }) => {
                 <Weight className="h-4 w-4" />
                 Leads
               </Link>
+              <Link
+                to="/invoices"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                  location.pathname === "/invoices" ? "bg-muted text-primary" : "text-muted-foreground hover:text-primary"
+                }`}
+              >
+                <Weight className="h-4 w-4" />
+                Invoices
+              </Link>
               {/* Add more links similarly */}
             </nav>
           </div>
@@ -120,7 +129,6 @@ const Sidebar = ({ children }) => {
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
                 <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
-                  {/* <IoLogoMicrosoft className="h-6 w-6" /> */}
                   <span className="">CRM</span>
                 </Link>
                 <Link

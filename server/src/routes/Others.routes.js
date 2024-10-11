@@ -2,6 +2,7 @@ import { Router } from "express";
 import { deletePeople, getPeople, getSinglePeople, postPeople, updatePeopleData } from "../controller/People.controller.js";
 import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompanyData } from "../controller/Company.controller.js";
 import { deleteLead, getLead, getSingleLead, leadStatusFilter, leadStatusUpdate, postLead, updateLeadData } from "../controller/Lead.controller.js";
+import { getCustomer, postCustomer } from "../controller/Customer.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -24,4 +25,7 @@ route.post("/post-lead",postLead)
 route.delete("/delete-lead/:id",deleteLead)
 route.put("/update-lead/:id",updateLeadData)
 route.put("/update-lead-status",leadStatusUpdate)
+// ## CUSTOMER
+route.get("/get-customer",getCustomer)
+route.post("/post-customer",postCustomer)
 export default route;

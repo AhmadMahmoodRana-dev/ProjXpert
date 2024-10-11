@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
 const leadSchema = new mongoose.Schema(
     {
@@ -9,7 +9,7 @@ const leadSchema = new mongoose.Schema(
         type: {
             type: String,
             required: true,
-            enum: ['People','Company'],
+            enum: ['People', 'Company'],
             default: 'People',
         },
         name: {
@@ -43,7 +43,7 @@ const leadSchema = new mongoose.Schema(
                 'Professional Network',
                 'Customer Referral',
                 'Sales',
-                'Other'
+                'Other',
             ],
             default: 'Other',
         },
@@ -55,12 +55,12 @@ const leadSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-       email: {
+        email: {
             type: String,
             required: true,
-            unique: true, 
+            unique: true,
             trim: true,
-            lowercase: true, 
+            lowercase: true,
             validate: {
                 validator: function (v) {
                     // Basic email validation regex
