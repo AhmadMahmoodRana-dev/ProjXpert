@@ -5,17 +5,15 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
-import { cn } from "@/lib/utils"
-import { useContext, useState } from "react";
+import { useState, useContext } from "react";
 import { ChevronsUpDown, Check, X } from "lucide-react";
 import { Context } from "@/context/Context";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -23,199 +21,245 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import { Link } from "react-router-dom";
+} from "@/components/ui/command";
+import { Formik, Field, Form } from "formik";
+import * as Yup from "yup"; // For validation
+import { Input } from "./ui/input";
+
 const PeopleForm = () => {
   const {
     setOpenPersonForm,
     openPersonForm,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    company,
-    setCompany,
-    country,
-    setCountry,
-    phone,
-    setPhone,
-    email,
-    setEmail,
     setPeople,
     countryData,
     showButton,
     updatePeople,
-    storeCompanyData
+    storeCompanyData,
+    personDetail,
   } = useContext(Context);
 
-  const [open, setOpen] = useState(false)
-  const [open1, setOpen1] = useState(false)
-  return (
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
 
+  // Yup validation schema
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
+    country: Yup.string().required("Country is required"),
+    company: Yup.string().required("Company is required"),
+    phone: Yup.string().required("Phone number is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+  });
+
+  return (
     <Dialog
       open={openPersonForm}
       onClose={setOpenPersonForm}
       className="relative z-10"
     >
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
-      />
+      <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-            <DialogPanel
-              transition
-              className="pointer-events-auto relative w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
-            >
+            <DialogPanel className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out sm:duration-700">
               <TransitionChild>
-                <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
+                <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
                   <button
                     type="button"
                     onClick={() => setOpenPersonForm(false)}
-                    className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                    className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                   >
-                    <span className="absolute -inset-2.5" />
-                    <span className="sr-only">Close panel</span>
                     <X aria-hidden="true" className="h-6 w-6" />
                   </button>
                 </div>
               </TransitionChild>
               <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                 <div className="px-4 sm:px-6 flex flex-col gap-4">
-                  <DialogTitle>First Name</DialogTitle>
-                  <Input
-                    type="text"
-                    onChange={(e) => setFirstName(e.target.value)}
-                    value={firstName}
-                  />
-                  <DialogTitle>Last Name</DialogTitle>
-                  <Input
-                    type="text"
-                    onChange={(e) => setLastName(e.target.value)}
-                    value={lastName}
-                  />
-                  <DialogTitle>Country</DialogTitle>
-                  {/* Popover Component for Country Selection */}
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-full justify-between"
-                      >
-                        {country || "Select country..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Search country..." />
-                        <CommandList>
-                          <CommandEmpty>No country found.</CommandEmpty>
-                          <CommandGroup>
-                            {countryData.map((country) => (
-                              <CommandItem
-                                key={country.cca3}
-                                value={country.name.common}
-                                onSelect={(currentValue) => {
-                                  setCountry(currentValue === country ? "" : currentValue);
-                                  setOpenCountryPopover(false);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    country === country.name.common ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                                 <img
-                                src={country.flags.svg} alt={`${country.name.common} flag`}
-                                className="h-5 w-5 flex-shrink-0 rounded-full"
-                              />
-                              <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
-                                {country.name.common}
-                              </span>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                  <Formik
+                    initialValues={{
+                      firstName: personDetail?.firstName || "",
+                      lastName: personDetail?.lastName || "",
+                      country: personDetail?.country || "",
+                      company: personDetail?.company || "",
+                      phone: personDetail?.phone || "",
+                      email: personDetail?.email || "",
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={(values) => {
+                      console.log("Form Data Submitted:", values); // Watch form data
 
-                  <DialogTitle>Company</DialogTitle>
-                 
-                  <Popover open={open1} onOpenChange={setOpen1}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open1}
-                        className="w-full justify-between"
-                      >
-                        {company || "Select Company..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Search country..." />
-                        <CommandList className="flex justify-center">
-                          <CommandEmpty>No country found.</CommandEmpty>
-                          <CommandGroup>
-                            {storeCompanyData.map((company) => (
-                              <CommandItem
-                                key={company._id}
-                                value={company.name}
-                                onSelect={(currentValue) => {
-                                  setCompany(currentValue === company ? "" : currentValue);
-                                  setOpenCountryPopover(false);
-                                }}
+                      if (showButton) {
+                        updatePeople(values); // Call updatePeople if showButton is true
+                      } else {
+                        setPeople(values); // Call setPeople if adding a new entry
+                      }
+                    }}
+                  >
+                    {({ errors, touched, setFieldValue, values }) => (
+                      <div>
+                        {/* Watch form data as it changes */}
+                        <Form>
+                          <h1 className="text-3xl font-bold text-center">
+                            Public Form
+                          </h1>
+                          <DialogTitle className="mt-20 pb-2">
+                            First Name
+                          </DialogTitle>
+                          <Field name="firstName" as={Input} />
+                          {errors.firstName && touched.firstName ? (
+                            <div className="text-red-500">
+                              {errors.firstName}
+                            </div>
+                          ) : null}
+
+                          <DialogTitle className="mt-5 pb-2">
+                            Last Name
+                          </DialogTitle>
+                          <Field name="lastName" as={Input} />
+                          {errors.lastName && touched.lastName ? (
+                            <div className="text-red-500">
+                              {errors.lastName}
+                            </div>
+                          ) : null}
+
+                          <DialogTitle className="mt-5 pb-2">
+                            Country
+                          </DialogTitle>
+                          {/* Country Popover */}
+                          <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={open}
+                                className="w-full justify-between"
                               >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    company === company.name ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                                 <img
-                                src="akjsalksal" alt={`${company.name} flag`}
-                                className="h-5 w-5 flex-shrink-0 rounded-full"
-                              />
-                              <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
-                                {company.name}
-                              </span>
-                              </CommandItem>
-                            ))}
-                           {/* <Link to={'/company'}> <Button>Add a Company</Button></Link> */}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <DialogTitle>Phone</DialogTitle>
-                  <Input
-                    type="number"
-                    onChange={(e) => setPhone(e.target.value)}
-                    value={phone}
-                  />
-                  <DialogTitle>Email</DialogTitle>
-                  <Input
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                  />
-                  {!showButton ? (
-                    <Button className="mt-10" onClick={setPeople}>
-                      Save
-                    </Button>
-                  ) : (
-                    <Button className="mt-10" onClick={updatePeople}>
-                      Update
-                    </Button>
-                  )}
+                                {values.country || "Select country..."}
+                                <ChevronsUpDown className="ml-2 h-4 w-4" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0">
+                              <Command>
+                                <CommandInput placeholder="Search country..." />
+                                <CommandList>
+                                  <CommandEmpty>No country found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {countryData.map((country) => (
+                                      <CommandItem
+                                        key={country.cca3}
+                                        value={country.name.common}
+                                        onSelect={() =>
+                                          setFieldValue(
+                                            "country",
+                                            country.name.common
+                                          )
+                                        }
+                                      >
+                                        <Check
+                                          className={
+                                            values.country ===
+                                            country.name.common
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          }
+                                        />
+                                        <img
+                                          src={country.flags.svg}
+                                          alt={`${country.name.common} flag`}
+                                          className="h-5 w-5 rounded-full"
+                                        />
+                                        <span className="ml-3">
+                                          {country.name.common}
+                                        </span>
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          {errors.country && touched.country ? (
+                            <div className="text-red-500">{errors.country}</div>
+                          ) : null}
+
+                          <DialogTitle className="mt-5 pb-2">
+                            Company
+                          </DialogTitle>
+                          {/* Company Popover */}
+                          <Popover open={open1} onOpenChange={setOpen1}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={open1}
+                                className="w-full justify-between"
+                              >
+                                {values.company || "Select company..."}
+                                <ChevronsUpDown className="ml-2 h-4 w-4" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0">
+                              <Command>
+                                <CommandInput placeholder="Search company..." />
+                                <CommandList>
+                                  <CommandEmpty>No company found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {storeCompanyData.map((company) => (
+                                      <CommandItem
+                                        key={company._id}
+                                        value={company.name}
+                                        onSelect={() =>
+                                          setFieldValue("company", company.name)
+                                        }
+                                      >
+                                        <Check
+                                          className={
+                                            values.company === company.name
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          }
+                                        />
+                                        <span className="ml-3">
+                                          {company.name}
+                                        </span>
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          {errors.company && touched.company ? (
+                            <div className="text-red-500">{errors.company}</div>
+                          ) : null}
+
+                          <DialogTitle className="mt-5 pb-2">Phone</DialogTitle>
+                          <Field name="phone" as={Input} type="text" />
+                          {errors.phone && touched.phone ? (
+                            <div className="text-red-500">{errors.phone}</div>
+                          ) : null}
+
+                          <DialogTitle className="mt-5 pb-2">Email</DialogTitle>
+                          <Field name="email" as={Input} type="email" />
+                          {errors.email && touched.email ? (
+                            <div className="text-red-500">{errors.email}</div>
+                          ) : null}
+
+                          {!showButton ? (
+                            <Button type="submit" className="mt-10 w-full">
+                              Save
+                            </Button>
+                          ) : (
+                            <Button type="submit" className="mt-10 w-full">
+                              Update
+                            </Button>
+                          )}
+                        </Form>
+                      </div>
+                    )}
+                  </Formik>
                 </div>
               </div>
             </DialogPanel>

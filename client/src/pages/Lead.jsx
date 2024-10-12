@@ -36,21 +36,27 @@ import {
 import { Context } from "@/context/Context";
 // import CompanyForm from "@/components/CompanyForm";
 import LeadForm from "@/components/LeadForm";
-
+import LeadDetailShow from '../components/LeadDetailShow'
+import useDebounce from "@/hooks/useDebounce";
 const Lead = () => {
   const {
     setOpenLeadForm,
     storeLeadData,
-    getSingleCompany,
-    getCompanyDetail,
-    filteredCompanyData,
-    cmpSearchTerm,
-    setCmpSearchTerm,
+    getLeadDetail,
+    leadSearchTerm,
+    setLeadSearchTerm,
     deleteLead,
-    updateLead,
     getSingleLead
   } = useContext(Context);
 
+  const debouncedSearchTerm = useDebounce(leadSearchTerm, 500);
+
+  const filteredleadData = storeLeadData.filter((lead) =>
+  lead.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+  lead.country.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  lead.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  lead.status.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
       <div className="w-[94%] bg-white px-10 py-10">
@@ -78,8 +84,8 @@ const Lead = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              value={cmpSearchTerm}
-              onChange={(e) => setCmpSearchTerm(e.target.value)}
+              value={leadSearchTerm}
+              onChange={(e) => setLeadSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -109,14 +115,14 @@ const Lead = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!filteredCompanyData.length ? (
+          {!filteredleadData.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {storeLeadData.map((lead, id) => (
+              {filteredleadData.map((lead, id) => (
                 <TableRow key={lead?._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
@@ -144,7 +150,7 @@ const Lead = () => {
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getCompanyDetail(company._id)}
+                          onClick={() => getLeadDetail(lead._id)}
                         >
                           <TvMinimal size={16} />
                           Show
@@ -173,6 +179,7 @@ const Lead = () => {
         </Table>
       </div>
       <LeadForm/>
+      <LeadDetailShow/>
     </div>
   );
 };

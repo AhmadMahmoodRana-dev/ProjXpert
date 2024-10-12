@@ -9,6 +9,7 @@ import Lead from "./pages/Lead";
 import DragLeadSatus from "./pages/DragLeadSatus";
 import Invoices from "./pages/Invoices";
 import Customers from "./pages/Customers";
+import ExpenseCategory from "./pages/ExpenseCategory";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/drag" element={<DragLeadSatus />} />
             <Route path="/invoices" element={<Invoices />} />
             <Route path="/customers" element={<Customers/>} />
+            <Route path="/expense-category" element={<ExpenseCategory/>} />
 
           </Route>
         </Routes>

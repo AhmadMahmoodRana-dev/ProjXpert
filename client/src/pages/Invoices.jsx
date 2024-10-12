@@ -107,7 +107,7 @@ const Invoices = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!filteredCompanyData.length ? (
+          {!storeLeadData.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND

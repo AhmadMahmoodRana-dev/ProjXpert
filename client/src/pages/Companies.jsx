@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table";
 import { Context } from "@/context/Context";
 import CompanyForm from "@/components/CompanyForm";
+import useDebounce from "@/hooks/useDebounce";
 
 const Companies = () => {
   const {
@@ -42,10 +43,20 @@ const Companies = () => {
     deleteCompany,
     getSingleCompany,
     getCompanyDetail,
-    filteredCompanyData,
+    storeCompanyData,
     cmpSearchTerm,
     setCmpSearchTerm,
   } = useContext(Context);
+
+  const debouncedSearchTerm = useDebounce(cmpSearchTerm, 500);
+
+  const filteredCompanyData = storeCompanyData.filter((company) =>
+  company.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+  company.country.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  company.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  company.contact.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
+
 
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">

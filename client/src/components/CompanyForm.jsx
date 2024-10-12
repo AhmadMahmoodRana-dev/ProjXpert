@@ -7,12 +7,12 @@ import {
   DialogTitle,
   TransitionChild,
 } from "@headlessui/react";
-import { Check, ChevronsUpDown,X } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -20,37 +20,41 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import { Context } from "@/context/Context";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Formik, Field, Form } from "formik";
+import * as Yup from "yup"; // For validation
 
 const CompanyForm = () => {
   const {
     setOpenCompanyForm,
     openCompanyForm,
-    name,
-    setName,
-    contact,
-    setContact,
-    website,
-    setWebsite,
-    cmpCountry,
-    setCmpCountry,
-    cmpPhone,
-    setCmpPhone,
-    cmpEmail,
-    setCmpEmail,
     setCompanies,
     countryData,
     cmpShowButton,
     updateCompany,
-    storePeopleData
+    storePeopleData,
+    companyDetail
   } = useContext(Context);
-  const [open, setOpen] = useState(false)
-  const [open1, setOpen1] = useState(false)
+  
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+
+  // Yup validation schema
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Company name is required"),
+    contact: Yup.string().required("Contact is required"),
+    country: Yup.string().required("Country is required"),
+    website: Yup.string().url("Invalid URL").required("Website is required"),
+    phone: Yup.string().required("Phone number is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+  });
+
   return (
     <Dialog
       open={openCompanyForm}
@@ -82,147 +86,155 @@ const CompanyForm = () => {
                   </button>
                 </div>
               </TransitionChild>
+              
               <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                 <div className="px-4 sm:px-6 flex flex-col gap-4">
-                  <DialogTitle> Name</DialogTitle>
-                  <Input
-                    type="text"
-                    onChange={(e) => setName(e.target.value)}
-                    value={name}
-                  />
-                  <DialogTitle>Contact</DialogTitle>
-                  <Popover open={open1} onOpenChange={setOpen1}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open1}
-                        className="w-full justify-between"
-                      >
-                        {contact || "Select Contact..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Search country..." />
-                        <CommandList className="flex justify-center">
-                          <CommandEmpty>No Contact found.</CommandEmpty>
-                          <CommandGroup>
-                            {storePeopleData.map((contact) => (
-                              <CommandItem
-                                key={contact._id}
-                                value={`${contact.firstName}${contact.lastName}`}
-                                onSelect={(currentValue) => {
-                                  setContact(currentValue === contact ? "" : currentValue);
-                                  setOpenCountryPopover(false);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    contact === contact.firstName ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                                 <img
-                                src="akjsalksal" alt={`${contact.firstName} flag`}
-                                className="h-5 w-5 flex-shrink-0 rounded-full"
-                              />
-                              <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
-                                {contact.firstName}
-                              </span>
-                              </CommandItem>
-                            ))}
-                           {/* <Link to={'/people'}> <Button>Add a Contact</Button></Link> */}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <DialogTitle>Country</DialogTitle>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-full justify-between"
-                      >
-                        {cmpCountry || "Select country..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="Search country..." />
-                        <CommandList>
-                          <CommandEmpty>No country found.</CommandEmpty>
-                          <CommandGroup>
-                            {countryData.map((country) => (
-                              <CommandItem
-                                key={country.cca3}
-                                value={country.name.common}
-                                onSelect={(currentValue) => {
-                                  setCmpCountry(currentValue === country ? "" : currentValue);
-                                  setOpenCountryPopover(false);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    country === country.name.common ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                                 <img
-                                src={country.flags.svg} alt={`${country.name.common} flag`}
-                                className="h-5 w-5 flex-shrink-0 rounded-full"
-                              />
-                              <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
-                                {country.name.common}
-                              </span>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                  <Formik
+                    initialValues={{
+                      name:companyDetail.name || '',
+                      contact:companyDetail.contact ||'',
+                      country:companyDetail.country ||'',
+                      website:companyDetail.website ||'',
+                      phone:companyDetail.phone ||'',
+                      email:companyDetail.email ||'',
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={(values) => {
+                      if (cmpShowButton) {
+                        updateCompany(values); // Call updateCompany if updating
+                      } else {
+                        setCompanies(values); // Call setCompanies if adding a new company
+                      }
+                    }}
+                  >
+                    {({ errors, touched, setFieldValue, values }) => (
+                      <Form>
+                        <DialogTitle className="mt-20 pb-3">Name</DialogTitle>
+                        <Field name="name" as={Input} />
+                        {errors.name && touched.name ? (
+                          <div className="text-red-500">{errors.name}</div>
+                        ) : null}
 
-                  <DialogTitle>Website</DialogTitle>
-                  <Input
-                    type="text"
-                    onChange={(e) => setWebsite(e.target.value)}
-                    value={website}
-                  />
-                  <DialogTitle>Phone</DialogTitle>
-                  <Input
-                    type="number"
-                    onChange={(e) => setCmpPhone(e.target.value)}
-                    value={cmpPhone}
-                  />
-                  <DialogTitle>Email</DialogTitle>
-                  <Input
-                    type="email"
-                    onChange={(e) => setCmpEmail(e.target.value)}
-                    value={cmpEmail}
-                  />
-                  {
-                    !cmpShowButton ?
-                  <Button className="mt-10" onClick={() => {
-                    setCompanies();
-                  }}>
-                    Save
-                  </Button>
-                  :
-                  <Button className="mt-10" onClick={() => {
-                    updateCompany();
-                  }}>
-                    Update
-                  </Button>
-                  }
-                </div>
-                <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                  {/* Your content */}
+                        <DialogTitle className="mt-5 pb-3" >Contact</DialogTitle>
+                        <Popover open={open1} onOpenChange={setOpen1}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={open1}
+                              className="w-full justify-between"
+                            >
+                              {values.contact || "Select Contact..."}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0">
+                            <Command>
+                              <CommandInput placeholder="Search contact..." />
+                              <CommandList className="flex justify-center">
+                                <CommandEmpty>No Contact found.</CommandEmpty>
+                                <CommandGroup>
+                                  {storePeopleData.map((contact) => (
+                                    <CommandItem
+                                      key={contact._id}
+                                      value={`${contact.firstName} ${contact.lastName}`}
+                                      onSelect={(currentValue) => {
+                                        setFieldValue('contact', currentValue);
+                                        setOpen1(false);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          values.contact === `${contact.firstName} ${contact.lastName}` ? "opacity-100" : "opacity-0"
+                                        )}
+                                      />
+                                      <span className="ml-3 w-full block truncate font-normal group-data-[selected]:font-semibold">
+                                        {`${contact.firstName} ${contact.lastName}`}
+                                      </span>
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        {errors.contact && touched.contact ? (
+                          <div className="text-red-500">{errors.contact}</div>
+                        ) : null}
+
+                        <DialogTitle className="mt-5 pb-3"  >Country</DialogTitle>
+                        <Popover open={open} onOpenChange={setOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={open}
+                              className="w-full justify-between"
+                            >
+                              {values.country || "Select country..."}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0">
+                            <Command>
+                              <CommandInput placeholder="Search country..." />
+                              <CommandList>
+                                <CommandEmpty>No country found.</CommandEmpty>
+                                <CommandGroup>
+                                  {countryData.map((country) => (
+                                    <CommandItem
+                                      key={country.cca3}
+                                      value={country.name.common}
+                                      onSelect={() => {
+                                        setFieldValue("country", country.name.common);
+                                        setOpen(false);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          values.country === country.name.common ? "opacity-100" : "opacity-0"
+                                        )}
+                                      />
+                                      <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
+                                        {country.name.common}
+                                      </span>
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        {errors.country && touched.country ? (
+                          <div className="text-red-500">{errors.country}</div>
+                        ) : null}
+
+                        <DialogTitle className="mt-5 pb-3">Website</DialogTitle>
+                        <Field name="website" as={Input} />
+                        {errors.website && touched.website ? (
+                          <div className="text-red-500">{errors.website}</div>
+                        ) : null}
+
+                        <DialogTitle className="mt-5 pb-3">Phone</DialogTitle>
+                        <Field name="phone" as={Input} type="text" />
+                        {errors.phone && touched.phone ? (
+                          <div className="text-red-500">{errors.phone}</div>
+                        ) : null}
+
+                        <DialogTitle className="mt-5 pb-3">Email</DialogTitle>
+                        <Field name="email" as={Input} type="email" />
+                        {errors.email && touched.email ? (
+                          <div className="text-red-500">{errors.email}</div>
+                        ) : null}
+
+                        <Button type="submit" className="mt-10">
+                          {!cmpShowButton ? "Save" : "Update"}
+                        </Button>
+                      </Form>
+                    )}
+                  </Formik>
                 </div>
               </div>
             </DialogPanel>
