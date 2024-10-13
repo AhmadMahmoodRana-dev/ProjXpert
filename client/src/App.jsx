@@ -10,6 +10,7 @@ import DragLeadSatus from "./pages/DragLeadSatus";
 import Invoices from "./pages/Invoices";
 import Customers from "./pages/Customers";
 import ExpenseCategory from "./pages/ExpenseCategory";
+import InvoicesForm from "./pages/InvoicesForm";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/invoices" element={<Invoices />} />
             <Route path="/customers" element={<Customers/>} />
             <Route path="/expense-category" element={<ExpenseCategory/>} />
+            <Route path="/invoices-form" element={<InvoicesForm/>} />
 
           </Route>
         </Routes>

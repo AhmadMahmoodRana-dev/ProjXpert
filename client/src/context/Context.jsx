@@ -39,6 +39,11 @@ const ContextProvider = (props) => {
   const [getSingleCompanyId, setGetSingleCompanyId] = useState("");
   const [getSinglePeopleId, setGetSinglePeopleId] = useState("");
   const [storeCustomerData, setStoreCustomerData] = useState([]);
+
+// ## INVOICES
+const [showInvoiceButton,setShowInvoiceButton] = useState(false)
+
+
   // ### PEOPLE FORM API ###
 
   // post
@@ -389,6 +394,7 @@ const getLeadDetail = async (id) => {
     }
   };
 
+  // ## GET DATA
   const getCustomerData = async () => {
     try {
       const { data } = await axios.get(
@@ -401,7 +407,25 @@ const getLeadDetail = async (id) => {
     }
   };
 
-  // ## GET DATA
+
+ //           #########################################################################################          //
+
+// INVOICES
+
+// POST
+
+const setInvoice = async (invoice) =>{
+try {
+  const result = await axios.post(`http://localhost:1337/api/form/post-invoice`,invoice)
+  console.log("Invoice submitted", result);
+  setShowInvoiceButton(!showInvoiceButton)
+} catch (error) {
+  console.log(error)
+}
+}
+
+
+  
 
   //           #########################################################################################          //
   //   ## GET COUNTRY
@@ -484,7 +508,7 @@ const getLeadDetail = async (id) => {
 
     // #######################
     // Customer
-
+    
     setOpenCustomerForm,
     openCustomerForm,
     getSingleCompanyId,
@@ -494,6 +518,13 @@ const getLeadDetail = async (id) => {
     storeSingleCustomerCompany,
     storeSingleCustomerPeople,
     storeCustomerData,
+    
+    // #######################
+    // Invoice
+    showInvoiceButton,
+    setShowInvoiceButton,
+    setInvoice
+
   };
 
   return (

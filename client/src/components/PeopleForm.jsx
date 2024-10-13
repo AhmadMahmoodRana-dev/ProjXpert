@@ -46,7 +46,6 @@ const PeopleForm = () => {
     firstName: Yup.string().required("First Name is required"),
     lastName: Yup.string().required("Last Name is required"),
     country: Yup.string().required("Country is required"),
-    company: Yup.string().required("Company is required"),
     phone: Yup.string().required("Phone number is required"),
     email: Yup.string()
       .email("Invalid email address")
@@ -231,9 +230,9 @@ const PeopleForm = () => {
                               </Command>
                             </PopoverContent>
                           </Popover>
-                          {errors.company && touched.company ? (
+                          {/* {errors.company && touched.company ? (
                             <div className="text-red-500">{errors.company}</div>
-                          ) : null}
+                          ) : null} */}
 
                           <DialogTitle className="mt-5 pb-2">Phone</DialogTitle>
                           <Field name="phone" as={Input} type="text" />

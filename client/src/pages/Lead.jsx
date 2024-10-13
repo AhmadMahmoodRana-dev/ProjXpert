@@ -131,7 +131,7 @@ const Lead = () => {
                   <TableCell>  <h1
                     className={`${
                       lead?.type === "People" ? "bg-blue-400" : "bg-red-400"
-                    } text-center py-1 rounded-lg text-white`}
+                    } text-center py-1 rounded-lg text-white px-1`}
                   >
                     {lead?.type}
                   </h1></TableCell>

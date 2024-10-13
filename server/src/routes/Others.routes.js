@@ -3,6 +3,7 @@ import { deletePeople, getPeople, getSinglePeople, postPeople, updatePeopleData 
 import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompanyData } from "../controller/Company.controller.js";
 import { deleteLead, getLead, getSingleLead, leadStatusFilter, leadStatusUpdate, postLead, updateLeadData } from "../controller/Lead.controller.js";
 import { getCustomer, postCustomer } from "../controller/Customer.controller.js";
+import { postInvoices } from "../controller/Invoices.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -28,4 +29,6 @@ route.put("/update-lead-status",leadStatusUpdate)
 // ## CUSTOMER
 route.get("/get-customer",getCustomer)
 route.post("/post-customer",postCustomer)
+// ## INVOICES
+route.post("/post-invoice",postInvoices)
 export default route;
