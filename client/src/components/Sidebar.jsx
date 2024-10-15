@@ -41,7 +41,7 @@ const Sidebar = ({ children }) => {
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-[#172332] md:block">
+      <div className="hidden border-r bg-[#172332] md:block sticky">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
@@ -168,7 +168,6 @@ const Sidebar = ({ children }) => {
                   <Package className="h-5 w-5" />
                   Products
                 </Link>
-                {/* Add more mobile nav links similarly */}
               </nav>
             </SheetContent>
           </Sheet>

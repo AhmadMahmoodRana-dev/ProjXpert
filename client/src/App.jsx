@@ -11,6 +11,7 @@ import Invoices from "./pages/Invoices";
 import Customers from "./pages/Customers";
 import ExpenseCategory from "./pages/ExpenseCategory";
 import InvoicesForm from "./pages/InvoicesForm";
+import InvoicesPaymentForm from "./pages/InvoicesPaymentForm";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="/customers" element={<Customers/>} />
             <Route path="/expense-category" element={<ExpenseCategory/>} />
             <Route path="/invoices-form" element={<InvoicesForm/>} />
+            <Route path="/invoices-payment-form" element={<InvoicesPaymentForm/>} />
 
           </Route>
         </Routes>

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import {
   FilePenLine,
+  HandCoins,
   Inbox,
   RefreshCw,
   Search,
@@ -36,16 +37,16 @@ import {
 import { Context } from "@/context/Context";
 // import CompanyForm from "@/components/CompanyForm";
 import LeadForm from "@/components/LeadForm";
+import { Link } from "react-router-dom";
 
 const Invoices = () => {
   const {
-    setOpenLeadForm,
-    storeLeadData,
+    storeInvoices,
+    getSingleinvoice,
     getCompanyDetail,
-    filteredCompanyData,
     cmpSearchTerm,
     setCmpSearchTerm,
-    deleteLead,
+    deleteInvoice,
     getSingleLead
   } = useContext(Context);
 
@@ -85,48 +86,51 @@ const Invoices = () => {
           <Button className={"bg-[#172332] flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          <Link to={'/invoices-form'}>
           <Button
             className={"bg-[#172332]"}
-            onClick={() => setOpenLeadForm(true)}
+            
           >
-            Add Lead
+            Add Invoices
           </Button>
+
+          </Link>
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
             <TableRow className={"bg-[#172332]"}>
               <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Branch</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>status</TableHead>
-              <TableHead>Source</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead className="text-left">Email</TableHead>
+              <TableHead>Client</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>ExpireDate</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Paid</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Payment</TableHead>
+              <TableHead className="text-left">Number</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!storeLeadData.length ? (
+          {!storeInvoices.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {storeLeadData.map((lead, id) => (
-                <TableRow key={lead?._id}>
+              {storeInvoices.map((invoice, id) => (
+                <TableRow key={invoice?._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
-                    {lead?.branch}
+                    {invoice?.client}
                   </TableCell>
-                  <TableCell>{lead?.type}</TableCell>
-                  <TableCell>{lead?.name || "none"}</TableCell>
-                  <TableCell>{lead?.status}</TableCell>
-                  <TableCell>{lead?.source}</TableCell>
-                  <TableCell>{lead?.country}</TableCell>
-                  <TableCell>{lead?.phone}</TableCell>
-                  <TableCell className="text-left">{lead?.email}</TableCell>
+                  <TableCell>{invoice?.date.slice(0 ,10)}</TableCell>
+                  <TableCell>{invoice?.expireDate.slice(0 ,10)}</TableCell>
+                  <TableCell>{invoice?.total}</TableCell>
+                  <TableCell>{invoice?.paidAmount}</TableCell>
+                  <TableCell>{invoice?.status}</TableCell>
+                  <TableCell>{invoice?.paymentStatus}</TableCell>
+                  <TableCell className="text-left">{invoice?.number}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center gap-1">
@@ -143,17 +147,24 @@ const Invoices = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getSingleLead(lead)}
+                          onClick={() => getSingleLead(invoice)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => deleteLead(lead._id)}
+                          onClick={() => deleteInvoice(invoice._id)}
                         >
                           <Trash2 size={16} />
                           Delete
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="flex gap-3"
+                          onClick={() => getSingleinvoice(invoice)}
+                        >
+                          <HandCoins size={16}  />
+                          Payment
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

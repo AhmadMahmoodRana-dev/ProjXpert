@@ -35,17 +35,17 @@ export const postInvoices = async (req, res) => {
   };
   
   // Update an invoice by ID (PUT)
-//   const updateInvoice = async (req, res) => {
-//     try {
-//       const updatedInvoice = await Invoice.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-//       if (!updatedInvoice) {
-//         return res.status(404).json({ message: 'Invoice not found' });
-//       }
-//       res.status(200).json(updatedInvoice);
-//     } catch (error) {
-//       res.status(400).json({ message: error.message });
-//     }
-//   };
+ export const updateInvoice = async (req, res) => {
+    try {
+      const updatedInvoice = await Invoice.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+      if (!updatedInvoice) {
+        return res.status(404).json({ message: 'Invoice not found' });
+      }
+      res.status(200).json(updatedInvoice);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
   
   // Delete an invoice by ID (DELETE)
   export const deleteInvoices = async (req, res) => {

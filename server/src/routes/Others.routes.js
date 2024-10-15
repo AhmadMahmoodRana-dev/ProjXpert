@@ -3,7 +3,7 @@ import { deletePeople, getPeople, getSinglePeople, postPeople, updatePeopleData 
 import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompanyData } from "../controller/Company.controller.js";
 import { deleteLead, getLead, getSingleLead, leadStatusFilter, leadStatusUpdate, postLead, updateLeadData } from "../controller/Lead.controller.js";
 import { getCustomer, postCustomer } from "../controller/Customer.controller.js";
-import { postInvoices } from "../controller/Invoices.controller.js";
+import { deleteInvoices, getInvoices, getSingleInvoice, postInvoices, updateInvoice } from "../controller/Invoices.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -31,4 +31,9 @@ route.get("/get-customer",getCustomer)
 route.post("/post-customer",postCustomer)
 // ## INVOICES
 route.post("/post-invoice",postInvoices)
+route.get("/get-invoice",getInvoices)
+route.delete('/delete-invoice/:id',deleteInvoices)
+route.get('/get-single-invoice/:id',getSingleInvoice)
+route.put('/update-invoice/:id',updateInvoice)
+
 export default route;

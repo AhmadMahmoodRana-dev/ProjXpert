@@ -1,9 +1,11 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Context = createContext();
 
 const ContextProvider = (props) => {
+  const navigate = useNavigate()
   const [countryData, setCountryData] = useState([]);
   // ## PEOPLE
   const [openPersonForm, setOpenPersonForm] = useState(false);
@@ -42,7 +44,8 @@ const ContextProvider = (props) => {
 
 // ## INVOICES
 const [showInvoiceButton,setShowInvoiceButton] = useState(false)
-
+const [storeInvoices,setStoreInvoices] = useState([])
+const [singleInvoice, setSingleInvoice] = useState({});
 
   // ### PEOPLE FORM API ###
 
@@ -419,13 +422,65 @@ try {
   const result = await axios.post(`http://localhost:1337/api/form/post-invoice`,invoice)
   console.log("Invoice submitted", result);
   setShowInvoiceButton(!showInvoiceButton)
+  getInvoice()
+  navigate('/invoices')
 } catch (error) {
   console.log(error)
 }
 }
 
-
+// GET
+const getInvoice = async () =>{
+  try {
+    const {data} = await axios.get(`http://localhost:1337/api/form/get-invoice`)
+    setStoreInvoices(data)
+    console.log("INVOICES",storeInvoices)
+  } catch (error) {
+    console.log(error)
+  }
+  }
   
+//  DELETE
+const deleteInvoice = async (invoiceId) =>{
+  try {
+    await axios.delete(`http://localhost:1337/api/form/delete-invoice/${invoiceId}`)
+    console.log("Invoice deleted successfully!")
+    getInvoice()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// SINGLE INVOICE
+const getSingleinvoice = async (invoice) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
+    );
+    setSingleInvoice(data)
+   navigate('/invoices-payment-form')
+    console.log("Leaddata fetch sucessfully", data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//  UPDATE INVOICE PAYMENT
+const updateInvoicePayment = async (value,id) =>{
+  try {
+    const result = await axios.put(
+      `http://localhost:1337/api/form/update-invoice/${id}`,
+      {
+        paidAmount:value.amount,
+      }
+    );
+    window.location.reload();
+    console.log("Invoice Payment Updated Successfully", value,id);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
   //           #########################################################################################          //
   //   ## GET COUNTRY
@@ -445,6 +500,7 @@ try {
     getCountry();
     getLead();
     getCustomerData();
+    getInvoice()
   }, []);
 
   // ######################################################################################################################################
@@ -523,7 +579,12 @@ try {
     // Invoice
     showInvoiceButton,
     setShowInvoiceButton,
-    setInvoice
+    setInvoice,
+    storeInvoices,
+    deleteInvoice,
+    getSingleinvoice,
+    singleInvoice,
+    updateInvoicePayment
 
   };
 

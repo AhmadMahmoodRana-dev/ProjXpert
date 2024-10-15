@@ -72,6 +72,27 @@ const invoiceSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  paidAmount:{
+    type:Number,
+    min:0,
+  },
+  paymentStatus:{
+    type:String,
+    default:"Not Paid"
+  },
+  paymentMethod:{
+    type:String,
+    default:"Not Paid"
+  },
+  reference:{
+    type: String,
+    default:"eee"
+  },
+  description:{
+    type: String,
+    default:"eee"
+   
+  }
 });
 
 export const Invoice = mongoose.model('Invoice', invoiceSchema);
