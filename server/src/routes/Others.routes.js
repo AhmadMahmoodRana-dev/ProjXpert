@@ -4,6 +4,7 @@ import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompany
 import { deleteLead, getLead, getSingleLead, leadStatusFilter, leadStatusUpdate, postLead, updateLeadData } from "../controller/Lead.controller.js";
 import { getCustomer, postCustomer } from "../controller/Customer.controller.js";
 import { deleteInvoices, getInvoices, getSingleInvoice, postInvoices, updateInvoice } from "../controller/Invoices.controller.js";
+import { getExpenseCategory, postExpenseCategory } from "../controller/ExpenseCategory.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -35,5 +36,8 @@ route.get("/get-invoice",getInvoices)
 route.delete('/delete-invoice/:id',deleteInvoices)
 route.get('/get-single-invoice/:id',getSingleInvoice)
 route.put('/update-invoice/:id',updateInvoice)
+// ## EXPENSECATEGORY
+route.get("/get-expensecategory",getExpenseCategory)
+route.post("/post-expensecategory",postExpenseCategory)
 
 export default route;

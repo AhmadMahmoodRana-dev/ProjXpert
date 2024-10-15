@@ -31,8 +31,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CustomerForm from "../components/CustomerForm";
 import { Context } from "@/context/Context";
+import { Switch } from "@/components/ui/switch";
+import ExpenseCategoryForm from "../components/ExpenseCategoryForm";
 
 const ExpenseCategory = () => {
   const { setOpenCustomerForm, openCustomerForm, storeCustomerData } =
@@ -82,11 +83,10 @@ const ExpenseCategory = () => {
           <TableHeader>
             <TableRow className={"bg-[#172332]"}>
               <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Type</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead className="text-left">Email</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Color</TableHead>
+              <TableHead className="text-left">Enabled</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -95,19 +95,10 @@ const ExpenseCategory = () => {
             {storeCustomerData.map((client, id) => (
               <TableRow key={client?._id}>
                 <TableCell className="font-medium">{id + 1}</TableCell>
-                <TableCell className="font-medium">
-                  <h1
-                    className={`${
-                      client?.type === "people" ? "bg-blue-400" : "bg-red-400"
-                    } text-center py-1 rounded-lg text-white`}
-                  >
-                    {client?.type}
-                  </h1>
-                </TableCell>
                 <TableCell className="font-medium">{client?.name}</TableCell>
                 <TableCell className="font-medium">{client?.country}</TableCell>
                 <TableCell className="font-medium">{client?.phone}</TableCell>
-                <TableCell className="font-medium">{client?.email}</TableCell>
+                <TableCell className="font-medium"> <Switch id="airplane-mode" /></TableCell>
 
                 <TableCell className="text-right">
                   <DropdownMenu>
@@ -136,7 +127,7 @@ const ExpenseCategory = () => {
           </TableBody>
         </Table>
       </div>
-      <CustomerForm />
+<ExpenseCategoryForm/>
     </div>
   );
 };

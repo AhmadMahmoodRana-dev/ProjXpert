@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const Context = createContext();
 
 const ContextProvider = (props) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [countryData, setCountryData] = useState([]);
   // ## PEOPLE
   const [openPersonForm, setOpenPersonForm] = useState(false);
@@ -27,7 +27,7 @@ const ContextProvider = (props) => {
 
   // ## LEAD
 
-   const [openLeadForm, setOpenLeadForm] = useState(false);
+  const [openLeadForm, setOpenLeadForm] = useState(false);
   const [openLeadDetail, setOpenLeadDetail] = useState(false);
   const [storeLeadData, setStoreLeadData] = useState([]);
   const [leadShowButton, setLeadShowButton] = useState(false);
@@ -42,10 +42,16 @@ const ContextProvider = (props) => {
   const [getSinglePeopleId, setGetSinglePeopleId] = useState("");
   const [storeCustomerData, setStoreCustomerData] = useState([]);
 
-// ## INVOICES
-const [showInvoiceButton,setShowInvoiceButton] = useState(false)
-const [storeInvoices,setStoreInvoices] = useState([])
-const [singleInvoice, setSingleInvoice] = useState({});
+  // ## INVOICES
+  const [showInvoiceButton, setShowInvoiceButton] = useState(false);
+  const [storeInvoices, setStoreInvoices] = useState([]);
+  const [singleInvoice, setSingleInvoice] = useState({});
+
+  // ## EXPENSE CATEGORY
+  const [storeExpenseCategory, setStoreExpenseCategory] = useState([]);
+  const [showExpenseCategoryButton, setShowExpenseCategoryButton] =
+    useState(false);
+    const [showExpenseCategoryForm,setShowExpenseCategoryForm] = useState(true)
 
   // ### PEOPLE FORM API ###
 
@@ -106,7 +112,7 @@ const [singleInvoice, setSingleInvoice] = useState({});
       const { data } = await axios.get(
         `http://localhost:1337/api/form/get-single-people/${people._id}`
       );
-      setPersonDetail(data)
+      setPersonDetail(data);
       setOpenPersonForm(!openPersonForm);
       setShowButton(!showButton);
       setUpdateId(data._id);
@@ -129,7 +135,7 @@ const [singleInvoice, setSingleInvoice] = useState({});
           email: value.email,
         }
       );
-    
+
       console.log("Succesfully Updated");
       window.location.reload();
     } catch (error) {
@@ -209,7 +215,7 @@ const [singleInvoice, setSingleInvoice] = useState({});
       const { data } = await axios.get(
         `http://localhost:1337/api/form/get-single-company/${company._id}`
       );
-      setCompanyDetail(data)
+      setCompanyDetail(data);
       setOpenCompanyForm(!openPersonForm);
       setCmpShowButton(!cmpShowButton);
       setCmpUpdateId(data._id);
@@ -253,108 +259,108 @@ const [singleInvoice, setSingleInvoice] = useState({});
 
   //   ## LEAD FORM APIS
 
- // post
+  // post
 
- const setLeads = async (val) => {
-  try {
-    const result = await axios.post(
-      `http://localhost:1337/api/form/post-lead`,
-      {
-        branch: val.leadBranch,
-        type: val.leadType,
-        name: val.leadName,
+  const setLeads = async (val) => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-lead`,
+        {
+          branch: val.leadBranch,
+          type: val.leadType,
+          name: val.leadName,
 
-        status: val.leadStatus,
-        source: val.leadSource,
-        country: val.leadCountry,
-        phone: val.leadPhone,
-        email: val.leadEmail,
-        project: val.leadProject,
-      }
+          status: val.leadStatus,
+          source: val.leadSource,
+          country: val.leadCountry,
+          phone: val.leadPhone,
+          email: val.leadEmail,
+          project: val.leadProject,
+        }
+      );
+      setOpenLeadForm(false);
+      getLead();
+      console.log("LeadForm submitted", result);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  // get
+
+  const getLead = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-lead`
+      );
+      setStoreLeadData(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // delete
+  const deleteLead = async (id) => {
+    try {
+      const result = await axios.delete(
+        `http://localhost:1337/api/form/delete-lead/${id}`
+      );
+      getLead();
+      console.log("Lead delete SuccessFully !", result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // update
+
+  const getSingleLead = async (Lead) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-lead/${Lead._id}`
+      );
+      setLeadDetail(data);
+      setOpenLeadForm(!openPersonForm);
+      setLeadShowButton(!leadShowButton);
+      setLeadUpdateId(data._id);
+      console.log("Leaddata fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateLead = async (val) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-lead/${leadUpdateId}`,
+        {
+          branch: val.leadBranch,
+          type: val.leadType,
+          name: val.leadName,
+
+          status: val.leadStatus,
+          source: val.leadSource,
+          country: val.leadCountry,
+          phone: val.leadPhone,
+          email: val.leadEmail,
+          project: val.leadProject,
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // detailpageInfo
+  const getLeadDetail = async (id) => {
+    const result = await axios.get(
+      `http://localhost:1337/api/form/get-single-lead/${id}`
     );
-    setOpenLeadForm(false);
-    getLead();
-    console.log("LeadForm submitted", result);
-  } catch (error) {
-    console.log("Error", error);
-  }
-};
-
-// get
-
-const getLead = async () => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-lead`
-    );
-    setStoreLeadData(data.message);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// delete
-const deleteLead = async (id) => {
-  try {
-    const result = await axios.delete(
-      `http://localhost:1337/api/form/delete-lead/${id}`
-    );
-    getLead();
-    console.log("Lead delete SuccessFully !", result);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// update
-
-const getSingleLead = async (Lead) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-lead/${Lead._id}`
-    );
-    setLeadDetail(data)
-    setOpenLeadForm(!openPersonForm);
-    setLeadShowButton(!leadShowButton);
-    setLeadUpdateId(data._id);
-    console.log("Leaddata fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const updateLead = async (val) => {
-  try {
-    const result = await axios.put(
-      `http://localhost:1337/api/form/update-lead/${leadUpdateId}`,
-      {
-       branch: val.leadBranch,
-        type: val.leadType,
-        name: val.leadName,
-
-        status: val.leadStatus,
-        source: val.leadSource,
-        country: val.leadCountry,
-        phone: val.leadPhone,
-        email: val.leadEmail,
-        project: val.leadProject,
-      }
-    );
-    window.location.reload();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// detailpageInfo
-const getLeadDetail = async (id) => {
-  const result = await axios.get(
-    `http://localhost:1337/api/form/get-single-lead/${id}`
-  );
-  setLeadDetail(result.data);
-  console.log(result.data);
-  setOpenLeadDetail(true);
-};
+    setLeadDetail(result.data);
+    console.log(result.data);
+    setOpenLeadDetail(true);
+  };
 
   //           #########################################################################################          //
 
@@ -410,77 +416,112 @@ const getLeadDetail = async (id) => {
     }
   };
 
+  //           #########################################################################################          //
 
- //           #########################################################################################          //
+  // INVOICES
 
-// INVOICES
+  // POST
 
-// POST
+  const setInvoice = async (invoice) => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-invoice`,
+        invoice
+      );
+      console.log("Invoice submitted", result);
+      setShowInvoiceButton(!showInvoiceButton);
+      getInvoice();
+      navigate("/invoices");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-const setInvoice = async (invoice) =>{
-try {
-  const result = await axios.post(`http://localhost:1337/api/form/post-invoice`,invoice)
-  console.log("Invoice submitted", result);
-  setShowInvoiceButton(!showInvoiceButton)
-  getInvoice()
-  navigate('/invoices')
-} catch (error) {
-  console.log(error)
-}
-}
+  // GET
+  const getInvoice = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-invoice`
+      );
+      setStoreInvoices(data);
+      console.log("INVOICES", storeInvoices);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-// GET
-const getInvoice = async () =>{
-  try {
-    const {data} = await axios.get(`http://localhost:1337/api/form/get-invoice`)
-    setStoreInvoices(data)
-    console.log("INVOICES",storeInvoices)
-  } catch (error) {
-    console.log(error)
-  }
-  }
-  
-//  DELETE
-const deleteInvoice = async (invoiceId) =>{
-  try {
-    await axios.delete(`http://localhost:1337/api/form/delete-invoice/${invoiceId}`)
-    console.log("Invoice deleted successfully!")
-    getInvoice()
-  } catch (error) {
-    console.log(error)
-  }
-}
+  //  DELETE
+  const deleteInvoice = async (invoiceId) => {
+    try {
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-invoice/${invoiceId}`
+      );
+      console.log("Invoice deleted successfully!");
+      getInvoice();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-// SINGLE INVOICE
-const getSingleinvoice = async (invoice) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
-    );
-    setSingleInvoice(data)
-   navigate('/invoices-payment-form')
-    console.log("Leaddata fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  // SINGLE INVOICE
+  const getSingleinvoice = async (invoice) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
+      );
+      setSingleInvoice(data);
+      navigate("/invoices-payment-form");
+      console.log("Leaddata fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-//  UPDATE INVOICE PAYMENT
-const updateInvoicePayment = async (value,id) =>{
-  try {
-    const result = await axios.put(
-      `http://localhost:1337/api/form/update-invoice/${id}`,
-      {
-        paidAmount:value.amount,
-      }
-    );
-    window.location.reload();
-    console.log("Invoice Payment Updated Successfully", value,id);
-  } catch (error) {
-    console.log(error);
-  }
-}
+  //  UPDATE INVOICE PAYMENT
+  const updateInvoicePayment = async (value, id) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-invoice/${id}`,
+        {
+          paidAmount: value.amount,
+        }
+      );
+      window.location.reload();
+      console.log("Invoice Payment Updated Successfully", value, id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  //           #########################################################################################          //
+  // EXPENSE CATEGORY API
+
+  // GET
+  const getExpenseCategory = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-expensecategory`
+      );
+      setStoreExpenseCategory(data);
+      console.log("INVOICES", storeExpenseCategory);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // POST
+  const setExpenseCategory = async (expensecategory) => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-expensecategory`,
+        expensecategory
+      );
+      console.log("EXPENSE CATEGORY submitted", result);
+      setShowExpenseCategoryButton(!showExpenseCategoryButton);
+      getExpenseCategory();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
   //   ## GET COUNTRY
@@ -500,7 +541,8 @@ const updateInvoicePayment = async (value,id) =>{
     getCountry();
     getLead();
     getCustomerData();
-    getInvoice()
+    getInvoice();
+    getExpenseCategory();
   }, []);
 
   // ######################################################################################################################################
@@ -545,7 +587,7 @@ const updateInvoicePayment = async (value,id) =>{
 
     // #######################
     // Lead
-    
+
     setOpenLeadForm,
     openLeadForm,
     setLeads,
@@ -564,7 +606,7 @@ const updateInvoicePayment = async (value,id) =>{
 
     // #######################
     // Customer
-    
+
     setOpenCustomerForm,
     openCustomerForm,
     getSingleCompanyId,
@@ -574,7 +616,7 @@ const updateInvoicePayment = async (value,id) =>{
     storeSingleCustomerCompany,
     storeSingleCustomerPeople,
     storeCustomerData,
-    
+
     // #######################
     // Invoice
     showInvoiceButton,
@@ -584,8 +626,14 @@ const updateInvoicePayment = async (value,id) =>{
     deleteInvoice,
     getSingleinvoice,
     singleInvoice,
-    updateInvoicePayment
+    updateInvoicePayment,
 
+    // #######################
+    // EXPENSE CATEGORY
+    setExpenseCategory,
+    showExpenseCategoryButton,
+    showExpenseCategoryForm,
+    setShowExpenseCategoryForm
   };
 
   return (
