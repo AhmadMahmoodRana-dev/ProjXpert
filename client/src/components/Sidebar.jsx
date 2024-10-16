@@ -121,6 +121,15 @@ const Sidebar = ({ children }) => {
                 <Weight className="h-4 w-4" />
                 ExpenseCategory
               </Link>
+              <Link
+                to="/product-category"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                  location.pathname === "/product-category" ? "bg-muted text-primary" : "text-muted-foreground hover:text-primary"
+                }`}
+              >
+                <Weight className="h-4 w-4" />
+                ProductCategory
+              </Link>
               {/* Add more links similarly */}
             </nav>
           </div>

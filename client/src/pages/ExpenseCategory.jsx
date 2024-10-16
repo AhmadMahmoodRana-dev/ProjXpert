@@ -34,10 +34,17 @@ import {
 import { Context } from "@/context/Context";
 import { Switch } from "@/components/ui/switch";
 import ExpenseCategoryForm from "../components/ExpenseCategoryForm";
+import ExpensiveCategoryDetailShow from "@/components/ExpensiveCategoryDetailShow";
 
 const ExpenseCategory = () => {
-  const { setOpenCustomerForm, openCustomerForm, storeCustomerData } =
-    useContext(Context);
+  const {
+    showExpenseCategoryForm,
+    setShowExpenseCategoryForm,
+    deleteExpenseCategory,
+    storeExpenseCategory,
+    getSingleExpenseCategory,
+    getSingleExpenseCategoryUpdate
+  } = useContext(Context);
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
       <div className="w-[94%] bg-white px-10 py-10">
@@ -74,9 +81,9 @@ const ExpenseCategory = () => {
           </Button>
           <Button
             className={"bg-[#172332]"}
-            onClick={() => setOpenCustomerForm(!openCustomerForm)}
+            onClick={() => setShowExpenseCategoryForm(!showExpenseCategoryForm)}
           >
-            Add Client
+            Add ExpenseCategory
           </Button>
         </div>
         <Table className={"bg-white"}>
@@ -92,42 +99,58 @@ const ExpenseCategory = () => {
           </TableHeader>
 
           <TableBody>
-            {storeCustomerData.map((client, id) => (
-              <TableRow key={client?._id}>
-                <TableCell className="font-medium">{id + 1}</TableCell>
-                <TableCell className="font-medium">{client?.name}</TableCell>
-                <TableCell className="font-medium">{client?.country}</TableCell>
-                <TableCell className="font-medium">{client?.phone}</TableCell>
-                <TableCell className="font-medium"> <Switch id="airplane-mode" /></TableCell>
+  {storeExpenseCategory.map((expenses, id) => (
+    <TableRow key={expenses?._id}>
+      <TableCell className="font-medium">{id + 1}</TableCell>
+      <TableCell className="font-medium">{expenses?.name}</TableCell>
+      <TableCell className="font-medium">
+        {expenses?.description}
+      </TableCell>
+      <TableCell className="font-medium">
+        <h1
+          className={`bg-[${expenses.color}] w-[65px] px-2 rounded-md py-2`}
+        >
+          {expenses?.color}
+        </h1>
+      </TableCell>
+      <TableCell className="font-medium">
+        <Switch
+          id={`enabled-${id}`}
+          checked={expenses.enabled} 
+          onCheckedChange={() => {} /* No action if it's already enabled */}
+          disabled={expenses.enabled} 
+        />
+      </TableCell>
+      <TableCell className="text-right">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-1">
+            <BreadcrumbEllipsis className="h-4 w-4" />
+            <span className="sr-only">Toggle menu</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem className="flex gap-3"  onClick={() => getSingleExpenseCategory(expenses)}>
+              <TvMinimal size={16} />
+              Show
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex gap-3" onClick={() => getSingleExpenseCategoryUpdate(expenses)}>
+              <FilePenLine size={16} />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex gap-3" onClick={() => deleteExpenseCategory(expenses._id)}>
+              <Trash2 size={16} />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
 
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center gap-1">
-                      <BreadcrumbEllipsis className="h-4 w-4" />
-                      <span className="sr-only">Toggle menu</span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      <DropdownMenuItem className="flex gap-3">
-                        <TvMinimal size={16} />
-                        Show
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="flex gap-3">
-                        <FilePenLine size={16} />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="flex gap-3">
-                        <Trash2 size={16} />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
         </Table>
       </div>
-<ExpenseCategoryForm/>
+      <ExpenseCategoryForm />
+      <ExpensiveCategoryDetailShow/>
     </div>
   );
 };

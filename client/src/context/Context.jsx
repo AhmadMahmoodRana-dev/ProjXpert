@@ -51,7 +51,21 @@ const ContextProvider = (props) => {
   const [storeExpenseCategory, setStoreExpenseCategory] = useState([]);
   const [showExpenseCategoryButton, setShowExpenseCategoryButton] =
     useState(false);
-    const [showExpenseCategoryForm,setShowExpenseCategoryForm] = useState(true)
+  const [showExpenseCategoryForm, setShowExpenseCategoryForm] = useState(false);
+  const [SingleExpenseCategory, setSingleExpenseCategory] = useState({});
+  const [openExpensiveCategoryDetailPage, setOpenExpensiveCategoryDetailPage] =
+    useState(false);
+ const [singleExpenseUpdateId,setSingleExpenseUpdateId] = useState("") 
+
+  // ## PRODUCT CATEGORY
+  const [storeProductCategory, setStoreProductCategory] = useState([]);
+  const [showProductCategoryButton, setShowProductCategoryButton] =
+    useState(false);
+  const [showProductCategoryForm, setShowProductCategoryForm] = useState(false);
+  const [SingleProductCategory, setSingleProductCategory] = useState({});
+  const [openProductCategoryDetailPage, setOpenProductCategoryDetailPage] =
+    useState(false);
+ const [singleProductUpdateId,setSingleProductUpdateId] = useState("")   
 
   // ### PEOPLE FORM API ###
 
@@ -494,15 +508,16 @@ const ContextProvider = (props) => {
   };
 
   //           #########################################################################################          //
-  // EXPENSE CATEGORY API
 
+  // EXPENSE CATEGORY API
+  
   // GET
   const getExpenseCategory = async () => {
     try {
       const { data } = await axios.get(
         `http://localhost:1337/api/form/get-expensecategory`
       );
-      setStoreExpenseCategory(data);
+      setStoreExpenseCategory(data.message);
       console.log("INVOICES", storeExpenseCategory);
     } catch (error) {
       console.log(error);
@@ -517,11 +532,169 @@ const ContextProvider = (props) => {
       );
       console.log("EXPENSE CATEGORY submitted", result);
       setShowExpenseCategoryButton(!showExpenseCategoryButton);
+      setShowExpenseCategoryForm(true);
+      // getExpenseCategory();
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // DELETE
+  const deleteExpenseCategory = async (Id) => {
+    try {
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-expensecategory/${Id}`
+      );
+      console.log("Invoice deleted successfully!");
       getExpenseCategory();
     } catch (error) {
       console.log(error);
     }
   };
+
+  // UPDATE
+
+  const getSingleExpenseCategory = async (ExpenseCategory) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`
+      );
+      setOpenExpensiveCategoryDetailPage(!openExpensiveCategoryDetailPage);
+      setSingleExpenseCategory(data);
+      setSingleExpenseUpdateId(data._id);
+      console.log("Leaddata fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSingleExpenseCategoryUpdate = async (ExpenseCategory) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`
+      );
+      setShowExpenseCategoryForm(!showExpenseCategoryForm);
+      setShowExpenseCategoryButton(true)
+      setSingleExpenseCategory(data);
+      setSingleExpenseUpdateId(data._id);
+      console.log("Leaddata fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateSingleExpenseCategory = async (val) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-expensecategory/${singleExpenseUpdateId}`,
+        {
+          name: val.name,
+          description: val.description,
+          color: val.color,
+          enabled: val.enabled,
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //           #########################################################################################          //
+
+  // PRODUCT CATEGORY API
+  
+  // GET
+  const getProductCategory = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-productcategory`
+      );
+      setStoreProductCategory(data.message);
+      console.log("INVOICES", storeProductCategory);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // POST
+  const setProductCategory = async (Productcategory) => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-productcategory`,
+        Productcategory
+      );
+      console.log("Product CATEGORY submitted", result);
+      setShowProductCategoryButton(!showProductCategoryButton);
+      setShowProductCategoryForm(true);
+      // getProductCategory();
+      window.location.reload()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // DELETE
+  const deleteProductCategory = async (Id) => {
+    try {
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-productcategory/${Id}`
+      );
+      console.log("Invoice deleted successfully!");
+      getProductCategory();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // UPDATE
+
+  const getSingleProductCategory = async (ProductCategory) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`
+      );
+      setOpenProductCategoryDetailPage(!openProductCategoryDetailPage);
+      setSingleProductCategory(data);
+      setSingleProductUpdateId(data._id);
+      console.log("Leaddata fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSingleProductCategoryUpdate = async (ProductCategory) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`
+      );
+      setShowProductCategoryForm(!showProductCategoryForm);
+      setShowProductCategoryButton(true)
+      setSingleProductCategory(data);
+      setSingleProductUpdateId(data._id);
+      console.log("Leaddata fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateSingleProductCategory = async (val) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-productcategory/${singleProductUpdateId}`,
+        {
+          name: val.name,
+          description: val.description,
+          color: val.color,
+          enabled: val.enabled,
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
 
   //           #########################################################################################          //
   //   ## GET COUNTRY
@@ -543,6 +716,7 @@ const ContextProvider = (props) => {
     getCustomerData();
     getInvoice();
     getExpenseCategory();
+    getProductCategory();
   }, []);
 
   // ######################################################################################################################################
@@ -633,7 +807,29 @@ const ContextProvider = (props) => {
     setExpenseCategory,
     showExpenseCategoryButton,
     showExpenseCategoryForm,
-    setShowExpenseCategoryForm
+    setShowExpenseCategoryForm,
+    storeExpenseCategory,
+    deleteExpenseCategory,
+    openExpensiveCategoryDetailPage,
+    setOpenExpensiveCategoryDetailPage,
+    getSingleExpenseCategory,
+    SingleExpenseCategory,
+    updateSingleExpenseCategory,
+    getSingleExpenseCategoryUpdate,
+    // #######################
+    // PRODUCT CATEGORY
+    setProductCategory,
+    showProductCategoryButton,
+    showProductCategoryForm,
+    setShowProductCategoryForm,
+    storeProductCategory,
+    deleteProductCategory,
+    openProductCategoryDetailPage,
+    setOpenProductCategoryDetailPage,
+    getSingleProductCategory,
+    SingleProductCategory,
+    updateSingleProductCategory,
+    getSingleProductCategoryUpdate
   };
 
   return (

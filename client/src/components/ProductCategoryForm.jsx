@@ -17,7 +17,7 @@ import { Textarea } from "./ui/textarea";
 import { Switch } from "./ui/switch";
 
 // Validation schema using Yup
-const ExpenseCategoryFormSchema = Yup.object().shape({
+const ProductCategoryFormSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   description: Yup.string().required("Description is required"),
   color: Yup.string()
@@ -29,14 +29,14 @@ const ExpenseCategoryFormSchema = Yup.object().shape({
   enabled: Yup.boolean().required("Enabled status is required"),
 });
 
-const ExpenseCategoryForm = () => {
+const ProductCategoryForm = () => {
   const {
-    setExpenseCategory,
-    showExpenseCategoryForm,
-    setShowExpenseCategoryForm,
-    showExpenseCategoryButton,
-    SingleExpenseCategory,
-    updateSingleExpenseCategory,
+    setProductCategory,
+    showProductCategoryForm,
+    setShowProductCategoryForm,
+    showProductCategoryButton,
+    SingleProductCategory,
+    updateSingleProductCategory,
   } = useContext(Context);
 
   const colorOptions = [
@@ -65,8 +65,8 @@ const ExpenseCategoryForm = () => {
 
   return (
     <Dialog
-      open={showExpenseCategoryForm}
-      onClose={() => setShowExpenseCategoryForm(false)} // Improved the onClose logic
+      open={showProductCategoryForm}
+      onClose={() => setShowProductCategoryForm(false)} // Improved the onClose logic
       className="relative z-10"
     >
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0" />
@@ -79,7 +79,7 @@ const ExpenseCategoryForm = () => {
                 <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
                   <button
                     type="button"
-                    onClick={() => setShowExpenseCategoryForm(false)} // Close form on clicking X
+                    onClick={() => setShowProductCategoryForm(false)} // Close form on clicking X
                     className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                   >
                     <span className="absolute -inset-2.5" />
@@ -91,19 +91,19 @@ const ExpenseCategoryForm = () => {
               <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                 <Formik
                   initialValues={{
-                    name: SingleExpenseCategory.name || "",
-                    description: SingleExpenseCategory.description || "",
-                    color: SingleExpenseCategory.color || "#ffffff", // Fixed default color value
-                    enabled: SingleExpenseCategory.enabled || false,
+                    name: SingleProductCategory.name || "",
+                    description: SingleProductCategory.description || "",
+                    color: SingleProductCategory.color || "#ffffff", // Fixed default color value
+                    enabled: SingleProductCategory.enabled || false,
                   }}
-                  validationSchema={ExpenseCategoryFormSchema}
+                  validationSchema={ProductCategoryFormSchema}
                   onSubmit={(values) => {
-                    if (showExpenseCategoryButton) {
-                      updateSingleExpenseCategory(values);
+                    if (showProductCategoryButton) {
+                      updateSingleProductCategory(values);
                     } else {
-                      setExpenseCategory(values);
+                        setProductCategory(values);
                     }
-                    setShowExpenseCategoryForm(false); // Close form on successful submission
+                    setShowProductCategoryForm(false); // Close form on successful submission
                   }}
                 >
                   {({ setFieldValue, values }) => (
@@ -161,7 +161,7 @@ const ExpenseCategoryForm = () => {
                       />
 
                       <Button className="mt-10" type="submit">
-                        {showExpenseCategoryButton ? "Update" : "Save"} {/* Button text logic */}
+                        {showProductCategoryButton ? "Update" : "Save"} {/* Button text logic */}
                       </Button>
                     </Form>
                   )}
@@ -175,4 +175,4 @@ const ExpenseCategoryForm = () => {
   );
 };
 
-export default ExpenseCategoryForm;
+export default ProductCategoryForm;
