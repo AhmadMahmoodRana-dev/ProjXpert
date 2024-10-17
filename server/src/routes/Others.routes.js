@@ -6,6 +6,7 @@ import { getCustomer, postCustomer } from "../controller/Customer.controller.js"
 import { deleteInvoices, getInvoices, getSingleInvoice, postInvoices, updateInvoice } from "../controller/Invoices.controller.js";
 import { deleteExpenseCategory, getExpenseCategory, getSingleExpenseCategory, postExpenseCategory, updateExpenseCategory } from "../controller/ExpenseCategory.controller.js";
 import { deleteProductCategory, getProductCategory, getSingleProductCategory, postProductCategory, updateProductCategory } from "../controller/ProductCategory.controller.js";
+import { deleteExpense, getExpense, getSingleExpense, postExpense, updateExpense } from "../controller/Expense.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -49,5 +50,12 @@ route.get("/get-single-productcategory/:id",getSingleProductCategory)
 route.post("/post-productcategory",postProductCategory)
 route.delete("/delete-productcategory/:id",deleteProductCategory)
 route.put("/update-productcategory/:id",updateProductCategory)
+
+// ## EXPENSE
+route.get("/get-expense",getExpense)
+route.get("/get-single-expense/:id",getSingleExpense)
+route.post("/post-expense",postExpense)
+route.delete("/delete-expense/:id",deleteExpense)
+route.put("/update-expense/:id",updateExpense)
 
 export default route;

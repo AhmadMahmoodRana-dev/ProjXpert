@@ -46,8 +46,8 @@ const InvoicesForm = () => {
   });
 
   return (
-    <div className="w-full h-auto flex justify-center items-center">
-      <div className="w-[92%] bg-[#ededed] p-4">
+    <div className="w-full h-auto flex justify-center items-center py-4">
+      <div className="w-[92%] bg-[#ededed] p-4 ">
         <Formik
           initialValues={{
             client: "",

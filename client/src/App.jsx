@@ -13,6 +13,7 @@ import ExpenseCategory from "./pages/ExpenseCategory";
 import InvoicesForm from "./pages/InvoicesForm";
 import InvoicesPaymentForm from "./pages/InvoicesPaymentForm";
 import ProductCategory from "./pages/ProductCategory";
+import Expense from "./pages/Expense";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/invoices-payment-form" element={<InvoicesPaymentForm/>} />
             <Route path="/expense-category" element={<ExpenseCategory/>} />
             <Route path="/product-category" element={<ProductCategory/>} />
+            <Route path="/expense" element={<Expense/>} />
 
           </Route>
         </Routes>

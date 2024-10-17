@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ref } from "yup";
 
 export const Context = createContext();
 
@@ -67,6 +68,14 @@ const ContextProvider = (props) => {
     useState(false);
  const [singleProductUpdateId,setSingleProductUpdateId] = useState("")   
 
+
+// ## EXPENSE
+const [openExpenseForm,setOpenExpenseForm] = useState(false)
+const [showExpenseButton,setShowExpenseButton] = useState(false)
+const [storeExpense,setStoreExpense] = useState([])
+const [expenseDetailShow,setExpenseDetailShow] = useState(false)
+const [singleExpense,setSingleExpense] = useState({})
+const [singleExpenseUpdatedId,setSingleExpenseUpdatedId] = useState("")
   // ### PEOPLE FORM API ###
 
   // post
@@ -694,6 +703,100 @@ const ContextProvider = (props) => {
   };
 
 
+  //           #########################################################################################          //
+
+  //   ## EXPENSE
+// POST
+  const setExpense = async (expense) => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-expense`,
+        expense
+      );
+      console.log("Expense submitted", result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //   ## GET EXPENSE
+  const getExpense = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-expense`
+      );
+      setStoreExpense(data.message);
+      console.log("INVOICES", storeExpense);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // DELETE EXPENSE
+  const deleteExpense = async (Id) => {
+    try {
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-expense/${Id}`
+      );
+      console.log("Expense deleted successfully!");
+      getExpense();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+// ### UPDATE
+
+const getSingleExpense = async (Expense) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
+    );
+    setExpenseDetailShow(!expenseDetailShow),
+    setSingleExpense(data);
+    setSingleExpenseUpdatedId(data._id);
+    console.log("Expense fetch sucessfully", data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getSingleExpenseUpdate = async (Expense) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
+    );
+    setOpenExpenseForm(!openExpenseForm);
+    setShowExpenseButton(true)
+    setSingleExpense(data);
+    setSingleExpenseUpdatedId(data._id);
+    console.log("Expense fetch sucessfully", data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateSingleExpense = async (val) => {
+  try {
+    const result = await axios.put(
+      `http://localhost:1337/api/form/update-expense/${singleExpenseUpdatedId}`,
+      {
+        name: val.name,
+        expensecategory: val.expensecategory,
+        currency:val.currency,
+        total:val.total,
+        description: val.description,
+        ref:val.ref
+      }
+    );
+    window.location.reload();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
 
 
   //           #########################################################################################          //
@@ -717,6 +820,7 @@ const ContextProvider = (props) => {
     getInvoice();
     getExpenseCategory();
     getProductCategory();
+    getExpense()
   }, []);
 
   // ######################################################################################################################################
@@ -774,7 +878,6 @@ const ContextProvider = (props) => {
     setOpenLeadDetail,
     getLeadDetail,
     leadDetail,
-    storeLeadData,
     leadSearchTerm,
     setLeadSearchTerm,
 
@@ -816,6 +919,7 @@ const ContextProvider = (props) => {
     SingleExpenseCategory,
     updateSingleExpenseCategory,
     getSingleExpenseCategoryUpdate,
+
     // #######################
     // PRODUCT CATEGORY
     setProductCategory,
@@ -829,7 +933,25 @@ const ContextProvider = (props) => {
     getSingleProductCategory,
     SingleProductCategory,
     updateSingleProductCategory,
-    getSingleProductCategoryUpdate
+    getSingleProductCategoryUpdate,
+
+    // #######################
+    // EXPENSE
+    openExpenseForm,
+    setOpenExpenseForm,
+    setExpense,
+    showExpenseButton,
+    setShowExpenseButton,
+    storeExpense,
+    deleteExpense,
+    expenseDetailShow,
+    setExpenseDetailShow,
+    getSingleExpense,
+    singleExpense,
+    getSingleExpenseUpdate,
+    updateSingleExpense
+
+
   };
 
   return (
