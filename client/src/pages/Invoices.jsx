@@ -47,7 +47,8 @@ const Invoices = () => {
     cmpSearchTerm,
     setCmpSearchTerm,
     deleteInvoice,
-    getSingleLead
+    getSingleLead,
+    getSingleinvoiceDetail
   } = useContext(Context);
 
   return (
@@ -129,7 +130,9 @@ const Invoices = () => {
                   <TableCell>{invoice?.total}</TableCell>
                   <TableCell>{invoice?.paidAmount}</TableCell>
                   <TableCell>{invoice?.status}</TableCell>
-                  <TableCell>{invoice?.paymentStatus}</TableCell>
+                  <TableCell>{
+                    invoice.total === invoice.paidAmount ? (<h3>paid</h3>):(<h3>unpaid</h3>)
+                    }</TableCell>
                   <TableCell className="text-left">{invoice?.number}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -140,7 +143,7 @@ const Invoices = () => {
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getCompanyDetail(company._id)}
+                          onClick={() => getSingleinvoiceDetail(invoice._id)}
                         >
                           <TvMinimal size={16} />
                           Show

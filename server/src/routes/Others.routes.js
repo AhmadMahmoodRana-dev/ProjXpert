@@ -2,11 +2,12 @@ import { Router } from "express";
 import { deletePeople, getPeople, getSinglePeople, postPeople, updatePeopleData } from "../controller/People.controller.js";
 import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompanyData } from "../controller/Company.controller.js";
 import { deleteLead, getLead, getSingleLead, leadStatusFilter, leadStatusUpdate, postLead, updateLeadData } from "../controller/Lead.controller.js";
-import { getCustomer, postCustomer } from "../controller/Customer.controller.js";
-import { deleteInvoices, getInvoices, getSingleInvoice, postInvoices, updateInvoice } from "../controller/Invoices.controller.js";
+import { getCustomer, getSingleCustomerName, postCustomer } from "../controller/Customer.controller.js";
+import { deleteInvoices, getInvoices, getSingleInvoice,  postInvoices, updateInvoice } from "../controller/Invoices.controller.js";
 import { deleteExpenseCategory, getExpenseCategory, getSingleExpenseCategory, postExpenseCategory, updateExpenseCategory } from "../controller/ExpenseCategory.controller.js";
 import { deleteProductCategory, getProductCategory, getSingleProductCategory, postProductCategory, updateProductCategory } from "../controller/ProductCategory.controller.js";
 import { deleteExpense, getExpense, getSingleExpense, postExpense, updateExpense } from "../controller/Expense.controller.js";
+import { deleteProduct, getProduct, getSingleProduct, postProduct, updateProduct } from "../controller/Product.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -32,6 +33,7 @@ route.put("/update-lead-status",leadStatusUpdate)
 // ## CUSTOMER
 route.get("/get-customer",getCustomer)
 route.post("/post-customer",postCustomer)
+route.get("/get-customer/:name",getSingleCustomerName)
 // ## INVOICES
 route.post("/post-invoice",postInvoices)
 route.get("/get-invoice",getInvoices)
@@ -57,5 +59,13 @@ route.get("/get-single-expense/:id",getSingleExpense)
 route.post("/post-expense",postExpense)
 route.delete("/delete-expense/:id",deleteExpense)
 route.put("/update-expense/:id",updateExpense)
+
+// ## PRODUCT
+route.get("/get-product",getProduct)
+route.get("/get-single-product/:id",getSingleProduct)
+route.post("/post-product",postProduct)
+route.delete("/delete-product/:id",deleteProduct)
+route.put("/update-product/:id",updateProduct)
+
 
 export default route;

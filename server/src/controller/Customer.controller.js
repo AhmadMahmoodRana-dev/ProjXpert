@@ -14,6 +14,18 @@ export const getCustomer = async (req, res) => {
     }
 }
 
+export const getSingleCustomerName = async (req, res) => {
+    try {
+      const invoice = await Customer.findOne({ name: req.params.name });
+      if (!invoice) {
+        return res.status(404).json({ message: 'Invoice not found' });
+      }
+      res.status(200).json(invoice);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
 export const postCustomer = async (req, res) => {
     try {
         const data = req.body

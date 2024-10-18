@@ -14,6 +14,8 @@ import InvoicesForm from "./pages/InvoicesForm";
 import InvoicesPaymentForm from "./pages/InvoicesPaymentForm";
 import ProductCategory from "./pages/ProductCategory";
 import Expense from "./pages/Expense";
+import Product from "./pages/Product";
+import InvoicesDetail from "./pages/InvoicesDetail";
 
 export default function App() {
   return (
@@ -33,6 +35,8 @@ export default function App() {
             <Route path="/expense-category" element={<ExpenseCategory/>} />
             <Route path="/product-category" element={<ProductCategory/>} />
             <Route path="/expense" element={<Expense/>} />
+            <Route path="/product" element={<Product/>} />
+            <Route path="/invoices-detail" element={<InvoicesDetail/>} />
 
           </Route>
         </Routes>
