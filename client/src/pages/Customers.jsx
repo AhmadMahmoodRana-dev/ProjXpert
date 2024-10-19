@@ -37,7 +37,7 @@ import CustomerForm from "../components/CustomerForm";
 import { Context } from "@/context/Context";
 
 const Customers = () => {
-  const { setOpenCustomerForm, openCustomerForm, storeCustomerData } =
+  const { setOpenCustomerForm, openCustomerForm, storeCustomerData,deleteCustomer } =
     useContext(Context);
   return (
     <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
@@ -122,11 +122,8 @@ const Customers = () => {
                         <TvMinimal size={16} />
                         Show
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="flex gap-3">
-                        <FilePenLine size={16} />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="flex gap-3">
+                      
+                      <DropdownMenuItem className="flex gap-3" onClick={() => deleteCustomer(client._id)}>
                         <Trash2 size={16} />
                         Delete
                       </DropdownMenuItem>

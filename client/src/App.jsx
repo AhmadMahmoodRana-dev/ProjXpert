@@ -40,7 +40,7 @@ export default function App() {
 
           </Route>
         </Routes>
-        <CompanyDetailShow />
+        <CompanyDetailShow />   
         <CustomerForm/>
         
       </div>

@@ -48,6 +48,7 @@ const Invoices = () => {
     setCmpSearchTerm,
     deleteInvoice,
     getSingleLead,
+    getSingleinvoiceDetail1,
     getSingleinvoiceDetail
   } = useContext(Context);
 
@@ -150,7 +151,7 @@ const Invoices = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3"
-                          onClick={() => getSingleLead(invoice)}
+                          onClick={() => getSingleinvoiceDetail1(invoice)}
                         >
                           <FilePenLine size={16} />
                           Edit

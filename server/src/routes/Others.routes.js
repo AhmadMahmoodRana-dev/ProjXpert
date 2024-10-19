@@ -2,7 +2,7 @@ import { Router } from "express";
 import { deletePeople, getPeople, getSinglePeople, postPeople, updatePeopleData } from "../controller/People.controller.js";
 import { deleteCompany, getCompany, getSingleCompany, postCompany, updateCompanyData } from "../controller/Company.controller.js";
 import { deleteLead, getLead, getSingleLead, leadStatusFilter, leadStatusUpdate, postLead, updateLeadData } from "../controller/Lead.controller.js";
-import { getCustomer, getSingleCustomerName, postCustomer } from "../controller/Customer.controller.js";
+import { deleteCustomer, getCustomer, getSingleCustomerName, postCustomer } from "../controller/Customer.controller.js";
 import { deleteInvoices, getInvoices, getSingleInvoice,  postInvoices, updateInvoice } from "../controller/Invoices.controller.js";
 import { deleteExpenseCategory, getExpenseCategory, getSingleExpenseCategory, postExpenseCategory, updateExpenseCategory } from "../controller/ExpenseCategory.controller.js";
 import { deleteProductCategory, getProductCategory, getSingleProductCategory, postProductCategory, updateProductCategory } from "../controller/ProductCategory.controller.js";
@@ -34,6 +34,7 @@ route.put("/update-lead-status",leadStatusUpdate)
 route.get("/get-customer",getCustomer)
 route.post("/post-customer",postCustomer)
 route.get("/get-customer/:name",getSingleCustomerName)
+route.delete("/delete-customer/:id",deleteCustomer)
 // ## INVOICES
 route.post("/post-invoice",postInvoices)
 route.get("/get-invoice",getInvoices)

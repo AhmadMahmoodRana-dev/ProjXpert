@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Input } from "@/components/ui/input";
@@ -7,21 +7,74 @@ import { Button } from "@/components/ui/button";
 import { Context } from "@/context/Context";
 
 const InvoicesForm = () => {
-  const { showInvoiceButton, setInvoice,storeCustomerData } = useContext(Context);
+  const { showInvoiceButton, setInvoice, storeCustomerData, singleInvoice,updateInvoice } = useContext(Context);
+  
+  // State for initial form data
+  const [initialData, setInitialData] = useState({
+    client: "",
+    number: "",
+    year: new Date().getFullYear(),
+    currency: "USD",
+    status: "Draft",
+    date: "",
+    expireDate: "",
+    note: "",
+    items: [
+      {
+        itemName: "",
+        descriptionName: "",
+        quantity: 1,
+        price: 0,
+        total: 0,
+      },
+    ],
+    subTotal: 0,
+    tax: 0,
+    total: 0,
+  });
 
-  // Options for currency and status
+  // Update initial data based on singleInvoice when it's available
+  useEffect(() => {
+    if (singleInvoice) {
+      setInitialData({
+        client: singleInvoice.client || "",
+        number: singleInvoice.number || "",
+        year: singleInvoice.year || new Date().getFullYear(),
+        currency: singleInvoice.currency || "USD",
+        status: singleInvoice.status || "Draft",
+        date: singleInvoice.date || "",
+        expireDate: singleInvoice.expireDate || "",
+        note: singleInvoice.note || "",
+        items: singleInvoice.items || [
+          {
+            itemName: "",
+            descriptionName: "",
+            quantity: 1,
+            price: 0,
+            total: 0,
+          },
+        ],
+        subTotal: singleInvoice.subTotal || 0,
+        tax: singleInvoice.tax || 0,
+        total: singleInvoice.total || 0,
+      });
+    }
+  }, [singleInvoice]);
+
+  // Currency and Status options
   const currencyOptions = [
     { label: "USD", value: "USD" },
     { label: "EUR", value: "EUR" },
     { label: "GBP", value: "GBP" },
   ];
+
   const statusOptions = [
     { label: "Draft", value: "Draft" },
     { label: "Pending", value: "Pending" },
     { label: "Paid", value: "Paid" },
   ];
 
-  // Validation schema
+  // Validation schema for the form
   const validationSchema = Yup.object({
     client: Yup.string().required("Client is required"),
     number: Yup.number().required("Invoice number is required"),
@@ -29,72 +82,41 @@ const InvoicesForm = () => {
     currency: Yup.string().required("Currency is required"),
     date: Yup.date().required("Date is required"),
     expireDate: Yup.date().required("Expire Date is required"),
-    items: Yup.array()
-      .of(
-        Yup.object({
-          itemName: Yup.string().required("Item Name is required"),
-          quantity: Yup.number()
-            .min(1, "Quantity must be at least 1")
-            .required("Quantity is required"),
-          price: Yup.number()
-            .min(0, "Price must be non-negative")
-            .required("Price is required"),
-        })
-      )
-      .required("At least one item is required"),
+    items: Yup.array().of(
+      Yup.object({
+        itemName: Yup.string().required("Item Name is required"),
+        quantity: Yup.number().min(1, "Quantity must be at least 1").required("Quantity is required"),
+        price: Yup.number().min(0, "Price must be non-negative").required("Price is required"),
+      })
+    ).required("At least one item is required"),
     tax: Yup.number().min(0, "Tax must be non-negative").required("Tax is required"),
   });
 
   return (
     <div className="w-full h-auto flex justify-center items-center py-4">
-      <div className="w-[92%] bg-[#ededed] p-4 ">
+      <div className="w-[92%] bg-[#ededed] p-4">
         <Formik
-          initialValues={{
-            client: "",
-            number: "",
-            year: new Date().getFullYear(),
-            currency: "USD",
-            status: "Draft",
-            date: "",
-            expireDate: "",
-            note: "",
-            items: [
-              {
-                itemName: "",
-                descriptionName: "",
-                quantity: 1,
-                price: 0,
-                total: 0,
-              },
-            ],
-            subTotal: 0,
-            tax: 0,
-            total: 0,
-          }}
+          enableReinitialize
+          initialValues={initialData}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            // Submit logic here
             console.log("Form values:", values);
             if (showInvoiceButton) {
-              updatePeople(values); 
+              updateInvoice(values); 
             } else {
-              setInvoice(values); 
+              setInvoice(values);
             }
           }}
         >
           {({ values, setFieldValue }) => {
-            // Effect to calculate subTotal and total
             useEffect(() => {
-              // Calculate subTotal by summing the quantity * price for all items
               const subTotal = values.items.reduce(
                 (acc, item) => acc + item.quantity * item.price,
                 0
               );
 
-              // Calculate total by adding tax to subTotal
               const total = subTotal + Number(values.tax);
 
-              // Update subTotal and total in the form values
               setFieldValue("subTotal", subTotal);
               setFieldValue("total", total);
             }, [values.items, values.tax, setFieldValue]);
@@ -102,6 +124,7 @@ const InvoicesForm = () => {
             return (
               <Form className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
+                  {/* Client Field */}
                   <div>
                     <label htmlFor="client" className="block text-sm font-medium">
                       Client
@@ -116,6 +139,7 @@ const InvoicesForm = () => {
                     <ErrorMessage name="client" component="div" className="text-red-600 text-sm" />
                   </div>
 
+                  {/* Invoice Number */}
                   <div>
                     <label htmlFor="number" className="block text-sm font-medium">
                       Number
@@ -124,6 +148,7 @@ const InvoicesForm = () => {
                     <ErrorMessage name="number" component="div" className="text-red-600 text-sm" />
                   </div>
 
+                  {/* Status */}
                   <div>
                     <label htmlFor="status" className="block text-sm font-medium">
                       Status
@@ -215,9 +240,6 @@ const InvoicesForm = () => {
                               name={`items.${index}.quantity`}
                               as={Input}
                               type="number"
-                              onChange={(e) => {
-                                setFieldValue(`items.${index}.quantity`, e.target.value);
-                              }}
                             />
                             <ErrorMessage name={`items.${index}.quantity`} component="div" className="text-red-600 text-sm" />
                           </div>
@@ -225,32 +247,44 @@ const InvoicesForm = () => {
                           {/* Price */}
                           <div>
                             <label className="block text-sm font-medium">Price</label>
-                            <Field
-                              name={`items.${index}.price`}
-                              as={Input}
-                              type="number"
-                              onChange={(e) => {
-                                setFieldValue(`items.${index}.price`, e.target.value);
-                              }}
-                            />
+                            <Field name={`items.${index}.price`} as={Input} type="number" />
                             <ErrorMessage name={`items.${index}.price`} component="div" className="text-red-600 text-sm" />
                           </div>
 
-                          {/* Remove Button */}
+                          {/* Total */}
                           <div>
-                          <label className="block text-sm font-medium opacity-0">Price</label>
-                            <Button onClick={() => remove(index)}>Delete</Button>
+                            <label className="block text-sm font-medium">Total</label>
+                            <Field
+                              name={`items.${index}.total`}
+                              value={item.quantity * item.price}
+                              readOnly
+                              as={Input}
+                            />
+                          </div>
+
+                          <div className="flex justify-end items-center col-span-5">
+                            <Button
+                              variant="ghost"
+                              type="button"
+                              onClick={() => remove(index)}
+                              className="text-red-600"
+                            >
+                              Remove
+                            </Button>
                           </div>
                         </div>
                       ))}
+
                       <Button
-                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        variant="primary"
+                        type="button"
                         onClick={() =>
                           push({
                             itemName: "",
                             descriptionName: "",
                             quantity: 1,
                             price: 0,
+                            total: 0,
                           })
                         }
                       >
@@ -260,47 +294,28 @@ const InvoicesForm = () => {
                   )}
                 </FieldArray>
 
-                {/* Totals */}
+                {/* Subtotal, Tax, Total */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="subTotal" className="block text-sm font-medium">
-                      Sub Total
-                    </label>
-                    <Field name="subTotal" as={Input} type="number" readOnly />
+                    <label className="block text-sm font-medium">SubTotal</label>
+                    <Field name="subTotal" value={values.subTotal} readOnly as={Input} />
                   </div>
 
                   <div>
-                    <label htmlFor="tax" className="block text-sm font-medium">
-                      Tax
-                    </label>
-                    <Field
-                      name="tax"
-                      as={Input}
-                      type="number"
-                      onChange={(e) => {
-                        setFieldValue("tax", e.target.value);
-                      }}
-                    />
+                    <label className="block text-sm font-medium">Tax</label>
+                    <Field name="tax" type="number" as={Input} />
+                    <ErrorMessage name="tax" component="div" className="text-red-600 text-sm" />
                   </div>
 
                   <div>
-                    <label htmlFor="total" className="block text-sm font-medium">
-                      Total
-                    </label>
-                    <Field name="total" as={Input} type="number" readOnly />
+                    <label className="block text-sm font-medium">Total</label>
+                    <Field name="total" value={values.total} readOnly as={Input} />
                   </div>
                 </div>
 
-                {/* Submit Button */}
-                {!showInvoiceButton ? (
-                  <Button type="submit" className="mt-10 w-full">
-                    Save
-                  </Button>
-                ) : (
-                  <Button type="submit" className="mt-10 w-full">
-                    Update
-                  </Button>
-                )}
+                <Button variant="primary" type="submit">
+                  {showInvoiceButton ? "Update Invoice" : "Save Invoice"}
+                </Button>
               </Form>
             );
           }}

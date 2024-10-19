@@ -18,7 +18,7 @@ import { Textarea } from "./ui/textarea";
 // Validation schema using Yup
 const ProductFormSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  ProductCategory: Yup.string().required("Product category is required"),
+  productCategory: Yup.string().required("Product category is required"),
   currency: Yup.string().required("Currency is required"),
   total: Yup.number()
     .min(0, "Total must be a positive number")
@@ -73,7 +73,7 @@ const ProductForm = () => {
                 <Formik
                   initialValues={{
                     name: singleProduct.name || "",
-                    ProductCategory:singleProduct.productCategory || "",
+                    productCategory:singleProduct.productCategory || "",
                     currency: singleProduct.currency || "USD", // Default currency can be USD
                     total: singleProduct.total || 0,
                     ref: singleProduct.ref || "",
@@ -102,7 +102,7 @@ const ProductForm = () => {
                       <DialogTitle>Product Category</DialogTitle>
                       <Field
                           as="select"
-                          name="ProductCategory"
+                          name="productCategory"
                           className="py-2 px-2 border w-full"
                         >
                           {storeProductCategory.map((option) => (
@@ -112,7 +112,7 @@ const ProductForm = () => {
                           ))}
                         </Field>
                       <ErrorMessage
-                        name="ProductCategory"
+                        name="productCategory"
                         component="div"
                         className="text-red-500 text-sm"
                       />
@@ -173,7 +173,6 @@ const ProductForm = () => {
 
                       <Button className="mt-10" type="submit">
                         {showProductButton ? "Update" : "Save"}{" "}
-                        {/* Button text logic */}
                       </Button>
                     </Form>
                   )}

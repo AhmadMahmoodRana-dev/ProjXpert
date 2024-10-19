@@ -42,12 +42,14 @@ const ContextProvider = (props) => {
   const [getSingleCompanyId, setGetSingleCompanyId] = useState("");
   const [getSinglePeopleId, setGetSinglePeopleId] = useState("");
   const [storeCustomerData, setStoreCustomerData] = useState([]);
+  const [singleCustomerData,setSingleCustomerData] = useState({})
+  const [openCustomerDetail,setOpenCUstomerDetail] = useState(false)
 
   // ## INVOICES
   const [showInvoiceButton, setShowInvoiceButton] = useState(false);
   const [storeInvoices, setStoreInvoices] = useState([]);
   const [singleInvoice, setSingleInvoice] = useState({});
-
+const [updateInvoiceId,setUpdateInvoiceId] = useState("")
   // ## EXPENSE CATEGORY
   const [storeExpenseCategory, setStoreExpenseCategory] = useState([]);
   const [showExpenseCategoryButton, setShowExpenseCategoryButton] =
@@ -56,7 +58,7 @@ const ContextProvider = (props) => {
   const [SingleExpenseCategory, setSingleExpenseCategory] = useState({});
   const [openExpensiveCategoryDetailPage, setOpenExpensiveCategoryDetailPage] =
     useState(false);
- const [singleExpenseUpdateId,setSingleExpenseUpdateId] = useState("") 
+  const [singleExpenseUpdateId, setSingleExpenseUpdateId] = useState("");
 
   // ## PRODUCT CATEGORY
   const [storeProductCategory, setStoreProductCategory] = useState([]);
@@ -66,26 +68,23 @@ const ContextProvider = (props) => {
   const [SingleProductCategory, setSingleProductCategory] = useState({});
   const [openProductCategoryDetailPage, setOpenProductCategoryDetailPage] =
     useState(false);
- const [singleProductUpdateId,setSingleProductUpdateId] = useState("")   
+  const [singleProductUpdateId, setSingleProductUpdateId] = useState("");
 
+  // ## EXPENSE
+  const [openExpenseForm, setOpenExpenseForm] = useState(false);
+  const [showExpenseButton, setShowExpenseButton] = useState(false);
+  const [storeExpense, setStoreExpense] = useState([]);
+  const [expenseDetailShow, setExpenseDetailShow] = useState(false);
+  const [singleExpense, setSingleExpense] = useState({});
+  const [singleExpenseUpdatedId, setSingleExpenseUpdatedId] = useState("");
 
-// ## EXPENSE
-const [openExpenseForm,setOpenExpenseForm] = useState(false)
-const [showExpenseButton,setShowExpenseButton] = useState(false)
-const [storeExpense,setStoreExpense] = useState([])
-const [expenseDetailShow,setExpenseDetailShow] = useState(false)
-const [singleExpense,setSingleExpense] = useState({})
-const [singleExpenseUpdatedId,setSingleExpenseUpdatedId] = useState("")
-
-// ## Product
-const [openProductForm,setOpenProductForm] = useState(false)
-const [showProductButton,setShowProductButton] = useState(false)
-const [storeProduct,setStoreProduct] = useState([])
-const [productDetailShow,setProductDetailShow] = useState(false)
-const [singleProduct,setSingleProduct] = useState({})
-const [singleProductUpdatedId,setSingleProductUpdatedId] = useState("")
-
-
+  // ## Product
+  const [openProductForm, setOpenProductForm] = useState(false);
+  const [showProductButton, setShowProductButton] = useState(false);
+  const [storeProduct, setStoreProduct] = useState([]);
+  const [productDetailShow, setProductDetailShow] = useState(false);
+  const [singleProduct, setSingleProduct] = useState({});
+  const [singleProductUpdatedId, setSingleProductUpdatedId] = useState("");
 
   // ### PEOPLE FORM API ###
 
@@ -437,6 +436,7 @@ const [singleProductUpdatedId,setSingleProductUpdatedId] = useState("")
     }
   };
 
+  
   // ## GET DATA
   const getCustomerData = async () => {
     try {
@@ -449,6 +449,37 @@ const [singleProductUpdatedId,setSingleProductUpdatedId] = useState("")
       console.log(error);
     }
   };
+  const deleteCustomer = async (customerId) =>{
+    try {
+      const result = await axios.delete(
+        `http://localhost:1337/api/form/delete-customer/${customerId}`
+      );
+      getCustomerData();
+      console.log("Customer delete successFully!", result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+//  UPDATE 
+
+const getSingleCustomer = async (people) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:1337/api/form/get-customer/${people.name}`
+    );
+    setOpenCUstomerDetail(true)
+    setSingleCustomerData(data) 
+    console.log("data fetch sucessfully");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
+
 
   //           #########################################################################################          //
 
@@ -511,23 +542,39 @@ const [singleProductUpdatedId,setSingleProductUpdatedId] = useState("")
     }
   };
 
-// SHOW INVOICE DETAIL
+  // SHOW INVOICE DETAIL
 
-const getSingleinvoiceDetail = async (invoice) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-invoice/${invoice}`
-    );
-    setSingleInvoice(data);
-    navigate("/invoices-detail");
-    console.log(singleInvoice,"SINGLE INVOIC DETAIL")
-    console.log("Invoice data fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const getSingleinvoiceDetail = async (invoice) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-invoice/${invoice}`
+      );
+      setSingleInvoice(data);
+      navigate("/invoices-detail");
+      console.log(singleInvoice, "SINGLE INVOIC DETAIL");
+      console.log("Invoice data fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSingleinvoiceDetail1 = async (invoice) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
+      );
+      setSingleInvoice(data);
+      setUpdateInvoiceId(invoice._id)
+      setShowInvoiceButton(true)
+      navigate("/invoices-form");
+      console.log(singleInvoice, "SINGLE INVOIC DETAIL");
+      console.log("Invoice data fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
 
-//  UPDATE INVOICE PAYMENT
+  //  UPDATE INVOICE PAYMENT
   const updateInvoicePayment = async (value, id) => {
     try {
       const result = await axios.put(
@@ -542,14 +589,49 @@ const getSingleinvoiceDetail = async (invoice) => {
       console.log(error);
     }
   };
+  //  UPDATE INVOICE
+  const updateInvoice = async (value) => {
+  try {
+    const result = await axios.put(
+      `http://localhost:1337/api/form/update-invoice/${updateInvoiceId}`,
+      {
+        client: value.client,
+        number: value.number,
+        year: value.year,
+        currency: value.currency,
+        status: value.status,
+        date: value.date,
+        expireDate: value.expireDate,
+        note: value.note,
+        // Send items correctly
+        items: value.items.map(item => ({
+          itemName: item.itemName,
+          descriptionName: item.descriptionName,
+          quantity: item.quantity,
+          price: item.price,
+          total: item.quantity * item.price, // Calculate total for each item
+        })),
+        // Send invoice-level totals
+        subTotal: value.subTotal,
+        tax: value.tax,
+        total: value.total
+      }
+    );
+    
+    navigate("/invoices")
+    window.location.reload();
+    console.log("Invoice Updated Successfully", value, id);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-
-
+  
 
   //           #########################################################################################          //
 
   // EXPENSE CATEGORY API
-  
+
   // GET
   const getExpenseCategory = async () => {
     try {
@@ -613,7 +695,7 @@ const getSingleinvoiceDetail = async (invoice) => {
         `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`
       );
       setShowExpenseCategoryForm(!showExpenseCategoryForm);
-      setShowExpenseCategoryButton(true)
+      setShowExpenseCategoryButton(true);
       setSingleExpenseCategory(data);
       setSingleExpenseUpdateId(data._id);
       console.log("Leaddata fetch sucessfully", data);
@@ -642,7 +724,7 @@ const getSingleinvoiceDetail = async (invoice) => {
   //           #########################################################################################          //
 
   // PRODUCT CATEGORY API
-  
+
   // GET
   const getProductCategory = async () => {
     try {
@@ -666,7 +748,7 @@ const getSingleinvoiceDetail = async (invoice) => {
       setShowProductCategoryButton(!showProductCategoryButton);
       setShowProductCategoryForm(true);
       // getProductCategory();
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -706,7 +788,7 @@ const getSingleinvoiceDetail = async (invoice) => {
         `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`
       );
       setShowProductCategoryForm(!showProductCategoryForm);
-      setShowProductCategoryButton(true)
+      setShowProductCategoryButton(true);
       setSingleProductCategory(data);
       setSingleProductUpdateId(data._id);
       console.log("Leaddata fetch sucessfully", data);
@@ -732,12 +814,11 @@ const getSingleinvoiceDetail = async (invoice) => {
     }
   };
 
-
   //           #########################################################################################          //
 
   //   ## EXPENSE
-  
-// POST
+
+  // POST
   const setExpense = async (expense) => {
     try {
       const result = await axios.post(
@@ -766,9 +847,7 @@ const getSingleinvoiceDetail = async (invoice) => {
   // DELETE EXPENSE
   const deleteExpense = async (Id) => {
     try {
-      await axios.delete(
-        `http://localhost:1337/api/form/delete-expense/${Id}`
-      );
+      await axios.delete(`http://localhost:1337/api/form/delete-expense/${Id}`);
       console.log("Expense deleted successfully!");
       getExpense();
     } catch (error) {
@@ -776,62 +855,61 @@ const getSingleinvoiceDetail = async (invoice) => {
     }
   };
 
-// ### UPDATE
+  // ### UPDATE
 
-const getSingleExpense = async (Expense) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
-    );
-    setExpenseDetailShow(!expenseDetailShow),
-    setSingleExpense(data);
-    setSingleExpenseUpdatedId(data._id);
-    console.log("Expense fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-const getSingleExpenseUpdate = async (Expense) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
-    );
-    setOpenExpenseForm(!openExpenseForm);
-    setShowExpenseButton(true)
-    setSingleExpense(data);
-    setSingleExpenseUpdatedId(data._id);
-    console.log("Expense fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const getSingleExpense = async (Expense) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
+      );
+      setExpenseDetailShow(!expenseDetailShow), setSingleExpense(data);
+      setSingleExpenseUpdatedId(data._id);
+      console.log("Expense fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSingleExpenseUpdate = async (Expense) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
+      );
+      setOpenExpenseForm(!openExpenseForm);
+      setShowExpenseButton(true);
+      setSingleExpense(data);
+      setSingleExpenseUpdatedId(data._id);
+      console.log("Expense fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-const updateSingleExpense = async (val) => {
-  try {
-    const result = await axios.put(
-      `http://localhost:1337/api/form/update-expense/${singleExpenseUpdatedId}`,
-      {
-        name: val.name,
-        expensecategory: val.expensecategory,
-        currency:val.currency,
-        total:val.total,
-        description: val.description,
-        ref:val.ref
-      }
-    );
-    window.location.reload();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+  const updateSingleExpense = async (val) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-expense/${singleExpenseUpdatedId}`,
+        {
+          name: val.name,
+          expensecategory: val.expensecategory,
+          currency: val.currency,
+          total: val.total,
+          description: val.description,
+          ref: val.ref,
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
 
   //   ## Product
 
-// POST
+  // POST
   const setProduct = async (Product) => {
+    console.log(Product)
     try {
       const result = await axios.post(
         `http://localhost:1337/api/form/post-product`,
@@ -859,9 +937,7 @@ const updateSingleExpense = async (val) => {
   // DELETE Product
   const deleteProduct = async (Id) => {
     try {
-      await axios.delete(
-        `http://localhost:1337/api/form/delete-product/${Id}`
-      );
+      await axios.delete(`http://localhost:1337/api/form/delete-product/${Id}`);
       console.log("Product deleted successfully!");
       getProduct();
     } catch (error) {
@@ -869,59 +945,53 @@ const updateSingleExpense = async (val) => {
     }
   };
 
-// ### UPDATE
+  // ### UPDATE
 
-const getSingleProduct = async (Product) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-product/${Product._id}`
-    );
-    setProductDetailShow(!productDetailShow),
-    setSingleProduct(data);
-    setSingleProductUpdatedId(data._id);
-    console.log("Product fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-const getSingleProductUpdate = async (Product) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-product/${Product._id}`
-    );
-    setOpenProductForm(!openProductForm);
-    setShowProductButton(true)
-    setSingleProduct(data);
-    setSingleProductUpdatedId(data._id);
-    console.log("Product fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const getSingleProduct = async (Product) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-product/${Product._id}`
+      );
+      setProductDetailShow(!productDetailShow), setSingleProduct(data);
+      setSingleProductUpdatedId(data._id);
+      console.log("Product fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getSingleProductUpdate = async (Product) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-product/${Product._id}`
+      );
+      setOpenProductForm(!openProductForm);
+      setShowProductButton(true);
+      setSingleProduct(data);
+      setSingleProductUpdatedId(data._id);
+      console.log("Product fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-const updateSingleProduct = async (val) => {
-  try {
-    const result = await axios.put(
-      `http://localhost:1337/api/form/update-product/${singleProductUpdatedId}`,
-      {
-        name: val.name,
-        Productcategory: val.Productcategory,
-        currency:val.currency,
-        total:val.total,
-        description: val.description,
-        ref:val.ref
-      }
-    );
-    window.location.reload();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
-
-
-
+  const updateSingleProduct = async (val) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-product/${singleProductUpdatedId}`,
+        {
+          name: val.name,
+          Productcategory: val.Productcategory,
+          currency: val.currency,
+          total: val.total,
+          description: val.description,
+          ref: val.ref,
+        }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
   //   ## GET COUNTRY
@@ -945,7 +1015,7 @@ const updateSingleProduct = async (val) => {
     getExpenseCategory();
     getProductCategory();
     getExpense();
-    getProduct()
+    getProduct();
   }, []);
 
   // ######################################################################################################################################
@@ -1018,6 +1088,10 @@ const updateSingleProduct = async (val) => {
     storeSingleCustomerCompany,
     storeSingleCustomerPeople,
     storeCustomerData,
+    deleteCustomer,
+    setOpenCUstomerDetail,
+    openCustomerDetail,
+    singleCustomerData,
 
     // #######################
     // Invoice
@@ -1030,6 +1104,9 @@ const updateSingleProduct = async (val) => {
     singleInvoice,
     updateInvoicePayment,
     getSingleinvoiceDetail,
+    updateInvoice,
+    getSingleinvoiceDetail1,
+    updateInvoice,
 
     // #######################
     // EXPENSE CATEGORY
@@ -1091,9 +1168,7 @@ const updateSingleProduct = async (val) => {
     getSingleProduct,
     singleProduct,
     getSingleProductUpdate,
-    updateSingleProduct
-
-
+    updateSingleProduct,
   };
 
   return (
