@@ -25,16 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+
 import {
   Table,
   TableBody,
@@ -43,13 +34,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { darkBackground, lightBackground } from "@/components/Colors"
+import { useContext } from "react"
+import { Context } from "@/context/Context"
 
 export const description =
   "An application shell with a header and main content area. The header has a navbar, a search input and and a user nav dropdown. The user nav is toggled by a button with an avatar image."
 
 const Home1 = () => {
+
+const {mode} = useContext(Context)
+
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className={`flex min-h-screen w-full flex-col ${mode ? darkBackground: lightBackground}`}>
       
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">

@@ -35,6 +35,7 @@ import { Context } from "@/context/Context";
 import { Switch } from "@/components/ui/switch";
 import ProductCategoryForm from "@/components/ProductCategoryForm";
 import ProductCategoryDetail from "@/components/ProductCategoryDetail";
+import { darkBackground, lightBackground } from "@/components/Colors";
 
 const ProductCategory = () => {
   const {
@@ -44,10 +45,11 @@ const ProductCategory = () => {
     storeProductCategory,
     getSingleProductCategory,
     getSingleProductCategoryUpdate,
+    mode
   } = useContext(Context);
   return (
-    <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
-      <div className="w-[94%] bg-white px-10 py-10">
+    <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
+      <div className="w-[94%] shadow-2xl shadow-[#435349] rounded-sm px-10 py-10">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
@@ -76,11 +78,10 @@ const ProductCategory = () => {
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
-          <Button className={"bg-[#172332] flex gap-3"}>
+          <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
           <Button
-            className={"bg-[#172332]"}
             onClick={() => setShowProductCategoryForm(!showProductCategoryForm)}
           >
             Add ProductCategory
@@ -88,12 +89,12 @@ const ProductCategory = () => {
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
-            <TableRow className={"bg-[#172332]"}>
-              <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Color</TableHead>
-              <TableHead className="text-left">Enabled</TableHead>
+            <TableRow className={"bg-[#f7f9fb]"}>
+              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
+              <TableHead className="text-[#2b2d3b]">Name</TableHead>
+              <TableHead className="text-[#2b2d3b]">Description</TableHead>
+              <TableHead className="text-[#2b2d3b]">Color</TableHead>
+              <TableHead className="text-left text-[#2b2d3b]">Enabled</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>

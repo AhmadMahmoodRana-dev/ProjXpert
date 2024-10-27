@@ -1,13 +1,22 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ref } from "yup";
 
 export const Context = createContext();
 
 const ContextProvider = (props) => {
   const navigate = useNavigate();
   const [countryData, setCountryData] = useState([]);
+
+  const [mode, setMode] = useState(() => {
+    const savedMode = localStorage.getItem('mode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
+
+  // Update localStorage whenever mode changes
+  useEffect(() => {
+    localStorage.setItem('mode', JSON.stringify(mode));
+  }, [mode]);
   // ## PEOPLE
   const [openPersonForm, setOpenPersonForm] = useState(false);
   const [openPersonDetail, setOpenPersonDetail] = useState(false);
@@ -42,14 +51,16 @@ const ContextProvider = (props) => {
   const [getSingleCompanyId, setGetSingleCompanyId] = useState("");
   const [getSinglePeopleId, setGetSinglePeopleId] = useState("");
   const [storeCustomerData, setStoreCustomerData] = useState([]);
-  const [singleCustomerData,setSingleCustomerData] = useState({})
-  const [openCustomerDetail,setOpenCUstomerDetail] = useState(false)
+  const [singleCustomerData, setSingleCustomerData] = useState({});
+  const [openCustomerDetail, setOpenCUstomerDetail] = useState(false);
 
   // ## INVOICES
   const [showInvoiceButton, setShowInvoiceButton] = useState(false);
   const [storeInvoices, setStoreInvoices] = useState([]);
   const [singleInvoice, setSingleInvoice] = useState({});
-const [updateInvoiceId,setUpdateInvoiceId] = useState("")
+  const [updateInvoiceId, setUpdateInvoiceId] = useState("");
+
+
   // ## EXPENSE CATEGORY
   const [storeExpenseCategory, setStoreExpenseCategory] = useState([]);
   const [showExpenseCategoryButton, setShowExpenseCategoryButton] =
@@ -85,6 +96,12 @@ const [updateInvoiceId,setUpdateInvoiceId] = useState("")
   const [productDetailShow, setProductDetailShow] = useState(false);
   const [singleProduct, setSingleProduct] = useState({});
   const [singleProductUpdatedId, setSingleProductUpdatedId] = useState("");
+
+  // ## QUOTES FOR LEAD
+const [storeLeadQuotes,setStoreLeadQuotes] = useState([])
+const [singleLeadQuote,setSingleLeadQuote] = useState({})
+const [updateLeadQuotesId,setUpdateLeadQuotesId] = useState("")
+
 
   // ### PEOPLE FORM API ###
 
@@ -436,7 +453,6 @@ const [updateInvoiceId,setUpdateInvoiceId] = useState("")
     }
   };
 
-  
   // ## GET DATA
   const getCustomerData = async () => {
     try {
@@ -449,7 +465,7 @@ const [updateInvoiceId,setUpdateInvoiceId] = useState("")
       console.log(error);
     }
   };
-  const deleteCustomer = async (customerId) =>{
+  const deleteCustomer = async (customerId) => {
     try {
       const result = await axios.delete(
         `http://localhost:1337/api/form/delete-customer/${customerId}`
@@ -459,27 +475,22 @@ const [updateInvoiceId,setUpdateInvoiceId] = useState("")
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-//  UPDATE 
+  //  UPDATE
 
-const getSingleCustomer = async (people) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-customer/${people.name}`
-    );
-    setOpenCUstomerDetail(true)
-    setSingleCustomerData(data) 
-    console.log("data fetch sucessfully");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
-
-
-
+  const getSingleCustomer = async (people) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-customer/${people.name}`
+      );
+      setOpenCUstomerDetail(true);
+      setSingleCustomerData(data);
+      console.log("data fetch sucessfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
 
@@ -563,8 +574,8 @@ const getSingleCustomer = async (people) => {
         `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
       );
       setSingleInvoice(data);
-      setUpdateInvoiceId(invoice._id)
-      setShowInvoiceButton(true)
+      setUpdateInvoiceId(invoice._id);
+      setShowInvoiceButton(true);
       navigate("/invoices-form");
       console.log(singleInvoice, "SINGLE INVOIC DETAIL");
       console.log("Invoice data fetch sucessfully", data);
@@ -572,7 +583,6 @@ const getSingleCustomer = async (people) => {
       console.log(error);
     }
   };
-  
 
   //  UPDATE INVOICE PAYMENT
   const updateInvoicePayment = async (value, id) => {
@@ -591,42 +601,40 @@ const getSingleCustomer = async (people) => {
   };
   //  UPDATE INVOICE
   const updateInvoice = async (value) => {
-  try {
-    const result = await axios.put(
-      `http://localhost:1337/api/form/update-invoice/${updateInvoiceId}`,
-      {
-        client: value.client,
-        number: value.number,
-        year: value.year,
-        currency: value.currency,
-        status: value.status,
-        date: value.date,
-        expireDate: value.expireDate,
-        note: value.note,
-        // Send items correctly
-        items: value.items.map(item => ({
-          itemName: item.itemName,
-          descriptionName: item.descriptionName,
-          quantity: item.quantity,
-          price: item.price,
-          total: item.quantity * item.price, // Calculate total for each item
-        })),
-        // Send invoice-level totals
-        subTotal: value.subTotal,
-        tax: value.tax,
-        total: value.total
-      }
-    );
-    
-    navigate("/invoices")
-    window.location.reload();
-    console.log("Invoice Updated Successfully", value, id);
-  } catch (error) {
-    console.log(error);
-  }
-};
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-invoice/${updateInvoiceId}`,
+        {
+          client: value.client,
+          number: value.number,
+          year: value.year,
+          currency: value.currency,
+          status: value.status,
+          date: value.date,
+          expireDate: value.expireDate,
+          note: value.note,
+          // Send items correctly
+          items: value.items.map((item) => ({
+            itemName: item.itemName,
+            descriptionName: item.descriptionName,
+            quantity: item.quantity,
+            price: item.price,
+            total: item.quantity * item.price, // Calculate total for each item
+          })),
+          // Send invoice-level totals
+          subTotal: value.subTotal,
+          tax: value.tax,
+          total: value.total,
+        }
+      );
 
-  
+      navigate("/invoices");
+      window.location.reload();
+      console.log("Invoice Updated Successfully", value, id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
 
@@ -909,7 +917,7 @@ const getSingleCustomer = async (people) => {
 
   // POST
   const setProduct = async (Product) => {
-    console.log(Product)
+    console.log(Product);
     try {
       const result = await axios.post(
         `http://localhost:1337/api/form/post-product`,
@@ -994,6 +1002,106 @@ const getSingleCustomer = async (people) => {
   };
 
   //           #########################################################################################          //
+
+  //  QUOTE FOR LEAd
+
+  //  POST
+
+  const setLeadQuotes = async (LeadQuotes) => {
+    try {
+      const result = await axios.post(
+        `http://localhost:1337/api/form/post-quote-lead`,
+        LeadQuotes
+      );
+      console.log("LeadQuotes submitted", result);
+      getLeadQuotes()
+      navigate("/quote-lead");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+   // GET
+   const getLeadQuotes = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-quote-lead`
+      );
+      setStoreLeadQuotes(data);
+      console.log("LeadQuotes", storeLeadQuotes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+   //  DELETE
+   const deleteLeadQuotes = async (LeadQuotes) => {
+    try {
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-lead-quotes/${LeadQuotes}`
+      );
+      console.log("LeadQuotes deleted successfully!");
+      getLeadQuotes();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+// UPDATE
+
+const getSingleLeadQuotes = async (LeadQuotes) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`
+    );
+    setSingleLeadQuote(data);
+    setUpdateLeadQuotesId(LeadQuotes._id);
+    setShowInvoiceButton(true);
+    navigate("/quote-lead-form");
+    console.log(singleLeadQuote, "SINGLE Lead DETAIL");
+    console.log("LEAD Quote data fetch sucessfully", data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateLeadQuotes = async (value) => {
+  try {
+    const result = await axios.put(
+      `http://localhost:1337/api/form/update-quote-lead/${updateLeadQuotesId}`,
+      {
+        client: value.client,
+        number: value.number,
+        year: value.year,
+        currency: value.currency,
+        status: value.status,
+        date: value.date,
+        expireDate: value.expireDate,
+        note: value.note,
+        // Send items correctly
+        items: value.items.map((item) => ({
+          itemName: item.itemName,
+          descriptionName: item.descriptionName,
+          quantity: item.quantity,
+          price: item.price,
+          total: item.quantity * item.price, // Calculate total for each item
+        })),
+        // Send invoice-level totals
+        subTotal: value.subTotal,
+        tax: value.tax,
+        total: value.total,
+      }
+    );
+
+    navigate("/quote-lead");
+    window.location.reload();
+    console.log("Quote Lead Updated Successfully", value, id);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+  //           #########################################################################################          //
   //   ## GET COUNTRY
 
   const getCountry = async () => {
@@ -1016,11 +1124,14 @@ const getSingleCustomer = async (people) => {
     getProductCategory();
     getExpense();
     getProduct();
+    getLeadQuotes();
   }, []);
 
   // ######################################################################################################################################
 
   const contextValue = {
+
+    mode,setMode,
     // #######################
     // ## PEOPLE
     setOpenPersonForm,
@@ -1169,6 +1280,17 @@ const getSingleCustomer = async (people) => {
     singleProduct,
     getSingleProductUpdate,
     updateSingleProduct,
+
+    // #######################
+
+    // QUOTE FOR LEAD
+
+    setLeadQuotes,
+    storeLeadQuotes,
+    deleteLeadQuotes,
+    getSingleLeadQuotes,
+    updateLeadQuotes,
+    singleLeadQuote
   };
 
   return (

@@ -36,6 +36,7 @@ import {
 import { Context } from "@/context/Context";
 import CompanyForm from "@/components/CompanyForm";
 import useDebounce from "@/hooks/useDebounce";
+import { darkBackground, lightBackground } from "@/components/Colors";
 
 const Companies = () => {
   const {
@@ -45,6 +46,7 @@ const Companies = () => {
     getCompanyDetail,
     storeCompanyData,
     cmpSearchTerm,
+    mode,
     setCmpSearchTerm,
   } = useContext(Context);
 
@@ -57,10 +59,11 @@ const Companies = () => {
   company.contact.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
 
+  
 
   return (
-    <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
-      <div className="w-[94%] bg-white px-10 py-10">
+    <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
+      <div className="w-[94%] px-10 py-10 shadow-2xl shadow-[#435349] rounded-sm">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
@@ -91,11 +94,10 @@ const Companies = () => {
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
-          <Button className={"bg-[#172332] flex gap-3"}>
+          <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
           <Button
-            className={"bg-[#172332]"}
             onClick={() => setOpenCompanyForm(true)}
           >
             Add Company
@@ -103,15 +105,15 @@ const Companies = () => {
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
-            <TableRow className={"bg-[#172332]"}>
-              <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>website</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead className="text-left">Email</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className={"bg-[#f7f9fb]"}>
+              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
+              <TableHead className="text-[#2b2d3b]">Name</TableHead>
+              <TableHead className="text-[#2b2d3b]">Contact</TableHead>
+              <TableHead className="text-[#2b2d3b]">website</TableHead>
+              <TableHead className="text-[#2b2d3b]">Country</TableHead>
+              <TableHead className="text-[#2b2d3b]">Phone</TableHead>
+              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
+              <TableHead className="text-right text-[#2b2d3b]"></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredCompanyData.length ? (
@@ -135,26 +137,26 @@ const Companies = () => {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center gap-1">
-                        <BreadcrumbEllipsis className="h-4 w-4" />
+                        <BreadcrumbEllipsis className="h-4 w-4 text-[#20bb59]" />
                         <span className="sr-only">Toggle menu</span>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
-                          className="flex gap-3"
+                          className="flex gap-3 text-[#20bb59]"
                           onClick={() => getCompanyDetail(company._id)}
                         >
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="flex gap-3"
+                          className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSingleCompany(company)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="flex gap-3"
+                          className="flex gap-3 text-[#20bb59]"
                           onClick={() => deleteCompany(company._id)}
                         >
                           <Trash2 size={16} />

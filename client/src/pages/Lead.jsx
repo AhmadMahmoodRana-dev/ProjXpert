@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext} from "react";
 import {
   FilePenLine,
   Inbox,
@@ -38,6 +38,7 @@ import { Context } from "@/context/Context";
 import LeadForm from "@/components/LeadForm";
 import LeadDetailShow from '../components/LeadDetailShow'
 import useDebounce from "@/hooks/useDebounce";
+import { darkBackground, lightBackground } from "@/components/Colors";
 const Lead = () => {
   const {
     setOpenLeadForm,
@@ -46,7 +47,8 @@ const Lead = () => {
     leadSearchTerm,
     setLeadSearchTerm,
     deleteLead,
-    getSingleLead
+    getSingleLead,
+    mode
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(leadSearchTerm, 500);
@@ -58,8 +60,8 @@ const Lead = () => {
   lead.status.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
   return (
-    <div className="w-full min-h-screen bg-[#172332] justify-center flex flex-col items-center">
-      <div className="w-[94%] bg-white px-10 py-10">
+    <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
+      <div className="w-[94%]  shadow-2xl shadow-[#435349] rounded-sm px-10 py-10">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
@@ -90,11 +92,10 @@ const Lead = () => {
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
-          <Button className={"bg-[#172332] flex gap-3"}>
+          <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
           <Button
-            className={"bg-[#172332]"}
             onClick={() => setOpenLeadForm(true)}
           >
             Add Lead
@@ -102,16 +103,16 @@ const Lead = () => {
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
-            <TableRow className={"bg-[#172332]"}>
-              <TableHead className="w-[100px]">Sr.No</TableHead>
-              <TableHead>Branch</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>status</TableHead>
-              <TableHead>Source</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead className="text-left">Email</TableHead>
+            <TableRow className={"bg-[#f7f9fb]"}>
+              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
+              <TableHead className="text-[#2b2d3b]" >Branch</TableHead>
+              <TableHead className="text-[#2b2d3b]">Type</TableHead>
+              <TableHead className="text-[#2b2d3b]">Name</TableHead>
+              <TableHead className="text-[#2b2d3b]">status</TableHead>
+              <TableHead className="text-[#2b2d3b]">Source</TableHead>
+              <TableHead className="text-[#2b2d3b]">Country</TableHead>
+              <TableHead className="text-[#2b2d3b]">Phone</TableHead>
+              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -128,10 +129,10 @@ const Lead = () => {
                   <TableCell className="font-medium">
                     {lead?.branch}
                   </TableCell>
-                  <TableCell>  <h1
+                  <TableCell className="font-medium">   <h1
                     className={`${
-                      lead?.type === "People" ? "bg-blue-400" : "bg-red-400"
-                    } text-center py-1 rounded-lg text-white px-1`}
+                      lead?.type === "People" ? "bg-[#2b2d3b]" : "bg-[#20bb59]"
+                    } text-center py-2 px-4 rounded-lg text-[white]`}
                   >
                     {lead?.type}
                   </h1></TableCell>
@@ -144,26 +145,26 @@ const Lead = () => {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center gap-1">
-                        <BreadcrumbEllipsis className="h-4 w-4" />
+                        <BreadcrumbEllipsis className="h-4 w-4 text-[#20bb59]" />
                         <span className="sr-only">Toggle menu</span>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
-                          className="flex gap-3"
+                          className="flex gap-3 text-[#20bb59]"
                           onClick={() => getLeadDetail(lead._id)}
                         >
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="flex gap-3"
+                          className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSingleLead(lead)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="flex gap-3"
+                          className="flex gap-3 text-[#20bb59]"
                           onClick={() => deleteLead(lead._id)}
                         >
                           <Trash2 size={16} />

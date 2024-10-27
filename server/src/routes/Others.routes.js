@@ -8,6 +8,7 @@ import { deleteExpenseCategory, getExpenseCategory, getSingleExpenseCategory, po
 import { deleteProductCategory, getProductCategory, getSingleProductCategory, postProductCategory, updateProductCategory } from "../controller/ProductCategory.controller.js";
 import { deleteExpense, getExpense, getSingleExpense, postExpense, updateExpense } from "../controller/Expense.controller.js";
 import { deleteProduct, getProduct, getSingleProduct, postProduct, updateProduct } from "../controller/Product.controller.js";
+import { deleteQuoteLeads, getQuoteLeads, getSingleQuoteLead, postQuoteLead, updateQuoteLead } from "../controller/QuoteLead.controller.js";
 
 const route = Router();
 // ## PEOPLE
@@ -68,5 +69,11 @@ route.post("/post-product",postProduct)
 route.delete("/delete-product/:id",deleteProduct)
 route.put("/update-product/:id",updateProduct)
 
+// ## QUOTES FOR LEAD
+route.post("/post-quote-lead",postQuoteLead)
+route.get("/get-quote-lead",getQuoteLeads)
+route.delete("/delete-lead-quotes/:id",deleteQuoteLeads)
+route.get('/get-single-quote-lead/:id',getSingleQuoteLead)
+route.put('/update-quote-lead/:id',updateQuoteLead)
 
 export default route;

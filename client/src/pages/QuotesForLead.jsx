@@ -40,27 +40,27 @@ import LeadForm from "@/components/LeadForm";
 import { Link } from "react-router-dom";
 import { darkBackground, lightBackground } from "@/components/Colors";
 
-const Invoices = () => {
+const QuotesForLead = () => {
   const {
-    storeInvoices,
+    storeLeadQuotes,
+    getSingleLeadQuotes,
     getSingleinvoice,
     cmpSearchTerm,
     setCmpSearchTerm,
-    deleteInvoice,
-    getSingleinvoiceDetail1,
+    deleteLeadQuotes,
     getSingleinvoiceDetail,
     mode
   } = useContext(Context);
 
   return (
     <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
-      <div className="w-[94%]  shadow-2xl shadow-[#435349] rounded-sm px-10 py-10">
+      <div className="w-[94%] shadow-2xl shadow-[#435349] px-10 py-10 rounded-sm">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <li>LEAD</li>
+                  <li>QUOTES</li>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -88,11 +88,11 @@ const Invoices = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
-          <Link to={'/invoices-form'}>
+          <Link to={'/quote-lead-form'}>
           <Button
             
           >
-            Add Invoices
+            Add Quote Lead
           </Button>
 
           </Link>
@@ -101,39 +101,39 @@ const Invoices = () => {
           <TableHeader>
             <TableRow className={"bg-[#f7f9fb]"}>
               <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Client</TableHead>
+              <TableHead className="text-[#2b2d3b]">Company</TableHead>
               <TableHead className="text-[#2b2d3b]">Date</TableHead>
-              <TableHead className="text-[#2b2d3b]">ExpireDate</TableHead>
+              <TableHead className="text-[#2b2d3b]">Expire Date</TableHead>
+              <TableHead className="text-[#2b2d3b]">Sub Total</TableHead>
               <TableHead className="text-[#2b2d3b]">Total</TableHead>
-              <TableHead className="text-[#2b2d3b]">Paid</TableHead>
-              <TableHead className="text-[#2b2d3b]">Status</TableHead>
-              <TableHead className="text-[#2b2d3b]">Payment</TableHead>
+              <TableHead className="text-[#2b2d3b]">Note</TableHead>
+              <TableHead className="text-[#2b2d3b]" >Status</TableHead>
               <TableHead className="text-left text-[#2b2d3b]">Number</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!storeInvoices.length ? (
+          {!storeLeadQuotes.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {storeInvoices.map((invoice, id) => (
-                <TableRow key={invoice?._id}>
+              {storeLeadQuotes.map((leadQuote, id) => (
+                <TableRow key={leadQuote?._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
-                    {invoice?.client}
+                    {leadQuote?.client}
                   </TableCell>
-                  <TableCell>{invoice?.date.slice(0 ,10)}</TableCell>
-                  <TableCell>{invoice?.expireDate.slice(0 ,10)}</TableCell>
-                  <TableCell>{invoice?.total}</TableCell>
-                  <TableCell>{invoice?.paidAmount}</TableCell>
-                  <TableCell>{invoice?.status}</TableCell>
+                  <TableCell>{leadQuote?.date.slice(0 ,10)}</TableCell>
+                  <TableCell>{leadQuote?.expireDate.slice(0 ,10)}</TableCell>
+                  <TableCell>{leadQuote?.subTotal}</TableCell>
+                  <TableCell>{leadQuote?.total}</TableCell>
                   <TableCell>{
-                    invoice.total === invoice.paidAmount ? (<h3>paid</h3>):(<h3>unpaid</h3>)
+                    leadQuote?.note
                     }</TableCell>
-                  <TableCell className="text-left">{invoice?.number}</TableCell>
+                  <TableCell>{leadQuote?.status}</TableCell>
+                  <TableCell className="text-left">{leadQuote?.number}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center gap-1">
@@ -143,28 +143,28 @@ const Invoices = () => {
                       <DropdownMenuContent align="start">
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
-                          onClick={() => getSingleinvoiceDetail(invoice._id)}
+                          onClick={() => getSingleinvoiceDetail(leadQuote._id)}
                         >
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
-                          onClick={() => getSingleinvoiceDetail1(invoice)}
+                          onClick={() => getSingleLeadQuotes(leadQuote)}
                         >
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
-                          onClick={() => deleteInvoice(invoice._id)}
+                          onClick={() => deleteLeadQuotes(leadQuote._id)}
                         >
                           <Trash2 size={16} />
                           Delete
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
-                          onClick={() => getSingleinvoice(invoice)}
+                          onClick={() => getSingleinvoice(leadQuote)}
                         >
                           <HandCoins size={16}  />
                           Payment
@@ -183,4 +183,4 @@ const Invoices = () => {
   );
 };
 
-export default Invoices;
+export default QuotesForLead;
