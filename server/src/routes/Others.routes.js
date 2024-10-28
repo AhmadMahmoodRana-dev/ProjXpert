@@ -10,6 +10,11 @@ import { deleteExpense, getExpense, getSingleExpense, postExpense, updateExpense
 import { deleteProduct, getProduct, getSingleProduct, postProduct, updateProduct } from "../controller/Product.controller.js";
 import { deleteQuoteLeads, getQuoteLeads, getSingleQuoteLead, postQuoteLead, updateQuoteLead } from "../controller/QuoteLead.controller.js";
 
+// ## AUTH
+import { register,login } from "../controller/Auth.controller.js";
+import { verifyToken,authorizeRoles } from "../middlewares/auth.js";
+
+
 const route = Router();
 // ## PEOPLE
 route.get("/get-people",getPeople)
@@ -75,5 +80,33 @@ route.get("/get-quote-lead",getQuoteLeads)
 route.delete("/delete-lead-quotes/:id",deleteQuoteLeads)
 route.get('/get-single-quote-lead/:id',getSingleQuoteLead)
 route.put('/update-quote-lead/:id',updateQuoteLead)
+
+
+// ### AUTHENTICATION AND AUTHERIZATION #####
+
+// const { verifyToken, authorizeRoles } = require("../middleware/auth");
+
+route.post("/register", register);
+route.post("/login", login);
+
+// Admin-only route example
+route.get("/admin", verifyToken, authorizeRoles("admin"), (req, res) => {
+  res.status(200).json({ message: "Welcome Admin!" });
+});
+
+// Worker-only route example
+route.get("/worker", verifyToken, authorizeRoles("worker"), (req, res) => {
+  res.status(200).json({ message: "Welcome Worker!" });
+});
+
+// Client-only route example
+route.get("/client", verifyToken, authorizeRoles("client"), (req, res) => {
+  res.status(200).json({ message: "Welcome Client!" });
+});
+
+
+
+
+
 
 export default route;

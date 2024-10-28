@@ -1137,6 +1137,38 @@ const ContextProvider = (props) => {
     getLeadQuotes();
   }, []);
 
+
+
+
+// 33333333333              AUTHENTICATION       3333333333333333
+
+
+const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser({ role: 'user' }); // Optionally verify the token with a backend call.
+    }
+  }, []);
+
+  const login = async (email, password) => {
+    const { data } = await axios.post("http://localhost:1337/api/form/login", { email, password });
+    localStorage.setItem("token", data.token);
+    setUser({ role: data.role });
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
+
+
+
+
+
+
   // ######################################################################################################################################
 
   const contextValue = {
@@ -1311,6 +1343,12 @@ const ContextProvider = (props) => {
     singleLeadQuote,
     quotesLeadSearchTerm,
     setQuotesLeadSearchTerm,
+
+// #############
+
+// Authentication
+user, setUser,login,logout
+
   };
 
   return (

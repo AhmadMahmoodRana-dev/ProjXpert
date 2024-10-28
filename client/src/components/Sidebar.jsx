@@ -6,8 +6,11 @@ import {
   Menu,
   Package,
   Package2,
+  Settings,
   ShoppingCart,
   Store,
+  Trash2,
+  TvMinimal,
   UserRound,
   Weight,
 } from "lucide-react";
@@ -19,6 +22,13 @@ import { useContext } from "react";
 import { Context } from "@/context/Context";
 import { Switch } from "@headlessui/react";
 import { darkBackground, lightBackground } from "./Colors";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+
 
 export const description =
   "A products dashboard with a sidebar navigation and a main content area. The dashboard has a header with a search input and a user menu. The sidebar has a logo, navigation links, and a card with a call to action. The main content area shows an empty state with a call to action.";
@@ -37,10 +47,15 @@ const Sidebar = ({ children }) => {
     storeProduct,
     setMode,
     mode,
+    logout
   } = useContext(Context);
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className={`hidden border-r ${mode ? darkBackground : lightBackground} md:block sticky`}>
+      <div
+        className={`hidden border-r ${
+          mode ? darkBackground : lightBackground
+        } md:block sticky`}
+      >
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14  justify-between items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
@@ -64,7 +79,7 @@ const Sidebar = ({ children }) => {
             </Switch>
           </div>
           <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            <nav className=" items-start mt-4 px-2 text-sm font-medium lg:px-4">
               <Link
                 to="/"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
@@ -204,7 +219,7 @@ const Sidebar = ({ children }) => {
               </Link>
               <Link
                 to="/product"
-                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 pb-10 transition-all ${
                   location.pathname === "/product"
                     ? "bg-muted text-primary"
                     : "text-muted-foreground hover:text-primary"
@@ -216,6 +231,23 @@ const Sidebar = ({ children }) => {
                   {storeProduct.length}
                 </Badge>
               </Link>
+              <DropdownMenu className="flex items-center" >
+                <DropdownMenuTrigger className="flex items-center  gap-3 rounded-lg px-3 py-3 text-muted-foreground hover:text-primary">
+                <Settings className="h-4 w-4"/>
+                  <h1>Setting</h1>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DropdownMenuItem className="flex gap-3 text-[#20bb59] ">
+                    <TvMinimal size={16} />
+                    Profile
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem className="flex gap-3 text-[#20bb59]" onClick={() => logout()}>
+                    <Trash2 size={16} />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               {/* Add more links similarly */}
             </nav>
           </div>
@@ -282,6 +314,7 @@ const Sidebar = ({ children }) => {
             </SheetContent>
           </Sheet>
         </header>
+
         <main className="flex min-h-screen h-auto">{children}</main>
       </div>
     </div>

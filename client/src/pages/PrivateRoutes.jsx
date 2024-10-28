@@ -1,17 +1,18 @@
-import Sidebar from "@/components/Sidebar";
 import { Navigate, Outlet } from "react-router-dom";
+import Sidebar from "@/components/Sidebar";
+import { useContext } from "react";
+import { Context } from "@/context/Context";
 
 const PrivateRoutes = () => {
-   const user = true;
-   return user ? (
+  const { user } = useContext(Context);
+console.log(user,"USER")
+  return user ? (
     <Sidebar>
-
-    <Outlet/>
+      <Outlet />
     </Sidebar>
+  ) : (
+    <Navigate to="/login" />
+  );
+};
 
-   )
-   :
-   (<Navigate to={"/login"} />)
-}
-
-export default PrivateRoutes
+export default PrivateRoutes;
