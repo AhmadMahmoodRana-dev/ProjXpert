@@ -39,18 +39,28 @@ import { Context } from "@/context/Context";
 import LeadForm from "@/components/LeadForm";
 import { Link } from "react-router-dom";
 import { darkBackground, lightBackground } from "@/components/Colors";
+import useDebounce from "@/hooks/useDebounce";
 
 const QuotesForLead = () => {
   const {
     storeLeadQuotes,
     getSingleLeadQuotes,
     getSingleinvoice,
-    cmpSearchTerm,
-    setCmpSearchTerm,
     deleteLeadQuotes,
     getSingleinvoiceDetail,
-    mode
+    mode,
+    quotesLeadSearchTerm,
+    setQuotesLeadSearchTerm
   } = useContext(Context);
+
+  const debouncedSearchTerm = useDebounce(quotesLeadSearchTerm, 500);
+
+  const filteredQuotesLead = storeLeadQuotes.filter((lead) =>
+  lead.client.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+  lead.currency.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  lead.status.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  lead.note.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
 
   return (
     <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
@@ -79,8 +89,8 @@ const QuotesForLead = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              value={cmpSearchTerm}
-              onChange={(e) => setCmpSearchTerm(e.target.value)}
+              value={quotesLeadSearchTerm}
+              onChange={(e) => setQuotesLeadSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -112,14 +122,14 @@ const QuotesForLead = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!storeLeadQuotes.length ? (
+          {!filteredQuotesLead.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {storeLeadQuotes.map((leadQuote, id) => (
+              {filteredQuotesLead.map((leadQuote, id) => (
                 <TableRow key={leadQuote?._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">

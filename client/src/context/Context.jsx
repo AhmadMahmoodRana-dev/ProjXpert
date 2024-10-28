@@ -9,13 +9,13 @@ const ContextProvider = (props) => {
   const [countryData, setCountryData] = useState([]);
 
   const [mode, setMode] = useState(() => {
-    const savedMode = localStorage.getItem('mode');
+    const savedMode = localStorage.getItem("mode");
     return savedMode ? JSON.parse(savedMode) : false;
   });
 
   // Update localStorage whenever mode changes
   useEffect(() => {
-    localStorage.setItem('mode', JSON.stringify(mode));
+    localStorage.setItem("mode", JSON.stringify(mode));
   }, [mode]);
   // ## PEOPLE
   const [openPersonForm, setOpenPersonForm] = useState(false);
@@ -53,13 +53,14 @@ const ContextProvider = (props) => {
   const [storeCustomerData, setStoreCustomerData] = useState([]);
   const [singleCustomerData, setSingleCustomerData] = useState({});
   const [openCustomerDetail, setOpenCUstomerDetail] = useState(false);
+  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
 
   // ## INVOICES
   const [showInvoiceButton, setShowInvoiceButton] = useState(false);
   const [storeInvoices, setStoreInvoices] = useState([]);
   const [singleInvoice, setSingleInvoice] = useState({});
   const [updateInvoiceId, setUpdateInvoiceId] = useState("");
-
+  const [invoiceSearchTerm, setInvoiceSearchTerm] = useState("");
 
   // ## EXPENSE CATEGORY
   const [storeExpenseCategory, setStoreExpenseCategory] = useState([]);
@@ -70,38 +71,47 @@ const ContextProvider = (props) => {
   const [openExpensiveCategoryDetailPage, setOpenExpensiveCategoryDetailPage] =
     useState(false);
   const [singleExpenseUpdateId, setSingleExpenseUpdateId] = useState("");
-
-  // ## PRODUCT CATEGORY
-  const [storeProductCategory, setStoreProductCategory] = useState([]);
-  const [showProductCategoryButton, setShowProductCategoryButton] =
+  const [expenseCategorySearchTerm, setExpenseCategorySearchTerm] =
+    useState("");
+    
+    // ## PRODUCT CATEGORY
+    const [storeProductCategory, setStoreProductCategory] = useState([]);
+    const [showProductCategoryButton, setShowProductCategoryButton] =
     useState(false);
-  const [showProductCategoryForm, setShowProductCategoryForm] = useState(false);
-  const [SingleProductCategory, setSingleProductCategory] = useState({});
-  const [openProductCategoryDetailPage, setOpenProductCategoryDetailPage] =
+    const [showProductCategoryForm, setShowProductCategoryForm] = useState(false);
+    const [SingleProductCategory, setSingleProductCategory] = useState({});
+    const [openProductCategoryDetailPage, setOpenProductCategoryDetailPage] =
     useState(false);
-  const [singleProductUpdateId, setSingleProductUpdateId] = useState("");
-
-  // ## EXPENSE
-  const [openExpenseForm, setOpenExpenseForm] = useState(false);
+    const [singleProductUpdateId, setSingleProductUpdateId] = useState("");
+    const [productCategorySearchTerm, setProductCategorySearchTerm] =
+      useState("");
+      
+    
+    // ## EXPENSE
+    const [openExpenseForm, setOpenExpenseForm] = useState(false);
   const [showExpenseButton, setShowExpenseButton] = useState(false);
   const [storeExpense, setStoreExpense] = useState([]);
   const [expenseDetailShow, setExpenseDetailShow] = useState(false);
   const [singleExpense, setSingleExpense] = useState({});
   const [singleExpenseUpdatedId, setSingleExpenseUpdatedId] = useState("");
-
-  // ## Product
-  const [openProductForm, setOpenProductForm] = useState(false);
+  const [expenseSearchTerm, setExpenseSearchTerm] =
+    useState("");
+    
+    // ## Product
+    const [openProductForm, setOpenProductForm] = useState(false);
   const [showProductButton, setShowProductButton] = useState(false);
   const [storeProduct, setStoreProduct] = useState([]);
   const [productDetailShow, setProductDetailShow] = useState(false);
   const [singleProduct, setSingleProduct] = useState({});
   const [singleProductUpdatedId, setSingleProductUpdatedId] = useState("");
+  const [productSearchTerm, setProductSearchTerm] =
+    useState("");
 
   // ## QUOTES FOR LEAD
-const [storeLeadQuotes,setStoreLeadQuotes] = useState([])
-const [singleLeadQuote,setSingleLeadQuote] = useState({})
-const [updateLeadQuotesId,setUpdateLeadQuotesId] = useState("")
-
+  const [storeLeadQuotes, setStoreLeadQuotes] = useState([]);
+  const [singleLeadQuote, setSingleLeadQuote] = useState({});
+  const [updateLeadQuotesId, setUpdateLeadQuotesId] = useState("");
+  const [quotesLeadSearchTerm, setQuotesLeadSearchTerm] = useState("");
 
   // ### PEOPLE FORM API ###
 
@@ -1014,15 +1024,15 @@ const [updateLeadQuotesId,setUpdateLeadQuotesId] = useState("")
         LeadQuotes
       );
       console.log("LeadQuotes submitted", result);
-      getLeadQuotes()
+      getLeadQuotes();
       navigate("/quote-lead");
     } catch (error) {
       console.log(error);
     }
   };
 
-   // GET
-   const getLeadQuotes = async () => {
+  // GET
+  const getLeadQuotes = async () => {
     try {
       const { data } = await axios.get(
         `http://localhost:1337/api/form/get-quote-lead`
@@ -1034,8 +1044,8 @@ const [updateLeadQuotesId,setUpdateLeadQuotesId] = useState("")
     }
   };
 
-   //  DELETE
-   const deleteLeadQuotes = async (LeadQuotes) => {
+  //  DELETE
+  const deleteLeadQuotes = async (LeadQuotes) => {
     try {
       await axios.delete(
         `http://localhost:1337/api/form/delete-lead-quotes/${LeadQuotes}`
@@ -1047,59 +1057,59 @@ const [updateLeadQuotesId,setUpdateLeadQuotesId] = useState("")
     }
   };
 
-// UPDATE
+  // UPDATE
 
-const getSingleLeadQuotes = async (LeadQuotes) => {
-  try {
-    const { data } = await axios.get(
-      `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`
-    );
-    setSingleLeadQuote(data);
-    setUpdateLeadQuotesId(LeadQuotes._id);
-    setShowInvoiceButton(true);
-    navigate("/quote-lead-form");
-    console.log(singleLeadQuote, "SINGLE Lead DETAIL");
-    console.log("LEAD Quote data fetch sucessfully", data);
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const getSingleLeadQuotes = async (LeadQuotes) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`
+      );
+      setSingleLeadQuote(data);
+      setUpdateLeadQuotesId(LeadQuotes._id);
+      setShowInvoiceButton(true);
+      navigate("/quote-lead-form");
+      console.log(singleLeadQuote, "SINGLE Lead DETAIL");
+      console.log("LEAD Quote data fetch sucessfully", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-const updateLeadQuotes = async (value) => {
-  try {
-    const result = await axios.put(
-      `http://localhost:1337/api/form/update-quote-lead/${updateLeadQuotesId}`,
-      {
-        client: value.client,
-        number: value.number,
-        year: value.year,
-        currency: value.currency,
-        status: value.status,
-        date: value.date,
-        expireDate: value.expireDate,
-        note: value.note,
-        // Send items correctly
-        items: value.items.map((item) => ({
-          itemName: item.itemName,
-          descriptionName: item.descriptionName,
-          quantity: item.quantity,
-          price: item.price,
-          total: item.quantity * item.price, // Calculate total for each item
-        })),
-        // Send invoice-level totals
-        subTotal: value.subTotal,
-        tax: value.tax,
-        total: value.total,
-      }
-    );
+  const updateLeadQuotes = async (value) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:1337/api/form/update-quote-lead/${updateLeadQuotesId}`,
+        {
+          client: value.client,
+          number: value.number,
+          year: value.year,
+          currency: value.currency,
+          status: value.status,
+          date: value.date,
+          expireDate: value.expireDate,
+          note: value.note,
+          // Send items correctly
+          items: value.items.map((item) => ({
+            itemName: item.itemName,
+            descriptionName: item.descriptionName,
+            quantity: item.quantity,
+            price: item.price,
+            total: item.quantity * item.price, // Calculate total for each item
+          })),
+          // Send invoice-level totals
+          subTotal: value.subTotal,
+          tax: value.tax,
+          total: value.total,
+        }
+      );
 
-    navigate("/quote-lead");
-    window.location.reload();
-    console.log("Quote Lead Updated Successfully", value, id);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      navigate("/quote-lead");
+      window.location.reload();
+      console.log("Quote Lead Updated Successfully", value, id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //           #########################################################################################          //
   //   ## GET COUNTRY
@@ -1130,8 +1140,8 @@ const updateLeadQuotes = async (value) => {
   // ######################################################################################################################################
 
   const contextValue = {
-
-    mode,setMode,
+    mode,
+    setMode,
     // #######################
     // ## PEOPLE
     setOpenPersonForm,
@@ -1203,6 +1213,8 @@ const updateLeadQuotes = async (value) => {
     setOpenCUstomerDetail,
     openCustomerDetail,
     singleCustomerData,
+    customerSearchTerm,
+    setCustomerSearchTerm,
 
     // #######################
     // Invoice
@@ -1218,6 +1230,8 @@ const updateLeadQuotes = async (value) => {
     updateInvoice,
     getSingleinvoiceDetail1,
     updateInvoice,
+    invoiceSearchTerm,
+    setInvoiceSearchTerm,
 
     // #######################
     // EXPENSE CATEGORY
@@ -1233,6 +1247,8 @@ const updateLeadQuotes = async (value) => {
     SingleExpenseCategory,
     updateSingleExpenseCategory,
     getSingleExpenseCategoryUpdate,
+    expenseCategorySearchTerm,
+    setExpenseCategorySearchTerm,
 
     // #######################
     // PRODUCT CATEGORY
@@ -1248,6 +1264,7 @@ const updateLeadQuotes = async (value) => {
     SingleProductCategory,
     updateSingleProductCategory,
     getSingleProductCategoryUpdate,
+    productCategorySearchTerm, setProductCategorySearchTerm,
 
     // #######################
     // EXPENSE
@@ -1264,6 +1281,7 @@ const updateLeadQuotes = async (value) => {
     singleExpense,
     getSingleExpenseUpdate,
     updateSingleExpense,
+    expenseSearchTerm, setExpenseSearchTerm,
 
     // #######################
     // Product
@@ -1280,7 +1298,7 @@ const updateLeadQuotes = async (value) => {
     singleProduct,
     getSingleProductUpdate,
     updateSingleProduct,
-
+    productSearchTerm, setProductSearchTerm,
     // #######################
 
     // QUOTE FOR LEAD
@@ -1290,7 +1308,9 @@ const updateLeadQuotes = async (value) => {
     deleteLeadQuotes,
     getSingleLeadQuotes,
     updateLeadQuotes,
-    singleLeadQuote
+    singleLeadQuote,
+    quotesLeadSearchTerm,
+    setQuotesLeadSearchTerm,
   };
 
   return (

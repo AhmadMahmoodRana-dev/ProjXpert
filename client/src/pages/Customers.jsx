@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-  FilePenLine,
   Inbox,
   RefreshCw,
   Search,
@@ -27,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -35,10 +35,22 @@ import {
 import CustomerForm from "../components/CustomerForm";
 import { Context } from "@/context/Context";
 import { darkBackground, lightBackground } from "@/components/Colors";
+import useDebounce from "@/hooks/useDebounce";
 
 const Customers = () => {
-  const { setOpenCustomerForm, openCustomerForm, storeCustomerData,deleteCustomer,mode } =
+  const { setOpenCustomerForm, openCustomerForm, storeCustomerData,deleteCustomer,mode,customerSearchTerm, setCustomerSearchTerm } =
     useContext(Context);
+
+    const debouncedSearchTerm = useDebounce(customerSearchTerm, 500);
+
+    const filteredCustomerData = storeCustomerData.filter((customer) =>
+    customer.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+    customer.country.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+    customer.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+    customer.type.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    );
+  
+
   return (
     <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
       <div className="w-[94%]  shadow-2xl shadow-[#435349]   px-10 py-10  rounded-sm ">
@@ -65,6 +77,8 @@ const Customers = () => {
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
+             value={customerSearchTerm}
+             onChange={(e) => setCustomerSearchTerm(e.target.value)}
               type="search"
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
@@ -93,8 +107,14 @@ const Customers = () => {
             </TableRow>
           </TableHeader>
 
+          {!filteredCustomerData.length ? (
+            <TableCaption className="w-full">
+              <Inbox size={40} />
+              NO DATA FOUND
+            </TableCaption>
+          ) :
           <TableBody>
-            {storeCustomerData.map((client, id) => (
+            {filteredCustomerData.map((client, id) => (
               <TableRow key={client?._id}>
                 <TableCell className="font-medium py-8">{id + 1}</TableCell>
                 <TableCell className="font-medium">
@@ -133,6 +153,7 @@ const Customers = () => {
               </TableRow>
             ))}
           </TableBody>
+            }
         </Table>
       </div>
       <CustomerForm />

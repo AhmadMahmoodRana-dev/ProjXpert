@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import {
   FilePenLine,
+  Inbox,
   RefreshCw,
   Search,
   Trash2,
@@ -26,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -35,6 +37,7 @@ import { Context } from "@/context/Context";
 import ProductForm from "@/components/ProductForm";
 import ProductDetailShow from "@/components/ProductDetailShow";
 import { darkBackground, lightBackground } from "@/components/Colors";
+import useDebounce from "@/hooks/useDebounce";
 
 const Product = () => {
   const {
@@ -44,8 +47,19 @@ const Product = () => {
     getSingleProduct,
     getSingleProductUpdate,
     deleteProduct,
-    mode
+    mode,
+    productSearchTerm, setProductSearchTerm
   } = useContext(Context);
+
+  
+  const debouncedSearchTerm = useDebounce(productSearchTerm, 500);
+
+  const filteredProductData = storeProduct.filter((product) =>
+  product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+  product.productCategory.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  product.currency.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  product.ref.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
   return (
     <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
       <div className="w-[94%] rounded-sm shadow-2xl shadow-[#435349] px-10 py-10">
@@ -72,6 +86,8 @@ const Product = () => {
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
+             value={productSearchTerm}
+             onChange={(e) => setProductSearchTerm(e.target.value)}
               type="search"
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
@@ -99,9 +115,14 @@ const Product = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-
+          {!filteredProductData.length ? (
+            <TableCaption className="w-full">
+              <Inbox size={40} />
+              NO DATA FOUND
+            </TableCaption>
+          ) : (
           <TableBody>
-            {storeProduct.map((Product, id) => (
+            {filteredProductData.map((Product, id) => (
               <TableRow key={Product?._id}>
                 <TableCell className="font-medium">{id + 1}</TableCell>
                 <TableCell className="font-medium">{Product?.name}</TableCell>
@@ -151,6 +172,7 @@ const Product = () => {
               </TableRow>
             ))}
           </TableBody>
+          )}
         </Table>
       </div>
       <ProductForm />

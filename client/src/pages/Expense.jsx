@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import {
   FilePenLine,
+  Inbox,
   RefreshCw,
   Search,
   Trash2,
@@ -26,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -35,6 +37,7 @@ import { Context } from "@/context/Context";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseDetailShow from "@/components/ExpenseDetailShow";
 import { darkBackground, lightBackground } from "@/components/Colors";
+import useDebounce from "@/hooks/useDebounce";
 
 const Expense = () => {
   const {
@@ -44,10 +47,28 @@ const Expense = () => {
     getSingleExpense,
     getSingleExpenseUpdate,
     deleteExpense,
-    mode
+    mode,
+    expenseSearchTerm,
+    setExpenseSearchTerm,
   } = useContext(Context);
+
+  const debouncedSearchTerm = useDebounce(expenseSearchTerm, 500);
+
+  const filteredExpenseData = storeExpense.filter(
+    (expense) =>
+      expense.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      expense.expenseCategory
+        .toLowerCase()
+        .includes(debouncedSearchTerm.toLowerCase()) ||
+      expense.currency.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      expense.ref.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
   return (
-    <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
+    <div
+      className={`w-full min-h-screen ${
+        mode ? darkBackground : lightBackground
+      } justify-center flex flex-col items-center`}
+    >
       <div className="w-[94%] shadow-2xl shadow-[#435349] rounded-sm px-10 py-10">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
@@ -73,6 +94,8 @@ const Expense = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
+              value={expenseSearchTerm}
+              onChange={(e) => setExpenseSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -80,9 +103,7 @@ const Expense = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
-          <Button
-            onClick={() => setOpenExpenseForm(!openExpenseForm)}
-          >
+          <Button onClick={() => setOpenExpenseForm(!openExpenseForm)}>
             Add Expense
           </Button>
         </div>
@@ -99,58 +120,66 @@ const Expense = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
+          {!filteredExpenseData.length ? (
+            <TableCaption className="w-full">
+              <Inbox size={40} />
+              NO DATA FOUND
+            </TableCaption>
+          ) : (
+            <TableBody>
+              {filteredExpenseData.map((expense, id) => (
+                <TableRow key={expense?._id}>
+                  <TableCell className="font-medium">{id + 1}</TableCell>
+                  <TableCell className="font-medium">{expense?.name}</TableCell>
+                  <TableCell className="font-medium">
+                    {expense?.expenseCategory}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {expense?.currency}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {expense?.total}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {expense?.description}
+                  </TableCell>
+                  <TableCell className="font-medium">{expense?.ref}</TableCell>
 
-          <TableBody>
-            {storeExpense.map((expense, id) => (
-              <TableRow key={expense?._id}>
-                <TableCell className="font-medium">{id + 1}</TableCell>
-                <TableCell className="font-medium">{expense?.name}</TableCell>
-                <TableCell className="font-medium">
-                  {expense?.expenseCategory}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {expense?.currency}
-                </TableCell>
-                <TableCell className="font-medium">{expense?.total}</TableCell>
-                <TableCell className="font-medium">
-                  {expense?.description}
-                </TableCell>
-                <TableCell className="font-medium">{expense?.ref}</TableCell>
-
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center gap-1">
-                      <BreadcrumbEllipsis className="h-4 w-4 text-[#20bb59]" />
-                      <span className="sr-only">Toggle menu</span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      <DropdownMenuItem
-                        className="flex gap-3 text-[#20bb59]"
-                        onClick={() => getSingleExpense(expense)}
-                      >
-                        <TvMinimal size={16} />
-                        Show
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="flex gap-3 text-[#20bb59]"
-                        onClick={() => getSingleExpenseUpdate(expense)}
-                      >
-                        <FilePenLine size={16} />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="flex gap-3 text-[#20bb59]"
-                        onClick={() => deleteExpense(expense._id)}
-                      >
-                        <Trash2 size={16} />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="flex items-center gap-1">
+                        <BreadcrumbEllipsis className="h-4 w-4 text-[#20bb59]" />
+                        <span className="sr-only">Toggle menu</span>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        <DropdownMenuItem
+                          className="flex gap-3 text-[#20bb59]"
+                          onClick={() => getSingleExpense(expense)}
+                        >
+                          <TvMinimal size={16} />
+                          Show
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="flex gap-3 text-[#20bb59]"
+                          onClick={() => getSingleExpenseUpdate(expense)}
+                        >
+                          <FilePenLine size={16} />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="flex gap-3 text-[#20bb59]"
+                          onClick={() => deleteExpense(expense._id)}
+                        >
+                          <Trash2 size={16} />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </div>
       <ExpenseForm />

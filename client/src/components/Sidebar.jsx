@@ -53,7 +53,7 @@ const Sidebar = ({ children }) => {
               checked={mode}
               onChange={setMode}
               className={`${
-                mode ? "bg-blue-600" : "bg-gray-300"
+                mode ? "bg-[#20bb59]" : "bg-gray-300"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out`}
             >
               <span

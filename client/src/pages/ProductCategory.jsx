@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import {
   FilePenLine,
+  Inbox,
   RefreshCw,
   Search,
   Trash2,
@@ -26,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -36,6 +38,7 @@ import { Switch } from "@/components/ui/switch";
 import ProductCategoryForm from "@/components/ProductCategoryForm";
 import ProductCategoryDetail from "@/components/ProductCategoryDetail";
 import { darkBackground, lightBackground } from "@/components/Colors";
+import useDebounce from "@/hooks/useDebounce";
 
 const ProductCategory = () => {
   const {
@@ -45,8 +48,19 @@ const ProductCategory = () => {
     storeProductCategory,
     getSingleProductCategory,
     getSingleProductCategoryUpdate,
-    mode
+    mode,
+    productCategorySearchTerm, setProductCategorySearchTerm
   } = useContext(Context);
+
+  const debouncedSearchTerm = useDebounce(productCategorySearchTerm, 500);
+
+  const filteredProductData = storeProductCategory.filter((product) =>
+  product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+  product.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  product.color.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
+
+
   return (
     <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
       <div className="w-[94%] shadow-2xl shadow-[#435349] rounded-sm px-10 py-10">
@@ -73,6 +87,8 @@ const ProductCategory = () => {
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
+             value={productCategorySearchTerm}
+             onChange={(e) => setProductCategorySearchTerm(e.target.value)}
               type="search"
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
@@ -98,9 +114,14 @@ const ProductCategory = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-
+          {!filteredProductData.length ? (
+            <TableCaption className="w-full">
+              <Inbox size={40} />
+              NO DATA FOUND
+            </TableCaption>
+          ) : (
           <TableBody>
-            {storeProductCategory.map((product, id) => (
+            {filteredProductData.map((product, id) => (
               <TableRow key={product?._id}>
                 <TableCell className="font-medium">{id + 1}</TableCell>
                 <TableCell className="font-medium">{product?.name}</TableCell>
@@ -158,6 +179,7 @@ const ProductCategory = () => {
               </TableRow>
             ))}
           </TableBody>
+          )}
         </Table>
       </div>
       <ProductCategoryForm />

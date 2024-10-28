@@ -39,19 +39,28 @@ import { Context } from "@/context/Context";
 import LeadForm from "@/components/LeadForm";
 import { Link } from "react-router-dom";
 import { darkBackground, lightBackground } from "@/components/Colors";
+import useDebounce from "@/hooks/useDebounce";
 
 const Invoices = () => {
   const {
     storeInvoices,
     getSingleinvoice,
-    cmpSearchTerm,
-    setCmpSearchTerm,
     deleteInvoice,
     getSingleinvoiceDetail1,
     getSingleinvoiceDetail,
-    mode
+    mode,
+    invoiceSearchTerm, 
+    setInvoiceSearchTerm,
   } = useContext(Context);
 
+  const debouncedSearchTerm = useDebounce(invoiceSearchTerm, 500);
+
+  const filteredInvoiceData = storeInvoices.filter((invoice) =>
+  invoice.client.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+  invoice.currency.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  invoice.status.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
+  invoice.note.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
   return (
     <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
       <div className="w-[94%]  shadow-2xl shadow-[#435349] rounded-sm px-10 py-10">
@@ -79,8 +88,8 @@ const Invoices = () => {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              value={cmpSearchTerm}
-              onChange={(e) => setCmpSearchTerm(e.target.value)}
+              value={invoiceSearchTerm}
+              onChange={(e) => setInvoiceSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -112,14 +121,14 @@ const Invoices = () => {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          {!storeInvoices.length ? (
+          {!filteredInvoiceData.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {storeInvoices.map((invoice, id) => (
+              {filteredInvoiceData.map((invoice, id) => (
                 <TableRow key={invoice?._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
