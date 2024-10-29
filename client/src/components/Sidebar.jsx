@@ -219,7 +219,7 @@ const Sidebar = ({ children }) => {
               </Link>
               <Link
                 to="/product"
-                className={`flex items-center gap-3 rounded-lg px-3 py-3 pb-10 transition-all ${
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
                   location.pathname === "/product"
                     ? "bg-muted text-primary"
                     : "text-muted-foreground hover:text-primary"
@@ -231,10 +231,10 @@ const Sidebar = ({ children }) => {
                   {storeProduct.length}
                 </Badge>
               </Link>
-              <DropdownMenu className="flex items-center" >
+              <DropdownMenu className="flex" >
                 <DropdownMenuTrigger className="flex items-center  gap-3 rounded-lg px-3 py-3 text-muted-foreground hover:text-primary">
-                <Settings className="h-4 w-4"/>
-                  <h1>Setting</h1>
+                <Settings className="h-4 w-4 mt-10"/>
+                  <h1 className="mt-10">Setting</h1>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   <DropdownMenuItem className="flex gap-3 text-[#20bb59] ">

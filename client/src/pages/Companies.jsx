@@ -103,9 +103,9 @@ const Companies = () => {
             Add Company
           </Button>
         </div>
-        <Table className={"bg-white"}>
+        <Table className={"bg-[#1f2633]"}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
+            <TableRow className={"bg-[#1f2633]"}>
               <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
               <TableHead className="text-[#2b2d3b]">Name</TableHead>
               <TableHead className="text-[#2b2d3b]">Contact</TableHead>

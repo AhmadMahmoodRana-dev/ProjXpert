@@ -12,97 +12,82 @@ import { deleteQuoteLeads, getQuoteLeads, getSingleQuoteLead, postQuoteLead, upd
 
 // ## AUTH
 import { register,login } from "../controller/Auth.controller.js";
-import { verifyToken,authorizeRoles } from "../middlewares/auth.js";
+import authMiddleware from "../middlewares/auth.js";
 
 
 const route = Router();
 // ## PEOPLE
-route.get("/get-people",getPeople)
-route.get("/get-single-people/:id",getSinglePeople)
-route.post("/post-people",postPeople)
-route.delete("/delete-people/:id",deletePeople)
-route.put("/update-people/:id",updatePeopleData)
+route.get("/get-people",authMiddleware(['admin','worker',"client"]),getPeople)
+route.get("/get-single-people/:id",authMiddleware(['admin','worker',"client"]),getSinglePeople)
+route.post("/post-people",authMiddleware(['admin','worker']),postPeople)
+route.put("/update-people/:id",authMiddleware(['admin','worker']),updatePeopleData)
+route.delete("/delete-people/:id",authMiddleware(['admin']),deletePeople)
 // ## COMPANY
-route.get("/get-company",getCompany)
-route.get("/get-single-company/:id",getSingleCompany)
-route.post("/post-company",postCompany)
-route.delete("/delete-company/:id",deleteCompany)
-route.put("/update-company/:id",updateCompanyData)
+route.get("/get-company",authMiddleware(['admin','worker',"client"]),getCompany)
+route.get("/get-single-company/:id",authMiddleware(['admin','worker',"client"]),getSingleCompany)
+route.post("/post-company",authMiddleware(['admin','worker']),postCompany)
+route.put("/update-company/:id",authMiddleware(['admin','worker']),updateCompanyData)
+route.delete("/delete-company/:id",authMiddleware(['admin']),deleteCompany)
 // ## LEADS
-route.get("/get-lead",getLead)
-route.get("/get-single-lead/:id",getSingleLead)
-route.get("/get-status-lead",leadStatusFilter)
-route.post("/post-lead",postLead)
-route.delete("/delete-lead/:id",deleteLead)
-route.put("/update-lead/:id",updateLeadData)
-route.put("/update-lead-status",leadStatusUpdate)
+route.get("/get-lead",authMiddleware(['admin','worker',"client"]),getLead)
+route.get("/get-single-lead/:id",authMiddleware(['admin','worker',"client"]),getSingleLead)
+route.get("/get-status-lead",authMiddleware(['admin','worker',"client"]),leadStatusFilter)
+route.post("/post-lead",authMiddleware(['admin','worker']),postLead)
+route.put("/update-lead/:id",authMiddleware(['admin','worker',]),updateLeadData)
+route.put("/update-lead-status",authMiddleware(['admin','worker',]),leadStatusUpdate)
+route.delete("/delete-lead/:id",authMiddleware(['admin']),deleteLead)
 // ## CUSTOMER
-route.get("/get-customer",getCustomer)
-route.post("/post-customer",postCustomer)
-route.get("/get-customer/:name",getSingleCustomerName)
-route.delete("/delete-customer/:id",deleteCustomer)
+route.get("/get-customer",authMiddleware(['admin','worker',"client"]),getCustomer)
+route.get("/get-customer/:name",authMiddleware(['admin','worker',"client"]),getSingleCustomerName)
+route.post("/post-customer",authMiddleware(['admin','worker']),postCustomer)
+route.delete("/delete-customer/:id",authMiddleware(['admin']),deleteCustomer)
 // ## INVOICES
-route.post("/post-invoice",postInvoices)
-route.get("/get-invoice",getInvoices)
-route.delete('/delete-invoice/:id',deleteInvoices)
-route.get('/get-single-invoice/:id',getSingleInvoice)
-route.put('/update-invoice/:id',updateInvoice)
+route.get("/get-invoice",authMiddleware(['admin','worker',"client"]),getInvoices)
+route.get('/get-single-invoice/:id',authMiddleware(['admin','worker',"client"]),getSingleInvoice)
+route.post("/post-invoice",authMiddleware(['admin','worker']),postInvoices)
+route.put('/update-invoice/:id',authMiddleware(['admin','worker']),updateInvoice)
+route.delete('/delete-invoice/:id',authMiddleware(['admin']),deleteInvoices)
 // ## EXPENSECATEGORY
-route.get("/get-expensecategory",getExpenseCategory)
-route.get("/get-single-expensecategory/:id",getSingleExpenseCategory)
-route.post("/post-expensecategory",postExpenseCategory)
-route.delete("/delete-expensecategory/:id",deleteExpenseCategory)
-route.put("/update-expensecategory/:id",updateExpenseCategory)
+route.get("/get-expensecategory",authMiddleware(['admin','worker',"client"]),getExpenseCategory)
+route.get("/get-single-expensecategory/:id",authMiddleware(['admin','worker',"client"]),getSingleExpenseCategory)
+route.post("/post-expensecategory",authMiddleware(['admin','worker']),postExpenseCategory)
+route.put("/update-expensecategory/:id",authMiddleware(['admin','worker']),updateExpenseCategory)
+route.delete("/delete-expensecategory/:id",authMiddleware(['admin']),deleteExpenseCategory)
 // ## PRODUCTCATEGORY
-route.get("/get-productcategory",getProductCategory)
-route.get("/get-single-productcategory/:id",getSingleProductCategory)
-route.post("/post-productcategory",postProductCategory)
-route.delete("/delete-productcategory/:id",deleteProductCategory)
-route.put("/update-productcategory/:id",updateProductCategory)
+route.get("/get-productcategory",authMiddleware(['admin','worker',"client"]),getProductCategory)
+route.get("/get-single-productcategory/:id",authMiddleware(['admin','worker',"client"]),getSingleProductCategory)
+route.post("/post-productcategory",authMiddleware(['admin','worker']),postProductCategory)
+route.put("/update-productcategory/:id",authMiddleware(['admin','worker']),updateProductCategory)
+route.delete("/delete-productcategory/:id",authMiddleware(['admin']),deleteProductCategory)
 
 // ## EXPENSE
-route.get("/get-expense",getExpense)
-route.get("/get-single-expense/:id",getSingleExpense)
-route.post("/post-expense",postExpense)
-route.delete("/delete-expense/:id",deleteExpense)
-route.put("/update-expense/:id",updateExpense)
+route.get("/get-expense",authMiddleware(['admin','worker',"client"]),getExpense)
+route.get("/get-single-expense/:id",authMiddleware(['admin','worker',"client"]),getSingleExpense)
+route.post("/post-expense",authMiddleware(['admin','worker']),postExpense)
+route.put("/update-expense/:id",authMiddleware(['admin','worker']),updateExpense)
+route.delete("/delete-expense/:id",authMiddleware(['admin']),deleteExpense)
 
 // ## PRODUCT
-route.get("/get-product",getProduct)
-route.get("/get-single-product/:id",getSingleProduct)
-route.post("/post-product",postProduct)
-route.delete("/delete-product/:id",deleteProduct)
-route.put("/update-product/:id",updateProduct)
+route.get("/get-product",authMiddleware(['admin','worker',"client"]),getProduct)
+route.get("/get-single-product/:id",authMiddleware(['admin','worker',"client"]),getSingleProduct)
+route.post("/post-product",authMiddleware(['admin','worker']),postProduct)
+route.put("/update-product/:id",authMiddleware(['admin','worker']),updateProduct)
+route.delete("/delete-product/:id",authMiddleware(['admin']),deleteProduct)
 
 // ## QUOTES FOR LEAD
-route.post("/post-quote-lead",postQuoteLead)
-route.get("/get-quote-lead",getQuoteLeads)
-route.delete("/delete-lead-quotes/:id",deleteQuoteLeads)
-route.get('/get-single-quote-lead/:id',getSingleQuoteLead)
-route.put('/update-quote-lead/:id',updateQuoteLead)
+route.post("/post-quote-lead",authMiddleware(['admin','worker']),postQuoteLead)
+route.get("/get-quote-lead",authMiddleware(['admin','worker',"client"]),getQuoteLeads)
+route.delete("/delete-lead-quotes/:id",authMiddleware(['admin']),deleteQuoteLeads)
+route.get('/get-single-quote-lead/:id',authMiddleware(['admin','worker',"client"]),getSingleQuoteLead)
+route.put('/update-quote-lead/:id',authMiddleware(['admin','worker']),updateQuoteLead)
 
 
 // ### AUTHENTICATION AND AUTHERIZATION #####
 
-// const { verifyToken, authorizeRoles } = require("../middleware/auth");
 
 route.post("/register", register);
 route.post("/login", login);
 
-// Admin-only route example
-route.get("/admin", verifyToken, authorizeRoles("admin"), (req, res) => {
-  res.status(200).json({ message: "Welcome Admin!" });
-});
-
-// Worker-only route example
-route.get("/worker", verifyToken, authorizeRoles("worker"), (req, res) => {
-  res.status(200).json({ message: "Welcome Worker!" });
-});
-
-// Client-only route example
-route.get("/client", verifyToken, authorizeRoles("client"), (req, res) => {
-  res.status(200).json({ message: "Welcome Client!" });
-});
 
 
 

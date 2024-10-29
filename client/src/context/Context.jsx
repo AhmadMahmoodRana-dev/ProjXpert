@@ -73,39 +73,36 @@ const ContextProvider = (props) => {
   const [singleExpenseUpdateId, setSingleExpenseUpdateId] = useState("");
   const [expenseCategorySearchTerm, setExpenseCategorySearchTerm] =
     useState("");
-    
-    // ## PRODUCT CATEGORY
-    const [storeProductCategory, setStoreProductCategory] = useState([]);
-    const [showProductCategoryButton, setShowProductCategoryButton] =
+
+  // ## PRODUCT CATEGORY
+  const [storeProductCategory, setStoreProductCategory] = useState([]);
+  const [showProductCategoryButton, setShowProductCategoryButton] =
     useState(false);
-    const [showProductCategoryForm, setShowProductCategoryForm] = useState(false);
-    const [SingleProductCategory, setSingleProductCategory] = useState({});
-    const [openProductCategoryDetailPage, setOpenProductCategoryDetailPage] =
+  const [showProductCategoryForm, setShowProductCategoryForm] = useState(false);
+  const [SingleProductCategory, setSingleProductCategory] = useState({});
+  const [openProductCategoryDetailPage, setOpenProductCategoryDetailPage] =
     useState(false);
-    const [singleProductUpdateId, setSingleProductUpdateId] = useState("");
-    const [productCategorySearchTerm, setProductCategorySearchTerm] =
-      useState("");
-      
-    
-    // ## EXPENSE
-    const [openExpenseForm, setOpenExpenseForm] = useState(false);
+  const [singleProductUpdateId, setSingleProductUpdateId] = useState("");
+  const [productCategorySearchTerm, setProductCategorySearchTerm] =
+    useState("");
+
+  // ## EXPENSE
+  const [openExpenseForm, setOpenExpenseForm] = useState(false);
   const [showExpenseButton, setShowExpenseButton] = useState(false);
   const [storeExpense, setStoreExpense] = useState([]);
   const [expenseDetailShow, setExpenseDetailShow] = useState(false);
   const [singleExpense, setSingleExpense] = useState({});
   const [singleExpenseUpdatedId, setSingleExpenseUpdatedId] = useState("");
-  const [expenseSearchTerm, setExpenseSearchTerm] =
-    useState("");
-    
-    // ## Product
-    const [openProductForm, setOpenProductForm] = useState(false);
+  const [expenseSearchTerm, setExpenseSearchTerm] = useState("");
+
+  // ## Product
+  const [openProductForm, setOpenProductForm] = useState(false);
   const [showProductButton, setShowProductButton] = useState(false);
   const [storeProduct, setStoreProduct] = useState([]);
   const [productDetailShow, setProductDetailShow] = useState(false);
   const [singleProduct, setSingleProduct] = useState({});
   const [singleProductUpdatedId, setSingleProductUpdatedId] = useState("");
-  const [productSearchTerm, setProductSearchTerm] =
-    useState("");
+  const [productSearchTerm, setProductSearchTerm] = useState("");
 
   // ## QUOTES FOR LEAD
   const [storeLeadQuotes, setStoreLeadQuotes] = useState([]);
@@ -119,6 +116,7 @@ const ContextProvider = (props) => {
 
   const setPeople = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-people`,
         {
@@ -129,6 +127,10 @@ const ContextProvider = (props) => {
           phone: val.phone,
           email: val.email,
           type: "people",
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       setOpenPersonForm(false);
@@ -143,8 +145,13 @@ const ContextProvider = (props) => {
 
   const getPeople = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-people`
+        `http://localhost:1337/api/form/get-people`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStorePeopleData(data.message);
     } catch (error) {
@@ -155,8 +162,13 @@ const ContextProvider = (props) => {
   // delete
   const deletePeople = async (id) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-people/${id}`
+        `http://localhost:1337/api/form/delete-people/${id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       getPeople();
       console.log("people delete SuccessFully !", result);
@@ -169,8 +181,13 @@ const ContextProvider = (props) => {
 
   const getSinglePeople = async (people) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-people/${people._id}`
+        `http://localhost:1337/api/form/get-single-people/${people._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setPersonDetail(data);
       setOpenPersonForm(!openPersonForm);
@@ -184,6 +201,7 @@ const ContextProvider = (props) => {
 
   const updatePeople = async (value) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-people/${updateId}`,
         {
@@ -193,6 +211,10 @@ const ContextProvider = (props) => {
           country: value.country,
           phone: value.phone,
           email: value.email,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -205,8 +227,13 @@ const ContextProvider = (props) => {
 
   // detailpageInfo
   const getPeopleDetail = async (id) => {
+    const token = localStorage.getItem("token");
     const result = await axios.get(
-      `http://localhost:1337/api/form/get-single-people/${id}`
+      `http://localhost:1337/api/form/get-single-people/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     setPersonDetail(result.data);
     console.log(result.data);
@@ -221,6 +248,7 @@ const ContextProvider = (props) => {
 
   const setCompanies = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-company`,
         {
@@ -232,6 +260,10 @@ const ContextProvider = (props) => {
           phone: val.phone,
           email: val.email,
           type: "company",
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       setOpenCompanyForm(false);
@@ -246,8 +278,13 @@ const ContextProvider = (props) => {
 
   const getCompany = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-company`
+        `http://localhost:1337/api/form/get-company`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreCompanyData(data.message);
     } catch (error) {
@@ -258,8 +295,13 @@ const ContextProvider = (props) => {
   // delete
   const deleteCompany = async (id) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-company/${id}`
+        `http://localhost:1337/api/form/delete-company/${id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       getCompany();
       console.log("Company delete SuccessFully !", result);
@@ -272,8 +314,13 @@ const ContextProvider = (props) => {
 
   const getSingleCompany = async (company) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-company/${company._id}`
+        `http://localhost:1337/api/form/get-single-company/${company._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setCompanyDetail(data);
       setOpenCompanyForm(!openPersonForm);
@@ -287,6 +334,7 @@ const ContextProvider = (props) => {
 
   const updateCompany = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-company/${cmpUpdateId}`,
         {
@@ -297,6 +345,10 @@ const ContextProvider = (props) => {
           country: val.country,
           phone: val.phone,
           email: val.email,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -307,8 +359,13 @@ const ContextProvider = (props) => {
 
   // detailpageInfo
   const getCompanyDetail = async (id) => {
+    const token = localStorage.getItem("token");
     const result = await axios.get(
-      `http://localhost:1337/api/form/get-single-company/${id}`
+      `http://localhost:1337/api/form/get-single-company/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     setCompanyDetail(result.data);
     console.log(result.data);
@@ -323,6 +380,7 @@ const ContextProvider = (props) => {
 
   const setLeads = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-lead`,
         {
@@ -336,6 +394,10 @@ const ContextProvider = (props) => {
           phone: val.leadPhone,
           email: val.leadEmail,
           project: val.leadProject,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       setOpenLeadForm(false);
@@ -350,8 +412,13 @@ const ContextProvider = (props) => {
 
   const getLead = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-lead`
+        `http://localhost:1337/api/form/get-lead`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreLeadData(data.message);
     } catch (error) {
@@ -362,8 +429,13 @@ const ContextProvider = (props) => {
   // delete
   const deleteLead = async (id) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-lead/${id}`
+        `http://localhost:1337/api/form/delete-lead/${id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       getLead();
       console.log("Lead delete SuccessFully !", result);
@@ -376,8 +448,13 @@ const ContextProvider = (props) => {
 
   const getSingleLead = async (Lead) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-lead/${Lead._id}`
+        `http://localhost:1337/api/form/get-single-lead/${Lead._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setLeadDetail(data);
       setOpenLeadForm(!openPersonForm);
@@ -391,6 +468,7 @@ const ContextProvider = (props) => {
 
   const updateLead = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-lead/${leadUpdateId}`,
         {
@@ -404,6 +482,11 @@ const ContextProvider = (props) => {
           phone: val.leadPhone,
           email: val.leadEmail,
           project: val.leadProject,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -414,8 +497,13 @@ const ContextProvider = (props) => {
 
   // detailpageInfo
   const getLeadDetail = async (id) => {
+    const token = localStorage.getItem("token");
     const result = await axios.get(
-      `http://localhost:1337/api/form/get-single-lead/${id}`
+      `http://localhost:1337/api/form/get-single-lead/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     setLeadDetail(result.data);
     console.log(result.data);
@@ -428,8 +516,13 @@ const ContextProvider = (props) => {
 
   const storeSingleCustomerCompany = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-company/${getSingleCompanyId}`
+        `http://localhost:1337/api/form/get-single-company/${getSingleCompanyId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       data
         ? await axios.post(`http://localhost:1337/api/form/post-customer`, {
@@ -438,6 +531,10 @@ const ContextProvider = (props) => {
             phone: data.phone,
             email: data.email,
             type: data.type,
+          },{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           })
         : console.log("null");
     } catch (error) {
@@ -446,8 +543,13 @@ const ContextProvider = (props) => {
   };
   const storeSingleCustomerPeople = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-people/${getSinglePeopleId}`
+        `http://localhost:1337/api/form/get-single-people/${getSinglePeopleId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       data
         ? await axios.post(`http://localhost:1337/api/form/post-customer`, {
@@ -466,8 +568,13 @@ const ContextProvider = (props) => {
   // ## GET DATA
   const getCustomerData = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-customer`
+        `http://localhost:1337/api/form/get-customer`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreCustomerData(data.message);
       console.log("customer data", storeCustomerData);
@@ -477,8 +584,13 @@ const ContextProvider = (props) => {
   };
   const deleteCustomer = async (customerId) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-customer/${customerId}`
+        `http://localhost:1337/api/form/delete-customer/${customerId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       getCustomerData();
       console.log("Customer delete successFully!", result);
@@ -491,8 +603,13 @@ const ContextProvider = (props) => {
 
   const getSingleCustomer = async (people) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-customer/${people.name}`
+        `http://localhost:1337/api/form/get-customer/${people.name}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setOpenCUstomerDetail(true);
       setSingleCustomerData(data);
@@ -510,9 +627,14 @@ const ContextProvider = (props) => {
 
   const setInvoice = async (invoice) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-invoice`,
-        invoice
+        invoice,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Invoice submitted", result);
       setShowInvoiceButton(!showInvoiceButton);
@@ -526,8 +648,13 @@ const ContextProvider = (props) => {
   // GET
   const getInvoice = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-invoice`
+        `http://localhost:1337/api/form/get-invoice`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreInvoices(data);
       console.log("INVOICES", storeInvoices);
@@ -539,8 +666,13 @@ const ContextProvider = (props) => {
   //  DELETE
   const deleteInvoice = async (invoiceId) => {
     try {
+      const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-invoice/${invoiceId}`
+        `http://localhost:1337/api/form/delete-invoice/${invoiceId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Invoice deleted successfully!");
       getInvoice();
@@ -552,8 +684,13 @@ const ContextProvider = (props) => {
   // SINGLE INVOICE
   const getSingleinvoice = async (invoice) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
+        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setSingleInvoice(data);
       navigate("/invoices-payment-form");
@@ -567,8 +704,13 @@ const ContextProvider = (props) => {
 
   const getSingleinvoiceDetail = async (invoice) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-invoice/${invoice}`
+        `http://localhost:1337/api/form/get-single-invoice/${invoice}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setSingleInvoice(data);
       navigate("/invoices-detail");
@@ -580,8 +722,13 @@ const ContextProvider = (props) => {
   };
   const getSingleinvoiceDetail1 = async (invoice) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`
+        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setSingleInvoice(data);
       setUpdateInvoiceId(invoice._id);
@@ -597,10 +744,15 @@ const ContextProvider = (props) => {
   //  UPDATE INVOICE PAYMENT
   const updateInvoicePayment = async (value, id) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-invoice/${id}`,
         {
           paidAmount: value.amount,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -612,6 +764,7 @@ const ContextProvider = (props) => {
   //  UPDATE INVOICE
   const updateInvoice = async (value) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-invoice/${updateInvoiceId}`,
         {
@@ -635,6 +788,10 @@ const ContextProvider = (props) => {
           subTotal: value.subTotal,
           tax: value.tax,
           total: value.total,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -653,8 +810,13 @@ const ContextProvider = (props) => {
   // GET
   const getExpenseCategory = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-expensecategory`
+        `http://localhost:1337/api/form/get-expensecategory`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreExpenseCategory(data.message);
       console.log("INVOICES", storeExpenseCategory);
@@ -665,9 +827,14 @@ const ContextProvider = (props) => {
   // POST
   const setExpenseCategory = async (expensecategory) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-expensecategory`,
-        expensecategory
+        expensecategory,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("EXPENSE CATEGORY submitted", result);
       setShowExpenseCategoryButton(!showExpenseCategoryButton);
@@ -682,8 +849,13 @@ const ContextProvider = (props) => {
   // DELETE
   const deleteExpenseCategory = async (Id) => {
     try {
+      const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-expensecategory/${Id}`
+        `http://localhost:1337/api/form/delete-expensecategory/${Id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Invoice deleted successfully!");
       getExpenseCategory();
@@ -696,8 +868,13 @@ const ContextProvider = (props) => {
 
   const getSingleExpenseCategory = async (ExpenseCategory) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`
+        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setOpenExpensiveCategoryDetailPage(!openExpensiveCategoryDetailPage);
       setSingleExpenseCategory(data);
@@ -709,8 +886,13 @@ const ContextProvider = (props) => {
   };
   const getSingleExpenseCategoryUpdate = async (ExpenseCategory) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`
+        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setShowExpenseCategoryForm(!showExpenseCategoryForm);
       setShowExpenseCategoryButton(true);
@@ -724,6 +906,7 @@ const ContextProvider = (props) => {
 
   const updateSingleExpenseCategory = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-expensecategory/${singleExpenseUpdateId}`,
         {
@@ -731,6 +914,10 @@ const ContextProvider = (props) => {
           description: val.description,
           color: val.color,
           enabled: val.enabled,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -746,8 +933,13 @@ const ContextProvider = (props) => {
   // GET
   const getProductCategory = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-productcategory`
+        `http://localhost:1337/api/form/get-productcategory`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreProductCategory(data.message);
       console.log("INVOICES", storeProductCategory);
@@ -758,9 +950,14 @@ const ContextProvider = (props) => {
   // POST
   const setProductCategory = async (Productcategory) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-productcategory`,
-        Productcategory
+        Productcategory,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Product CATEGORY submitted", result);
       setShowProductCategoryButton(!showProductCategoryButton);
@@ -775,8 +972,13 @@ const ContextProvider = (props) => {
   // DELETE
   const deleteProductCategory = async (Id) => {
     try {
+      const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-productcategory/${Id}`
+        `http://localhost:1337/api/form/delete-productcategory/${Id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Invoice deleted successfully!");
       getProductCategory();
@@ -789,8 +991,13 @@ const ContextProvider = (props) => {
 
   const getSingleProductCategory = async (ProductCategory) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`
+        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setOpenProductCategoryDetailPage(!openProductCategoryDetailPage);
       setSingleProductCategory(data);
@@ -802,8 +1009,13 @@ const ContextProvider = (props) => {
   };
   const getSingleProductCategoryUpdate = async (ProductCategory) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`
+        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setShowProductCategoryForm(!showProductCategoryForm);
       setShowProductCategoryButton(true);
@@ -817,6 +1029,7 @@ const ContextProvider = (props) => {
 
   const updateSingleProductCategory = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-productcategory/${singleProductUpdateId}`,
         {
@@ -824,6 +1037,10 @@ const ContextProvider = (props) => {
           description: val.description,
           color: val.color,
           enabled: val.enabled,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -839,9 +1056,14 @@ const ContextProvider = (props) => {
   // POST
   const setExpense = async (expense) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-expense`,
-        expense
+        expense,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Expense submitted", result);
     } catch (error) {
@@ -852,8 +1074,13 @@ const ContextProvider = (props) => {
   //   ## GET EXPENSE
   const getExpense = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-expense`
+        `http://localhost:1337/api/form/get-expense`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreExpense(data.message);
       console.log("INVOICES", storeExpense);
@@ -865,7 +1092,12 @@ const ContextProvider = (props) => {
   // DELETE EXPENSE
   const deleteExpense = async (Id) => {
     try {
-      await axios.delete(`http://localhost:1337/api/form/delete-expense/${Id}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:1337/api/form/delete-expense/${Id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log("Expense deleted successfully!");
       getExpense();
     } catch (error) {
@@ -877,8 +1109,13 @@ const ContextProvider = (props) => {
 
   const getSingleExpense = async (Expense) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
+        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setExpenseDetailShow(!expenseDetailShow), setSingleExpense(data);
       setSingleExpenseUpdatedId(data._id);
@@ -889,8 +1126,13 @@ const ContextProvider = (props) => {
   };
   const getSingleExpenseUpdate = async (Expense) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`
+        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setOpenExpenseForm(!openExpenseForm);
       setShowExpenseButton(true);
@@ -904,6 +1146,7 @@ const ContextProvider = (props) => {
 
   const updateSingleExpense = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-expense/${singleExpenseUpdatedId}`,
         {
@@ -913,6 +1156,10 @@ const ContextProvider = (props) => {
           total: val.total,
           description: val.description,
           ref: val.ref,
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -929,9 +1176,14 @@ const ContextProvider = (props) => {
   const setProduct = async (Product) => {
     console.log(Product);
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-product`,
-        Product
+        Product,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Product submitted", result);
     } catch (error) {
@@ -942,8 +1194,13 @@ const ContextProvider = (props) => {
   //   ## GET Product
   const getProduct = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-product`
+        `http://localhost:1337/api/form/get-product`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreProduct(data.message);
       console.log("INVOICES", storeProduct);
@@ -955,7 +1212,12 @@ const ContextProvider = (props) => {
   // DELETE Product
   const deleteProduct = async (Id) => {
     try {
-      await axios.delete(`http://localhost:1337/api/form/delete-product/${Id}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:1337/api/form/delete-product/${Id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log("Product deleted successfully!");
       getProduct();
     } catch (error) {
@@ -967,8 +1229,13 @@ const ContextProvider = (props) => {
 
   const getSingleProduct = async (Product) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-product/${Product._id}`
+        `http://localhost:1337/api/form/get-single-product/${Product._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setProductDetailShow(!productDetailShow), setSingleProduct(data);
       setSingleProductUpdatedId(data._id);
@@ -979,8 +1246,13 @@ const ContextProvider = (props) => {
   };
   const getSingleProductUpdate = async (Product) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-product/${Product._id}`
+        `http://localhost:1337/api/form/get-single-product/${Product._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setOpenProductForm(!openProductForm);
       setShowProductButton(true);
@@ -994,6 +1266,7 @@ const ContextProvider = (props) => {
 
   const updateSingleProduct = async (val) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-product/${singleProductUpdatedId}`,
         {
@@ -1003,6 +1276,11 @@ const ContextProvider = (props) => {
           total: val.total,
           description: val.description,
           ref: val.ref,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       window.location.reload();
@@ -1019,9 +1297,16 @@ const ContextProvider = (props) => {
 
   const setLeadQuotes = async (LeadQuotes) => {
     try {
+      const token = localStorage.getItem("token");
+
       const result = await axios.post(
         `http://localhost:1337/api/form/post-quote-lead`,
-        LeadQuotes
+        LeadQuotes,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("LeadQuotes submitted", result);
       getLeadQuotes();
@@ -1034,21 +1319,38 @@ const ContextProvider = (props) => {
   // GET
   const getLeadQuotes = async () => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-quote-lead`
+        "http://localhost:1337/api/form/get-quote-lead",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setStoreLeadQuotes(data);
-      console.log("LeadQuotes", storeLeadQuotes);
+      console.log("LeadQuotes", data);
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        console.error("Server responded with an error:", error.response.data);
+      } else if (error.request) {
+        console.error("Request made but no response received:", error.request);
+      } else {
+        console.error("Error in setting up the request:", error.message);
+      }
     }
   };
 
   //  DELETE
   const deleteLeadQuotes = async (LeadQuotes) => {
     try {
+      const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-lead-quotes/${LeadQuotes}`
+        `http://localhost:1337/api/form/delete-lead-quotes/${LeadQuotes}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("LeadQuotes deleted successfully!");
       getLeadQuotes();
@@ -1061,8 +1363,13 @@ const ContextProvider = (props) => {
 
   const getSingleLeadQuotes = async (LeadQuotes) => {
     try {
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`
+        `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setSingleLeadQuote(data);
       setUpdateLeadQuotesId(LeadQuotes._id);
@@ -1077,6 +1384,7 @@ const ContextProvider = (props) => {
 
   const updateLeadQuotes = async (value) => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.put(
         `http://localhost:1337/api/form/update-quote-lead/${updateLeadQuotesId}`,
         {
@@ -1100,6 +1408,10 @@ const ContextProvider = (props) => {
           subTotal: value.subTotal,
           tax: value.tax,
           total: value.total,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -1137,37 +1449,33 @@ const ContextProvider = (props) => {
     getLeadQuotes();
   }, []);
 
+  // 33333333333              AUTHENTICATION       3333333333333333
 
-
-
-// 33333333333              AUTHENTICATION       3333333333333333
-
-
-const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ role: 'user' }); // Optionally verify the token with a backend call.
+    const role = localStorage.getItem("role");
+    if (token && role) {
+      setUser({ role });
     }
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await axios.post("http://localhost:1337/api/form/login", { email, password });
+    const { data } = await axios.post("http://localhost:1337/api/form/login", {
+      email,
+      password,
+    });
     localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role);
     setUser({ role: data.role });
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setUser(null);
   };
-
-
-
-
-
-
 
   // ######################################################################################################################################
 
@@ -1296,7 +1604,8 @@ const [user, setUser] = useState(null);
     SingleProductCategory,
     updateSingleProductCategory,
     getSingleProductCategoryUpdate,
-    productCategorySearchTerm, setProductCategorySearchTerm,
+    productCategorySearchTerm,
+    setProductCategorySearchTerm,
 
     // #######################
     // EXPENSE
@@ -1313,7 +1622,8 @@ const [user, setUser] = useState(null);
     singleExpense,
     getSingleExpenseUpdate,
     updateSingleExpense,
-    expenseSearchTerm, setExpenseSearchTerm,
+    expenseSearchTerm,
+    setExpenseSearchTerm,
 
     // #######################
     // Product
@@ -1330,7 +1640,8 @@ const [user, setUser] = useState(null);
     singleProduct,
     getSingleProductUpdate,
     updateSingleProduct,
-    productSearchTerm, setProductSearchTerm,
+    productSearchTerm,
+    setProductSearchTerm,
     // #######################
 
     // QUOTE FOR LEAD
@@ -1344,11 +1655,13 @@ const [user, setUser] = useState(null);
     quotesLeadSearchTerm,
     setQuotesLeadSearchTerm,
 
-// #############
+    // #############
 
-// Authentication
-user, setUser,login,logout
-
+    // Authentication
+    user,
+    setUser,
+    login,
+    logout,
   };
 
   return (
