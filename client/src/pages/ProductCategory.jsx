@@ -49,7 +49,8 @@ const ProductCategory = () => {
     getSingleProductCategory,
     getSingleProductCategoryUpdate,
     mode,
-    productCategorySearchTerm, setProductCategorySearchTerm
+    productCategorySearchTerm, setProductCategorySearchTerm,
+    user
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(productCategorySearchTerm, 500);
@@ -97,11 +98,14 @@ const ProductCategory = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button
             onClick={() => setShowProductCategoryForm(!showProductCategoryForm)}
           >
             Add ProductCategory
           </Button>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

@@ -50,7 +50,8 @@ const QuotesForLead = () => {
     getSingleinvoiceDetail,
     mode,
     quotesLeadSearchTerm,
-    setQuotesLeadSearchTerm
+    setQuotesLeadSearchTerm,
+    user
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(quotesLeadSearchTerm, 500);
@@ -98,6 +99,8 @@ const QuotesForLead = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Link to={'/quote-lead-form'}>
           <Button
             
@@ -106,6 +109,7 @@ const QuotesForLead = () => {
           </Button>
 
           </Link>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

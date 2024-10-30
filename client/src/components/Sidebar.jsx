@@ -148,9 +148,9 @@ const Sidebar = ({ children }) => {
                 </Badge>
               </Link>
               <Link
-                to="/invoices"
+                to="/signup"
                 className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
-                  location.pathname === "/invoices"
+                  location.pathname === "/signup"
                     ? "bg-muted text-primary"
                     : "text-muted-foreground hover:text-primary"
                 }`}

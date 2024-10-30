@@ -51,6 +51,7 @@ const Invoices = () => {
     mode,
     invoiceSearchTerm, 
     setInvoiceSearchTerm,
+    user
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(invoiceSearchTerm, 500);
@@ -98,12 +99,14 @@ const Invoices = () => {
             <RefreshCw size={16} /> Refresh
           </Button>
           <Link to={'/invoices-form'}>
+          {
+            user.role == "client" ? null :
           <Button
             
           >
             Add Invoices
           </Button>
-
+          }
           </Link>
         </div>
         <Table className={"bg-white"}>

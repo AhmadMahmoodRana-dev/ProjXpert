@@ -48,6 +48,7 @@ const Companies = () => {
     cmpSearchTerm,
     mode,
     setCmpSearchTerm,
+    user
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(cmpSearchTerm, 500);
@@ -97,11 +98,14 @@ const Companies = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button
             onClick={() => setOpenCompanyForm(true)}
           >
             Add Company
           </Button>
+          }
         </div>
         <Table className={"bg-[#1f2633]"}>
           <TableHeader>

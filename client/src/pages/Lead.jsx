@@ -48,7 +48,7 @@ const Lead = () => {
     setLeadSearchTerm,
     deleteLead,
     getSingleLead,
-    mode
+    mode,user
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(leadSearchTerm, 500);
@@ -95,11 +95,14 @@ const Lead = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button
             onClick={() => setOpenLeadForm(true)}
           >
             Add Lead
           </Button>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

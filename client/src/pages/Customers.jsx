@@ -38,7 +38,7 @@ import { darkBackground, lightBackground } from "@/components/Colors";
 import useDebounce from "@/hooks/useDebounce";
 
 const Customers = () => {
-  const { setOpenCustomerForm, openCustomerForm, storeCustomerData,deleteCustomer,mode,customerSearchTerm, setCustomerSearchTerm } =
+  const { setOpenCustomerForm, openCustomerForm, storeCustomerData,deleteCustomer,mode,customerSearchTerm, setCustomerSearchTerm,user } =
     useContext(Context);
 
     const debouncedSearchTerm = useDebounce(customerSearchTerm, 500);
@@ -87,12 +87,15 @@ const Customers = () => {
           <Button className={" flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button
             className={"bg-[#20bb59]"}
             onClick={() => setOpenCustomerForm(!openCustomerForm)}
           >
             Add Client
           </Button>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

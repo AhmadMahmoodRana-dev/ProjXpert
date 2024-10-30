@@ -50,6 +50,7 @@ const Expense = () => {
     mode,
     expenseSearchTerm,
     setExpenseSearchTerm,
+    user
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(expenseSearchTerm, 500);
@@ -103,9 +104,12 @@ const Expense = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button onClick={() => setOpenExpenseForm(!openExpenseForm)}>
             Add Expense
           </Button>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

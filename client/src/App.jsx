@@ -29,12 +29,12 @@ export default function App() {
         {/* Public Routes */}
         <Route element={<PublicRoutes />}>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
         </Route>
 
         {/* Private Routes */}
         <Route element={<PrivateRoutes />}>
           <Route path="/" element={<Home1 />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/people" element={<Peoples />} />
           <Route path="/company" element={<Companies />} />
           <Route path="/lead" element={<Lead />} />

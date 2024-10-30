@@ -48,7 +48,7 @@ const Product = () => {
     getSingleProductUpdate,
     deleteProduct,
     mode,
-    productSearchTerm, setProductSearchTerm
+    productSearchTerm, setProductSearchTerm,user
   } = useContext(Context);
 
   
@@ -96,11 +96,14 @@ const Product = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button
             onClick={() => setOpenProductForm(!openProductForm)}
           >
             Add Product
           </Button>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

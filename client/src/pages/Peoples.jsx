@@ -48,7 +48,7 @@ const Peoples = () => {
     storePeopleData,
     searchTerm,
     setSearchTerm,
-    mode
+    mode,user
   } = useContext(Context);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -96,11 +96,14 @@ const Peoples = () => {
           <Button className={" flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
+          {
+            user.role == "client" ? null :
           <Button
             onClick={() => setOpenPersonForm(true)}
           >
             Add Person
           </Button>
+          }
         </div>
         <Table className={"bg-white"}>
           <TableHeader>

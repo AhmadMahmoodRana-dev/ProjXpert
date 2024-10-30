@@ -26,7 +26,7 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
         <input
