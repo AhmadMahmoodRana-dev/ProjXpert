@@ -1,5 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Inbox, RefreshCw, Search, Trash2, TvMinimal } from "lucide-react";
+import {
+  Inbox,
+  RefreshCw,
+  Search,
+  Trash2,
+} from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -26,35 +31,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CustomerForm from "../components/CustomerForm";
 import { Context } from "@/context/Context";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import PeopleForm from "@/components/PeopleForm";
+import DetailShow from "@/components/DetailShow";
 import useDebounce from "@/hooks/useDebounce";
+import { darkBackground, lightBackground } from "@/components/Colors";
+import UserForm from "@/components/UserForm";
 
-const Customers = () => {
-  const {
-    setOpenCustomerForm,
-    openCustomerForm,
-    storeCustomerData,
-    deleteCustomer,
-    mode,
-    customerSearchTerm,
-    setCustomerSearchTerm,
-    user,
-  } = useContext(Context);
+const AddUser = () => {
+  const { mode, user, allUser, setOpenUserForm, deleteUser } =
+    useContext(Context);
 
-  const debouncedSearchTerm = useDebounce(customerSearchTerm, 500);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const filteredCustomerData = storeCustomerData.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-      customer.country
+  const filteredData = allUser.filter(
+    (user) =>
+      user.username
         .toLowerCase()
         .includes(debouncedSearchTerm.toLowerCase()) ||
-      customer.email
-        .toLowerCase()
-        .includes(debouncedSearchTerm.toLowerCase()) ||
-      customer.type.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+     
+      user.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      user.role.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
 
   return (
@@ -63,13 +61,13 @@ const Customers = () => {
         mode ? darkBackground : lightBackground
       } justify-center flex flex-col items-center`}
     >
-      <div className="w-[94%]  shadow-2xl shadow-[#435349]   px-10 py-10  rounded-sm ">
+      <div className="w-[94%] px-10 py-10  shadow-2xl shadow-[#435349] rounded-sm">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <li>Customer</li>
+                  <li>aaa</li>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -87,9 +85,9 @@ const Customers = () => {
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              value={customerSearchTerm}
-              onChange={(e) => setCustomerSearchTerm(e.target.value)}
               type="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
             />
@@ -98,52 +96,34 @@ const Customers = () => {
             <RefreshCw size={16} /> Refresh
           </Button>
           {user.role == "client" ? null : (
-            <Button
-              className={"bg-[#20bb59]"}
-              onClick={() => setOpenCustomerForm(!openCustomerForm)}
-            >
-              Add Client
-            </Button>
+            <Button onClick={() => setOpenUserForm(true)}>Add Person</Button>
           )}
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
             <TableRow className={"bg-[#f7f9fb]"}>
               <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">Type</TableHead>
-              <TableHead className="text-[#2b2d3b]">Name</TableHead>
-              <TableHead className="text-[#2b2d3b]">Country</TableHead>
-              <TableHead className="text-[#2b2d3b]">Phone</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
+              <TableHead className="text-[#2b2d3b]">UserName</TableHead>
+              <TableHead className="text-[#2b2d3b]">Email</TableHead>
+              <TableHead className="text-[#2b2d3b]">Role</TableHead>
               <TableHead className="text-right text-[#2b2d3b]"></TableHead>
             </TableRow>
           </TableHeader>
-
-          {!filteredCustomerData.length ? (
+          {!filteredData.length ? (
             <TableCaption className="w-full">
               <Inbox size={40} />
               NO DATA FOUND
             </TableCaption>
           ) : (
             <TableBody>
-              {filteredCustomerData.map((client, id) => (
-                <TableRow key={client?._id}>
-                  <TableCell className="font-medium py-8">{id + 1}</TableCell>
+              {filteredData.map((user, id) => (
+                <TableRow key={user._id}>
+                  <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
-                    <h1
-                      className={`${
-                        client?.type === "people"
-                          ? "bg-[#2b2d3b]"
-                          : "bg-[#20bb59]"
-                      } text-center py-2 rounded-lg text-[white]`}
-                    >
-                      {client?.type}
-                    </h1>
+                    {user?.username}
                   </TableCell>
-                  <TableCell>{client?.name}</TableCell>
-                  <TableCell>{client?.country}</TableCell>
-                  <TableCell>{client?.phone}</TableCell>
-                  <TableCell>{client?.email}</TableCell>
+                  <TableCell>{user?.email}</TableCell>
+                  <TableCell>{user?.role || "none"}</TableCell>
 
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -152,19 +132,13 @@ const Customers = () => {
                         <span className="sr-only">Toggle menu</span>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start">
-                        <DropdownMenuItem className="flex gap-3 text-[#20bb59]">
-                          <TvMinimal size={16} />
-                          Show
+                        <DropdownMenuItem
+                          className="flex gap-3 text-[#20bb59]"
+                          onClick={() => deleteUser(user?._id)}
+                        >
+                          <Trash2 size={16} />
+                          Delete
                         </DropdownMenuItem>
-                        {user?.role == "admin" ? (
-                          <DropdownMenuItem
-                            className="flex gap-3 text-[#20bb59]"
-                            onClick={() => deleteCustomer(client._id)}
-                          >
-                            <Trash2 size={16} />
-                            Delete
-                          </DropdownMenuItem>
-                        ) : null}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -174,9 +148,11 @@ const Customers = () => {
           )}
         </Table>
       </div>
-      <CustomerForm />
+      <PeopleForm />
+      <UserForm />
+      <DetailShow />
     </div>
   );
 };
 
-export default Customers;
+export default AddUser;

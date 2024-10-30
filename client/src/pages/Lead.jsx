@@ -159,6 +159,7 @@ const Lead = () => {
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
+                        {user?.role == "client" ? null :
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSingleLead(lead)}
@@ -166,13 +167,15 @@ const Lead = () => {
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
+                        }
+                        {user?.role == "admin" ? 
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => deleteLead(lead._id)}
                         >
                           <Trash2 size={16} />
                           Delete
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> : null }
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

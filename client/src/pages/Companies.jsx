@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   FilePenLine,
   Inbox,
@@ -36,7 +36,7 @@ import {
 import { Context } from "@/context/Context";
 import CompanyForm from "@/components/CompanyForm";
 import useDebounce from "@/hooks/useDebounce";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 
 const Companies = () => {
   const {
@@ -48,22 +48,27 @@ const Companies = () => {
     cmpSearchTerm,
     mode,
     setCmpSearchTerm,
-    user
+    user,
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(cmpSearchTerm, 500);
 
-  const filteredCompanyData = storeCompanyData.filter((company) =>
-  company.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-  company.country.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
-  company.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())||
-  company.contact.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  const filteredCompanyData = storeCompanyData.filter(
+    (company) =>
+      company.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      company.country
+        .toLowerCase()
+        .includes(debouncedSearchTerm.toLowerCase()) ||
+      company.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      company.contact.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
 
-  
-
   return (
-    <div className={`w-full min-h-screen ${mode ? darkBackground : lightBackground} justify-center flex flex-col items-center`}>
+    <div
+      className={`w-full min-h-screen ${
+        mode ? darkBackground : lightBackground
+      } justify-center flex flex-col items-center`}
+    >
       <div className="w-[94%] px-10 py-10 shadow-2xl shadow-[#435349] rounded-sm">
         <div className="flex pb-10 gap-3">
           <Breadcrumb className="hidden md:flex">
@@ -98,24 +103,21 @@ const Companies = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
-          {
-            user.role == "client" ? null :
-          <Button
-            onClick={() => setOpenCompanyForm(true)}
-          >
-            Add Company
-          </Button>
-          }
+          {user.role == "client" ? null : (
+            <Button onClick={() => setOpenCompanyForm(true)}>
+              Add Company
+            </Button>
+          )}
         </div>
-        <Table className={"bg-[#1f2633]"}>
+        <Table className={`${mode ? darkTableColor : "bg-white"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#1f2633]"}>
+            <TableRow className={`${mode ? "bg-[#1d222b]" : "bg-[#f7f9fb]" }`}>
               <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">Name</TableHead>
-              <TableHead className="text-[#2b2d3b]">Contact</TableHead>
-              <TableHead className="text-[#2b2d3b]">website</TableHead>
-              <TableHead className="text-[#2b2d3b]">Country</TableHead>
-              <TableHead className="text-[#2b2d3b]">Phone</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Name</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Contact</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>website</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Country</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Phone</TableHead>
               <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
               <TableHead className="text-right text-[#2b2d3b]"></TableHead>
             </TableRow>
@@ -130,9 +132,7 @@ const Companies = () => {
               {filteredCompanyData.map((company, id) => (
                 <TableRow key={company._id}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
-                  <TableCell className="font-medium">
-                    {company.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{company.name}</TableCell>
                   <TableCell>{company.contact}</TableCell>
                   <TableCell>{company.website || "none"}</TableCell>
                   <TableCell>{company.country}</TableCell>
@@ -152,20 +152,25 @@ const Companies = () => {
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="flex gap-3 text-[#20bb59]"
-                          onClick={() => getSingleCompany(company)}
-                        >
-                          <FilePenLine size={16} />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="flex gap-3 text-[#20bb59]"
-                          onClick={() => deleteCompany(company._id)}
-                        >
-                          <Trash2 size={16} />
-                          Delete
-                        </DropdownMenuItem>
+
+                        {user?.role == "client" ? null : (
+                          <DropdownMenuItem
+                            className="flex gap-3 text-[#20bb59]"
+                            onClick={() => getSingleCompany(company)}
+                          >
+                            <FilePenLine size={16} />
+                            Edit
+                          </DropdownMenuItem>
+                        )}
+                        {user?.role == "admin" ? (
+                          <DropdownMenuItem
+                            className="flex gap-3 text-[#20bb59]"
+                            onClick={() => deleteCompany(company._id)}
+                          >
+                            <Trash2 size={16} />
+                            Delete
+                          </DropdownMenuItem>
+                        ) : null}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -175,7 +180,7 @@ const Companies = () => {
           )}
         </Table>
       </div>
-      <CompanyForm/>
+      <CompanyForm />
     </div>
   );
 };

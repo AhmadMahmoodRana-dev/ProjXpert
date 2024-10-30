@@ -29,7 +29,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-
 export const description =
   "A products dashboard with a sidebar navigation and a main content area. The dashboard has a header with a search input and a user menu. The sidebar has a logo, navigation links, and a card with a call to action. The main content area shows an empty state with a call to action.";
 
@@ -47,7 +46,8 @@ const Sidebar = ({ children }) => {
     storeProduct,
     setMode,
     mode,
-    logout
+    logout,
+    user
   } = useContext(Context);
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -148,9 +148,9 @@ const Sidebar = ({ children }) => {
                 </Badge>
               </Link>
               <Link
-                to="/signup"
+                to="/invoices"
                 className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
-                  location.pathname === "/signup"
+                  location.pathname === "/invoices"
                     ? "bg-muted text-primary"
                     : "text-muted-foreground hover:text-primary"
                 }`}
@@ -231,9 +231,26 @@ const Sidebar = ({ children }) => {
                   {storeProduct.length}
                 </Badge>
               </Link>
-              <DropdownMenu className="flex" >
+              {
+                user?.role == "admin" ?
+              <Link
+                to="/add-user"
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
+                  location.pathname === "/add-user"
+                    ? "bg-muted text-primary"
+                    : "text-muted-foreground "
+                }`}
+              >
+                <Weight className="h-4 w-4" />
+                Add User
+                <Badge className="ml-auto flex h-5 w-3 shrink-0 items-center justify-center rounded-full">
+                  {storeProduct.length}
+                </Badge>
+              </Link> : null
+              }
+              <DropdownMenu className="flex">
                 <DropdownMenuTrigger className="flex items-center  gap-3 rounded-lg px-3 py-3 text-muted-foreground hover:text-primary">
-                <Settings className="h-4 w-4 mt-10"/>
+                  <Settings className="h-4 w-4 mt-10" />
                   <h1 className="mt-10">Setting</h1>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
@@ -242,7 +259,10 @@ const Sidebar = ({ children }) => {
                     Profile
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className="flex gap-3 text-[#20bb59]" onClick={() => logout()}>
+                  <DropdownMenuItem
+                    className="flex gap-3 text-[#20bb59]"
+                    onClick={() => logout()}
+                  >
                     <Trash2 size={16} />
                     Logout
                   </DropdownMenuItem>

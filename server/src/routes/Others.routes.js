@@ -11,7 +11,7 @@ import { deleteProduct, getProduct, getSingleProduct, postProduct, updateProduct
 import { deleteQuoteLeads, getQuoteLeads, getSingleQuoteLead, postQuoteLead, updateQuoteLead } from "../controller/QuoteLead.controller.js";
 
 // ## AUTH
-import { register,login } from "../controller/Auth.controller.js";
+import { register,login, getAllUsers, deleteUser } from "../controller/Auth.controller.js";
 import authMiddleware from "../middlewares/auth.js";
 
 
@@ -87,7 +87,8 @@ route.put('/update-quote-lead/:id',authMiddleware(['admin','worker']),updateQuot
 
 route.post("/register", register);
 route.post("/login", login);
-
+route.get("/get-users",getAllUsers)
+route.delete("/delete-user/:id",deleteUser)
 
 
 

@@ -50,7 +50,7 @@ const Expense = () => {
     mode,
     expenseSearchTerm,
     setExpenseSearchTerm,
-    user
+    user,
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(expenseSearchTerm, 500);
@@ -61,7 +61,9 @@ const Expense = () => {
       expense.expenseCategory
         .toLowerCase()
         .includes(debouncedSearchTerm.toLowerCase()) ||
-      expense.currency.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      expense.currency
+        .toLowerCase()
+        .includes(debouncedSearchTerm.toLowerCase()) ||
       expense.ref.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
   return (
@@ -104,12 +106,11 @@ const Expense = () => {
           <Button className={"flex gap-3"}>
             <RefreshCw size={16} /> Refresh
           </Button>
-          {
-            user.role == "client" ? null :
-          <Button onClick={() => setOpenExpenseForm(!openExpenseForm)}>
-            Add Expense
-          </Button>
-          }
+          {user.role == "client" ? null : (
+            <Button onClick={() => setOpenExpenseForm(!openExpenseForm)}>
+              Add Expense
+            </Button>
+          )}
         </div>
         <Table className={"bg-white"}>
           <TableHeader>
@@ -163,6 +164,7 @@ const Expense = () => {
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
+                        {user?.role == "client" ? null :
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSingleExpenseUpdate(expense)}
@@ -170,13 +172,16 @@ const Expense = () => {
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="flex gap-3 text-[#20bb59]"
-                          onClick={() => deleteExpense(expense._id)}
-                        >
-                          <Trash2 size={16} />
-                          Delete
-                        </DropdownMenuItem>
+                        }
+                        {user?.role == "admin" ? (
+                          <DropdownMenuItem
+                            className="flex gap-3 text-[#20bb59]"
+                            onClick={() => deleteExpense(expense._id)}
+                          >
+                            <Trash2 size={16} />
+                            Delete
+                          </DropdownMenuItem>
+                        ) : null}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

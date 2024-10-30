@@ -160,6 +160,7 @@ const Invoices = () => {
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
+                        {user?.role == "client" ? null :
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSingleinvoiceDetail1(invoice)}
@@ -167,13 +168,16 @@ const Invoices = () => {
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
+                        }
+                        {user?.role == "admin" ? 
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => deleteInvoice(invoice._id)}
                         >
                           <Trash2 size={16} />
                           Delete
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> : null }
+                        {user?.role == "client" ? null :
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSingleinvoice(invoice)}
@@ -181,6 +185,7 @@ const Invoices = () => {
                           <HandCoins size={16}  />
                           Payment
                         </DropdownMenuItem>
+                        }
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

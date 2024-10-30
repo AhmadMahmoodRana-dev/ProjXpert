@@ -110,6 +110,10 @@ const ContextProvider = (props) => {
   const [updateLeadQuotesId, setUpdateLeadQuotesId] = useState("");
   const [quotesLeadSearchTerm, setQuotesLeadSearchTerm] = useState("");
 
+// ## USERS 
+const [allUser,setAllUser] = useState([])
+const [user, setUser] = useState(null);
+const [openUserForm,setOpenUserForm] = useState(false)
   // ### PEOPLE FORM API ###
 
   // post
@@ -1447,11 +1451,11 @@ const ContextProvider = (props) => {
     getExpense();
     getProduct();
     getLeadQuotes();
+    getUsers()
   }, []);
 
   // 33333333333              AUTHENTICATION       3333333333333333
 
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -1462,13 +1466,19 @@ const ContextProvider = (props) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await axios.post("http://localhost:1337/api/form/login", {
-      email,
-      password,
-    });
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.role);
-    setUser({ role: data.role });
+    try {
+      const { data } = await axios.post("http://localhost:1337/api/form/login", {
+        email,
+        password,
+      });
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role);
+      setUser({ role: data.role });
+      window.location.reload();  
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   const logout = () => {
@@ -1476,6 +1486,41 @@ const ContextProvider = (props) => {
     localStorage.removeItem("role");
     setUser(null);
   };
+
+// ## GET USERS
+const getUsers = async ( ) =>{
+    const token = localStorage.getItem("token");
+    const { data } = await axios.get(
+      "http://localhost:1337/api/form/get-users",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setAllUser(data);
+    console.log("Users fetched successfully", data);
+ 
+}
+
+//  DELETE USERS
+const deleteUser = async (user) => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.delete(
+      `http://localhost:1337/api/form/delete-user/${user}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("user deleted successfully!");
+    getUsers();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   // ######################################################################################################################################
 
@@ -1662,6 +1707,11 @@ const ContextProvider = (props) => {
     setUser,
     login,
     logout,
+    allUser,
+    getUsers,
+    openUserForm,setOpenUserForm,
+    deleteUser
+
   };
 
   return (

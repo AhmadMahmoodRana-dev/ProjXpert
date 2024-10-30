@@ -150,6 +150,7 @@ const Peoples = () => {
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
+                        {user?.role == "client" ? null :
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => getSinglePeople(people)}
@@ -157,13 +158,15 @@ const Peoples = () => {
                           <FilePenLine size={16} />
                           Edit
                         </DropdownMenuItem>
+                        }
+                        {user?.role == "admin" ? 
                         <DropdownMenuItem
                           className="flex gap-3 text-[#20bb59]"
                           onClick={() => deletePeople(people._id)}
                         >
                           <Trash2 size={16} />
                           Delete
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> : null }
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

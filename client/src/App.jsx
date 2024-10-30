@@ -18,9 +18,10 @@ import Product from "./pages/Product";
 import InvoicesDetail from "./pages/InvoicesDetail";
 import QuotesForLead from "./pages/QuotesForLead";
 import LeadQuotesForm from "./pages/LeadQuotesForm";
-import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import PublicRoutes from "./pages/PublicRoutes"; // Import the new PublicRoutes component
+import AddUser from "./pages/AddUser";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 export default function App() {
   return (
@@ -34,7 +35,6 @@ export default function App() {
         {/* Private Routes */}
         <Route element={<PrivateRoutes />}>
           <Route path="/" element={<Home1 />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/people" element={<Peoples />} />
           <Route path="/company" element={<Companies />} />
           <Route path="/lead" element={<Lead />} />
@@ -42,7 +42,10 @@ export default function App() {
           <Route path="/invoices" element={<Invoices />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/invoices-form" element={<InvoicesForm />} />
-          <Route path="/invoices-payment-form" element={<InvoicesPaymentForm />} />
+          <Route
+            path="/invoices-payment-form"
+            element={<InvoicesPaymentForm />}
+          />
           <Route path="/expense-category" element={<ExpenseCategory />} />
           <Route path="/product-category" element={<ProductCategory />} />
           <Route path="/expense" element={<Expense />} />
@@ -50,12 +53,21 @@ export default function App() {
           <Route path="/invoices-detail" element={<InvoicesDetail />} />
           <Route path="/quote-lead" element={<QuotesForLead />} />
           <Route path="/quote-lead-form" element={<LeadQuotesForm />} />
+          <Route
+            path="/add-user"
+            element={
+              <ProtectedRoutes allowedRoles={["admin"]}>
+                <AddUser />
+              </ProtectedRoutes>
+            }
+          />
+          
         </Route>
       </Routes>
 
       {/* Other Components */}
-      <CompanyDetailShow />   
-      <CustomerForm/>
+      <CompanyDetailShow />
+      <CustomerForm />
     </div>
   );
 }

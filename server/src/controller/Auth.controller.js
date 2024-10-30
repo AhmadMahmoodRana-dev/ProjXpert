@@ -31,3 +31,24 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Error logging in" });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, "-password"); // Exclude password field
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching users" });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+      const result = await User.findByIdAndDelete(req.params.id)
+      if (!result) {
+          return res.status(404).json({ message: 'User is Deleted' })
+      }
+      res.json(result)
+  } catch (err) {
+      res.status(500).json({ message: err.message })
+  }
+}
