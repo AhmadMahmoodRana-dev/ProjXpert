@@ -549,25 +549,40 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-people/${getSinglePeopleId}`,{
+        `http://localhost:1337/api/form/get-single-people/${getSinglePeopleId}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      data
-        ? await axios.post(`http://localhost:1337/api/form/post-customer`, {
-            name: data.firstName + data.lastName,
+  
+      if (data) {
+        await axios.post(
+          `http://localhost:1337/api/form/post-customer`,
+          {
+            name: `${data.firstName} ${data.lastName}`,
             country: data.country,
             phone: data.phone,
             email: data.email,
             type: data.type,
-          })
-        : console.log("null");
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        getCustomerData();
+      } else {
+        console.log("No data found for the specified ID.");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error in storeSingleCustomerPeople:", error);
     }
   };
+  
+
 
   // ## GET DATA
   const getCustomerData = async () => {
@@ -605,11 +620,11 @@ const [openUserForm,setOpenUserForm] = useState(false)
 
   //  UPDATE
 
-  const getSingleCustomer = async (people) => {
+  const getSingleCustomer = async (customer) => {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-customer/${people.name}`,{
+        `http://localhost:1337/api/form//get-customer/${customer.name}`,{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1600,6 +1615,7 @@ const deleteUser = async (user) => {
     singleCustomerData,
     customerSearchTerm,
     setCustomerSearchTerm,
+    getSingleCustomer,
 
     // #######################
     // Invoice

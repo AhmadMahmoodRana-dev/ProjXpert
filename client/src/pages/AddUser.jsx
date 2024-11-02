@@ -35,7 +35,7 @@ import { Context } from "@/context/Context";
 import PeopleForm from "@/components/PeopleForm";
 import DetailShow from "@/components/DetailShow";
 import useDebounce from "@/hooks/useDebounce";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 import UserForm from "@/components/UserForm";
 
 const AddUser = () => {
@@ -99,14 +99,14 @@ const AddUser = () => {
             <Button onClick={() => setOpenUserForm(true)}>Add Person</Button>
           )}
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">UserName</TableHead>
-              <TableHead className="text-[#2b2d3b]">Email</TableHead>
-              <TableHead className="text-[#2b2d3b]">Role</TableHead>
-              <TableHead className="text-right text-[#2b2d3b]"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>UserName</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Email</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Role</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredData.length ? (
@@ -117,7 +117,7 @@ const AddUser = () => {
           ) : (
             <TableBody>
               {filteredData.map((user, id) => (
-                <TableRow key={user._id}>
+                <TableRow key={user._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
                     {user?.username}

@@ -38,7 +38,7 @@ import { Context } from "@/context/Context";
 import LeadForm from "@/components/LeadForm";
 import LeadDetailShow from '../components/LeadDetailShow'
 import useDebounce from "@/hooks/useDebounce";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 const Lead = () => {
   const {
     setOpenLeadForm,
@@ -104,19 +104,19 @@ const Lead = () => {
           </Button>
           }
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Branch</TableHead>
-              <TableHead className="text-[#2b2d3b]">Type</TableHead>
-              <TableHead className="text-[#2b2d3b]">Name</TableHead>
-              <TableHead className="text-[#2b2d3b]">status</TableHead>
-              <TableHead className="text-[#2b2d3b]">Source</TableHead>
-              <TableHead className="text-[#2b2d3b]">Country</TableHead>
-              <TableHead className="text-[#2b2d3b]">Phone</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Branch</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Type</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Name</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>status</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Source</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Country</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Phone</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Email</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredleadData.length ? (
@@ -127,7 +127,7 @@ const Lead = () => {
           ) : (
             <TableBody>
               {filteredleadData.map((lead, id) => (
-                <TableRow key={lead?._id}>
+                <TableRow key={lead?._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
                     {lead?.branch}

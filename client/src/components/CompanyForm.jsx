@@ -27,6 +27,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup"; // For validation
+import { darkBackground } from "./Colors";
 
 const CompanyForm = () => {
   const {
@@ -37,7 +38,8 @@ const CompanyForm = () => {
     cmpShowButton,
     updateCompany,
     storePeopleData,
-    companyDetail
+    companyDetail,
+    mode
   } = useContext(Context);
   
   const [open, setOpen] = useState(false);
@@ -87,7 +89,7 @@ const CompanyForm = () => {
                 </div>
               </TransitionChild>
               
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+              <div className={`flex h-full flex-col overflow-y-scroll py-6 shadow-xl ${mode ? darkBackground : 'bg-white'}`}>
                 <div className="px-4 sm:px-6 flex flex-col gap-4">
                   <Formik
                     initialValues={{
@@ -109,15 +111,15 @@ const CompanyForm = () => {
                   >
                     {({ errors, touched, setFieldValue, values }) => (
                       <Form>
-                        <DialogTitle className="mt-20 pb-3">Name</DialogTitle>
-                        <Field name="name" as={Input} />
+                        <DialogTitle className="mt-20 pb-3 text-gray-400">Name</DialogTitle>
+                        <Field name="name" as={Input} className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400" />
                         {errors.name && touched.name ? (
                           <div className="text-red-500">{errors.name}</div>
                         ) : null}
 
-                        <DialogTitle className="mt-5 pb-3" >Contact</DialogTitle>
+                        <DialogTitle className="mt-5 pb-3 text-gray-400" >Contact</DialogTitle>
                         <Popover open={open1} onOpenChange={setOpen1}>
-                          <PopoverTrigger asChild>
+                          <PopoverTrigger asChild className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400">
                             <Button
                               variant="outline"
                               role="combobox"
@@ -163,9 +165,9 @@ const CompanyForm = () => {
                           <div className="text-red-500">{errors.contact}</div>
                         ) : null}
 
-                        <DialogTitle className="mt-5 pb-3"  >Country</DialogTitle>
+                        <DialogTitle className="mt-5 pb-3 text-gray-400 "  >Country</DialogTitle>
                         <Popover open={open} onOpenChange={setOpen}>
-                          <PopoverTrigger asChild>
+                          <PopoverTrigger asChild className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400">
                             <Button
                               variant="outline"
                               role="combobox"
@@ -211,20 +213,20 @@ const CompanyForm = () => {
                           <div className="text-red-500">{errors.country}</div>
                         ) : null}
 
-                        <DialogTitle className="mt-5 pb-3">Website</DialogTitle>
-                        <Field name="website" as={Input} />
+                        <DialogTitle className="mt-5 pb-3 text-gray-400">Website</DialogTitle>
+                        <Field name="website" as={Input} className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400" />
                         {errors.website && touched.website ? (
                           <div className="text-red-500">{errors.website}</div>
                         ) : null}
 
-                        <DialogTitle className="mt-5 pb-3">Phone</DialogTitle>
-                        <Field name="phone" as={Input} type="text" />
+                        <DialogTitle className="mt-5 pb-3 text-gray-400">Phone</DialogTitle>
+                        <Field name="phone" as={Input} type="text" className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400" />
                         {errors.phone && touched.phone ? (
                           <div className="text-red-500">{errors.phone}</div>
                         ) : null}
 
-                        <DialogTitle className="mt-5 pb-3">Email</DialogTitle>
-                        <Field name="email" as={Input} type="email" />
+                        <DialogTitle className="mt-5 pb-3 text-gray-400">Email</DialogTitle>
+                        <Field name="email" as={Input} type="email" className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400" />
                         {errors.email && touched.email ? (
                           <div className="text-red-500">{errors.email}</div>
                         ) : null}

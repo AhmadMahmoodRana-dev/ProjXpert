@@ -36,7 +36,7 @@ import {
 import { Context } from "@/context/Context";
 import ProductForm from "@/components/ProductForm";
 import ProductDetailShow from "@/components/ProductDetailShow";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 import useDebounce from "@/hooks/useDebounce";
 
 const Product = () => {
@@ -105,17 +105,17 @@ const Product = () => {
           </Button>
           }
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">Name</TableHead>
-              <TableHead className="text-[#2b2d3b]">Product Category</TableHead>
-              <TableHead className="text-[#2b2d3b]">Currency</TableHead>
-              <TableHead className="text-[#2b2d3b]">Total</TableHead>
-              <TableHead className="text-[#2b2d3b]">Description</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Ref</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Name</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Product Category</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Currency</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Total</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Description</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Ref</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredProductData.length ? (
@@ -126,7 +126,7 @@ const Product = () => {
           ) : (
           <TableBody>
             {filteredProductData.map((Product, id) => (
-              <TableRow key={Product?._id}>
+              <TableRow key={Product?._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                 <TableCell className="font-medium">{id + 1}</TableCell>
                 <TableCell className="font-medium">{Product?.name}</TableCell>
                 <TableCell className="font-medium">

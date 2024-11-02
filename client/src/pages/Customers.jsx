@@ -28,8 +28,9 @@ import {
 } from "@/components/ui/table";
 import CustomerForm from "../components/CustomerForm";
 import { Context } from "@/context/Context";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 import useDebounce from "@/hooks/useDebounce";
+import CustomerDetail from "@/components/CustomerDetail";
 
 const Customers = () => {
   const {
@@ -41,6 +42,7 @@ const Customers = () => {
     customerSearchTerm,
     setCustomerSearchTerm,
     user,
+    getSingleCustomer,
   } = useContext(Context);
 
   const debouncedSearchTerm = useDebounce(customerSearchTerm, 500);
@@ -106,16 +108,16 @@ const Customers = () => {
             </Button>
           )}
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">Type</TableHead>
-              <TableHead className="text-[#2b2d3b]">Name</TableHead>
-              <TableHead className="text-[#2b2d3b]">Country</TableHead>
-              <TableHead className="text-[#2b2d3b]">Phone</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
-              <TableHead className="text-right text-[#2b2d3b]"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Type</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Name</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Country</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Phone</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Email</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
 
@@ -127,7 +129,7 @@ const Customers = () => {
           ) : (
             <TableBody>
               {filteredCustomerData.map((client, id) => (
-                <TableRow key={client?._id}>
+                <TableRow key={client?._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`} >
                   <TableCell className="font-medium py-8">{id + 1}</TableCell>
                   <TableCell className="font-medium">
                     <h1
@@ -152,7 +154,7 @@ const Customers = () => {
                         <span className="sr-only">Toggle menu</span>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start">
-                        <DropdownMenuItem className="flex gap-3 text-[#20bb59]">
+                        <DropdownMenuItem className="flex gap-3 text-[#20bb59]" onClick={() => getSingleCustomer(client)}>
                           <TvMinimal size={16} />
                           Show
                         </DropdownMenuItem>
@@ -175,6 +177,7 @@ const Customers = () => {
         </Table>
       </div>
       <CustomerForm />
+      <CustomerDetail/>
     </div>
   );
 };

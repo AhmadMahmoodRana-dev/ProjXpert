@@ -112,14 +112,14 @@ const Companies = () => {
         <Table className={`${mode ? darkTableColor : "bg-white"}`}>
           <TableHeader>
             <TableRow className={`${mode ? "bg-[#1d222b]" : "bg-[#f7f9fb]" }`}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
               <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Name</TableHead>
               <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Contact</TableHead>
               <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>website</TableHead>
               <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Country</TableHead>
               <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Phone</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
-              <TableHead className="text-right text-[#2b2d3b]"></TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Email</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredCompanyData.length ? (
@@ -130,7 +130,7 @@ const Companies = () => {
           ) : (
             <TableBody>
               {filteredCompanyData.map((company, id) => (
-                <TableRow key={company._id}>
+                <TableRow key={company._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">{company.name}</TableCell>
                   <TableCell>{company.contact}</TableCell>

@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "./ui/button";
+import { darkBackground } from "./Colors";
 
 const CompanyForm = () => {
   const {
@@ -30,7 +31,8 @@ const CompanyForm = () => {
     getSinglePeopleId,
     setGetSinglePeopleId,
     storeSingleCustomerCompany,
-    storeSingleCustomerPeople
+    storeSingleCustomerPeople,
+    mode
   } = useContext(Context);
   const [selectType, setSelectType] = useState("");
   console.log(getSinglePeopleId);
@@ -65,18 +67,19 @@ const CompanyForm = () => {
                   </button>
                 </div>
               </TransitionChild>
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+              <div className={`flex h-full flex-col overflow-y-scroll py-6 shadow-xl ${mode ? darkBackground : 'bg-white'}`}>
                 <div className="px-4 sm:px-6 flex flex-col gap-4">
                   <DialogTitle> Type</DialogTitle>
                   <Select
                     onValueChange={(value) => setSelectType(value)}
                     value={selectType}
+                    className="bg-transparent"
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a type" />
+                    <SelectTrigger className="w-full bg-transparent border-gray-600">
+                      <SelectValue placeholder="Select a type" className="placeholder:text-gray-400 text-gray-400" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectGroup>
+                      <SelectGroup className="bg-transparent">
                         <SelectItem value="people">People</SelectItem>
                         <SelectItem value="company">Company</SelectItem>
                       </SelectGroup>

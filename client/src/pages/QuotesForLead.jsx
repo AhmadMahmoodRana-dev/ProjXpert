@@ -38,7 +38,7 @@ import { Context } from "@/context/Context";
 // import CompanyForm from "@/components/CompanyForm";
 import LeadForm from "@/components/LeadForm";
 import { Link } from "react-router-dom";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 import useDebounce from "@/hooks/useDebounce";
 
 const QuotesForLead = () => {
@@ -111,19 +111,19 @@ const QuotesForLead = () => {
           </Link>
           }
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">Company</TableHead>
-              <TableHead className="text-[#2b2d3b]">Date</TableHead>
-              <TableHead className="text-[#2b2d3b]">Expire Date</TableHead>
-              <TableHead className="text-[#2b2d3b]">Sub Total</TableHead>
-              <TableHead className="text-[#2b2d3b]">Total</TableHead>
-              <TableHead className="text-[#2b2d3b]">Note</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Status</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Number</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Company</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Date</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Expire Date</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sub Total</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Total</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Note</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Status</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Number</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredQuotesLead.length ? (
@@ -134,7 +134,7 @@ const QuotesForLead = () => {
           ) : (
             <TableBody>
               {filteredQuotesLead.map((leadQuote, id) => (
-                <TableRow key={leadQuote?._id}>
+                <TableRow key={leadQuote?._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
                     {leadQuote?.client}

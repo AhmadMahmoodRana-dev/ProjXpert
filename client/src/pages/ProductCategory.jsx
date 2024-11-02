@@ -37,7 +37,7 @@ import { Context } from "@/context/Context";
 import { Switch } from "@/components/ui/switch";
 import ProductCategoryForm from "@/components/ProductCategoryForm";
 import ProductCategoryDetail from "@/components/ProductCategoryDetail";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 import useDebounce from "@/hooks/useDebounce";
 
 const ProductCategory = () => {
@@ -107,15 +107,15 @@ const ProductCategory = () => {
           </Button>
           }
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]">Name</TableHead>
-              <TableHead className="text-[#2b2d3b]">Description</TableHead>
-              <TableHead className="text-[#2b2d3b]">Color</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Enabled</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Name</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Description</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Color</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Enabled</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredProductData.length ? (
@@ -126,7 +126,7 @@ const ProductCategory = () => {
           ) : (
           <TableBody>
             {filteredProductData.map((product, id) => (
-              <TableRow key={product?._id}>
+              <TableRow key={product?._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                 <TableCell className="font-medium">{id + 1}</TableCell>
                 <TableCell className="font-medium">{product?.name}</TableCell>
                 <TableCell className="font-medium">

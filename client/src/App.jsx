@@ -22,8 +22,11 @@ import Login from "./pages/Login";
 import PublicRoutes from "./pages/PublicRoutes"; // Import the new PublicRoutes component
 import AddUser from "./pages/AddUser";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import { useContext } from "react";
+import { Context } from "./context/Context";
 
 export default function App() {
+  const { user } = useContext(Context);
   return (
     <div className="flex w-full h-screen">
       <Routes>
@@ -34,9 +37,9 @@ export default function App() {
 
         {/* Private Routes */}
         <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<Home1 />} />
+          {user?.role == "admin"  ? <Route path="/" element={<Home1 />} /> :  <Route path="/" element={<Companies />} />}
           <Route path="/people" element={<Peoples />} />
-          <Route path="/company" element={<Companies />} />
+          {user?.role == "admin" ? <Route path="/company" element={<Companies />} /> : null}
           <Route path="/lead" element={<Lead />} />
           <Route path="/drag" element={<DragLeadSatus />} />
           <Route path="/invoices" element={<Invoices />} />
@@ -61,7 +64,6 @@ export default function App() {
               </ProtectedRoutes>
             }
           />
-          
         </Route>
       </Routes>
 

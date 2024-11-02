@@ -25,6 +25,7 @@ import {
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup"; // For validation
 import { Input } from "./ui/input";
+import { darkBackground } from "./Colors";
 
 const PeopleForm = () => {
   const {
@@ -36,6 +37,7 @@ const PeopleForm = () => {
     updatePeople,
     storeCompanyData,
     personDetail,
+    mode
   } = useContext(Context);
 
   const [open, setOpen] = useState(false);
@@ -74,7 +76,7 @@ const PeopleForm = () => {
                   </button>
                 </div>
               </TransitionChild>
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+              <div className={`flex h-full flex-col overflow-y-scroll py-6 shadow-xl ${mode ? darkBackground : 'bg-white'}`}>
                 <div className="px-4 sm:px-6 flex flex-col gap-4">
                   <Formik
                     initialValues={{
@@ -100,35 +102,35 @@ const PeopleForm = () => {
                       <div>
                         {/* Watch form data as it changes */}
                         <Form>
-                          <h1 className="text-3xl font-bold text-center">
+                          <h1 className="text-3xl font-bold text-center text-gray-400">
                             Public Form
                           </h1>
-                          <DialogTitle className="mt-20 pb-2">
+                          <DialogTitle className="mt-20 pb-2 text-gray-400">
                             First Name
                           </DialogTitle>
-                          <Field name="firstName" as={Input} />
+                          <Field name="firstName" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                           {errors.firstName && touched.firstName ? (
                             <div className="text-red-500">
                               {errors.firstName}
                             </div>
                           ) : null}
 
-                          <DialogTitle className="mt-5 pb-2">
+                          <DialogTitle className="mt-5 pb-2 text-gray-400">
                             Last Name
                           </DialogTitle>
-                          <Field name="lastName" as={Input} />
+                          <Field name="lastName" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                           {errors.lastName && touched.lastName ? (
                             <div className="text-red-500">
                               {errors.lastName}
                             </div>
                           ) : null}
 
-                          <DialogTitle className="mt-5 pb-2">
+                          <DialogTitle className="mt-5 pb-2 text-gray-400">
                             Country
                           </DialogTitle>
                           {/* Country Popover */}
                           <Popover open={open} onOpenChange={setOpen}>
-                            <PopoverTrigger asChild>
+                            <PopoverTrigger asChild className="bg-transparent border-gray-600 text-gray-400">
                               <Button
                                 variant="outline"
                                 role="combobox"
@@ -183,12 +185,12 @@ const PeopleForm = () => {
                             <div className="text-red-500">{errors.country}</div>
                           ) : null}
 
-                          <DialogTitle className="mt-5 pb-2">
+                          <DialogTitle className="mt-5 pb-2 text-gray-400">
                             Company
                           </DialogTitle>
                           {/* Company Popover */}
                           <Popover open={open1} onOpenChange={setOpen1}>
-                            <PopoverTrigger asChild>
+                            <PopoverTrigger asChild className="bg-transparent border-gray-600 text-gray-400">
                               <Button
                                 variant="outline"
                                 role="combobox"
@@ -234,14 +236,14 @@ const PeopleForm = () => {
                             <div className="text-red-500">{errors.company}</div>
                           ) : null} */}
 
-                          <DialogTitle className="mt-5 pb-2">Phone</DialogTitle>
-                          <Field name="phone" as={Input} type="text" />
+                          <DialogTitle className="mt-5 pb-2 text-gray-400">Phone</DialogTitle>
+                          <Field name="phone" as={Input} type="text" className="bg-transparent border-gray-600 text-gray-400" />
                           {errors.phone && touched.phone ? (
                             <div className="text-red-500">{errors.phone}</div>
                           ) : null}
 
-                          <DialogTitle className="mt-5 pb-2">Email</DialogTitle>
-                          <Field name="email" as={Input} type="email" />
+                          <DialogTitle className="mt-5 pb-2 text-gray-400">Email</DialogTitle>
+                          <Field name="email" as={Input} type="email" className="bg-transparent border-gray-600 text-gray-400" />
                           {errors.email && touched.email ? (
                             <div className="text-red-500">{errors.email}</div>
                           ) : null}

@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Switch } from "./ui/switch";
+import { darkBackground } from "./Colors";
 
 // Validation schema using Yup
 const ExpenseCategoryFormSchema = Yup.object().shape({
@@ -37,6 +38,7 @@ const ExpenseCategoryForm = () => {
     showExpenseCategoryButton,
     SingleExpenseCategory,
     updateSingleExpenseCategory,
+    mode
   } = useContext(Context);
 
   const colorOptions = [
@@ -88,7 +90,8 @@ const ExpenseCategoryForm = () => {
                   </button>
                 </div>
               </TransitionChild>
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+              <div className={`flex h-full flex-col overflow-y-scroll py-6 shadow-xl ${mode ? darkBackground : 'bg-white'}`}>
+
                 <Formik
                   initialValues={{
                     name: SingleExpenseCategory.name || "",
@@ -108,19 +111,19 @@ const ExpenseCategoryForm = () => {
                 >
                   {({ setFieldValue, values }) => (
                     <Form className="px-4 sm:px-6 flex flex-col gap-4">
-                      <DialogTitle>Name</DialogTitle>
-                      <Field name="name" as={Input} />
+                      <DialogTitle className={"text-gray-400"}>Name</DialogTitle>
+                      <Field name="name" as={Input} className="bg-transparent border-gray-600 text-gray-400"/>
                       <ErrorMessage
                         name="name"
                         component="div"
-                        className="text-red-500 text-sm"
+                        className="text-red-500 text-sm "
                       />
 
-                      <DialogTitle>Color</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Color</DialogTitle>
                       <Field
                         as="select"
                         name="color"
-                        className="py-2 px-2 border w-full"
+                        className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400"
                       >
                         {colorOptions.map((option) => (
                           <option key={option.name} value={option.value}>
@@ -134,11 +137,11 @@ const ExpenseCategoryForm = () => {
                         className="text-red-500 text-sm"
                       />
 
-                      <DialogTitle>Description</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Description</DialogTitle>
                       <Field
                         name="description"
                         as={Textarea}
-                        className="block w-full px-3 py-2 text-sm"
+                        className="block w-full px-3 py-2 text-sm bg-transparent border-gray-600 text-gray-400"
                         rows={5}
                       />
                       <ErrorMessage
@@ -147,7 +150,7 @@ const ExpenseCategoryForm = () => {
                         className="text-red-500 text-sm"
                       />
 
-                      <DialogTitle>Enabled</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Enabled</DialogTitle>
                       <Switch
                         checked={values.enabled} // Properly bind the checked prop to Formik's value
                         onCheckedChange={(checked) =>

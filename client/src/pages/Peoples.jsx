@@ -37,7 +37,7 @@ import { Context } from "@/context/Context";
 import PeopleForm from "@/components/PeopleForm";
 import DetailShow from "@/components/DetailShow";
 import useDebounce from "@/hooks/useDebounce";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 
 const Peoples = () => {
   const {
@@ -105,17 +105,17 @@ const Peoples = () => {
           </Button>
           }
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Firstname</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Lastname</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Company</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Country</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Phone</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Email</TableHead>
-              <TableHead className="text-right text-[#2b2d3b]"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Firstname</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Lastname</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Company</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Country</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Phone</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Email</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredData.length ? (
@@ -126,7 +126,7 @@ const Peoples = () => {
           ) : (
             <TableBody>
               {filteredData.map((people, id) => (
-                <TableRow key={people._id}>
+                <TableRow key={people._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
                     {people.firstName}

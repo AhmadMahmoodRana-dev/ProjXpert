@@ -26,6 +26,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { darkBackground } from "./Colors";
 
 // Validation schema using Yup
 const LeadFormSchema = Yup.object().shape({
@@ -50,7 +51,8 @@ const LeadForm = () => {
     openLeadForm,
     setOpenLeadForm,
     leadShowButton,
-    leadDetail
+    leadDetail,
+    mode
   } = useContext(Context);
 
   return (
@@ -74,7 +76,7 @@ const LeadForm = () => {
                   </button>
                 </div>
               </TransitionChild>
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+              <div className={`flex h-full flex-col overflow-y-scroll py-6 shadow-xl ${mode ? darkBackground : 'bg-white'}`}>
                 <Formik
                   initialValues={{
                     leadBranch: leadDetail.branch || "",

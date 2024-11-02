@@ -89,7 +89,9 @@ const Sidebar = ({ children }) => {
                 }`}
               >
                 <Home className="h-4 w-4" />
-                Dashboard
+                {user.role == "admin" ? 
+               <h1>Dashboard</h1>  : <h1>Companies</h1> 
+              }
               </Link>
               <Link
                 to="/customers"
@@ -119,6 +121,8 @@ const Sidebar = ({ children }) => {
                   {storePeopleData.length}
                 </Badge>
               </Link>
+              {
+                user.role == "admin" ?
               <Link
                 to="/company"
                 className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
@@ -132,7 +136,8 @@ const Sidebar = ({ children }) => {
                 <Badge className="ml-auto flex h-5 w-3 shrink-0 items-center justify-center rounded-full">
                   {storeCompanyData.length}
                 </Badge>
-              </Link>
+              </Link> : null
+              }
               <Link
                 to="/lead"
                 className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${

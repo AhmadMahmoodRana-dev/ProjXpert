@@ -38,7 +38,7 @@ import { Context } from "@/context/Context";
 // import CompanyForm from "@/components/CompanyForm";
 import LeadForm from "@/components/LeadForm";
 import { Link } from "react-router-dom";
-import { darkBackground, lightBackground } from "@/components/Colors";
+import { darkBackground, darkTableColor, lightBackground } from "@/components/Colors";
 import useDebounce from "@/hooks/useDebounce";
 
 const Invoices = () => {
@@ -109,19 +109,19 @@ const Invoices = () => {
           }
           </Link>
         </div>
-        <Table className={"bg-white"}>
+        <Table className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
           <TableHeader>
-            <TableRow className={"bg-[#f7f9fb]"}>
-              <TableHead className="w-[100px] text-[#2b2d3b]">Sr.No</TableHead>
-              <TableHead className="text-[#2b2d3b]" >Client</TableHead>
-              <TableHead className="text-[#2b2d3b]">Date</TableHead>
-              <TableHead className="text-[#2b2d3b]">ExpireDate</TableHead>
-              <TableHead className="text-[#2b2d3b]">Total</TableHead>
-              <TableHead className="text-[#2b2d3b]">Paid</TableHead>
-              <TableHead className="text-[#2b2d3b]">Status</TableHead>
-              <TableHead className="text-[#2b2d3b]">Payment</TableHead>
-              <TableHead className="text-left text-[#2b2d3b]">Number</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>
+              <TableHead className={`w-[100px] ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Sr.No</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`} >Client</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Date</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>ExpireDate</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Total</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Paid</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Status</TableHead>
+              <TableHead className={`${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Payment</TableHead>
+              <TableHead className={`text-left ${mode ? darkTableColor : "text-[#2b2d3b]"}`}>Number</TableHead>
+              <TableHead className={`text-right ${mode ? darkTableColor : "text-[#2b2d3b]"}`}></TableHead>
             </TableRow>
           </TableHeader>
           {!filteredInvoiceData.length ? (
@@ -132,7 +132,7 @@ const Invoices = () => {
           ) : (
             <TableBody>
               {filteredInvoiceData.map((invoice, id) => (
-                <TableRow key={invoice?._id}>
+                <TableRow key={invoice?._id} className={`${mode ? "border-gray-600" : "border-gray-200"}`}>
                   <TableCell className="font-medium">{id + 1}</TableCell>
                   <TableCell className="font-medium">
                     {invoice?.client}
