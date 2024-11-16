@@ -2,12 +2,8 @@ import { Link } from "react-router-dom"
 import {
   Activity,
   ArrowUpRight,
-  CircleUser,
   CreditCard,
   DollarSign,
-  Menu,
-  Package2,
-  Search,
   Users,
 } from "lucide-react"
 
@@ -43,7 +39,10 @@ export const description =
 
 const Home1 = () => {
 
-const {mode} = useContext(Context)
+const {mode,storeInvoices,allUser} = useContext(Context)
+const totalAmount = storeInvoices.reduce((sum, invoice) => {
+  return sum + invoice.total;
+}, 0);
 
   return (
     <div className={`flex min-h-screen w-full flex-col ${mode ? darkBackground: lightBackground}`}>
@@ -53,12 +52,12 @@ const {mode} = useContext(Context)
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Total Revenue
+                Total Invoices Payment
               </CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
+              <div className="text-2xl font-bold">{totalAmount}</div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
               </p>
@@ -67,12 +66,12 @@ const {mode} = useContext(Context)
           <Card x-chunk="dashboard-01-chunk-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Subscriptions
+                Total Users
               </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
+              <div className="text-2xl font-bold">0{allUser.length}</div>
               <p className="text-xs text-muted-foreground">
                 +180.1% from last month
               </p>
@@ -80,11 +79,11 @@ const {mode} = useContext(Context)
           </Card>
           <Card x-chunk="dashboard-01-chunk-2">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Invoices</CardTitle>
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
+              <div className="text-2xl font-bold">0{storeInvoices.length}</div>
               <p className="text-xs text-muted-foreground">
                 +19% from last month
               </p>
@@ -96,7 +95,7 @@ const {mode} = useContext(Context)
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+573</div>
+              <div className="text-2xl font-bold">0{allUser.length}</div>
               <p className="text-xs text-muted-foreground">
                 +201 since last hour
               </p>
@@ -109,9 +108,9 @@ const {mode} = useContext(Context)
           >
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
-                <CardTitle>Transactions</CardTitle>
+                <CardTitle>Latest Invoices</CardTitle>
                 <CardDescription>
-                  Recent transactions from your store.
+                  Recent Invoices from your store.
                 </CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
@@ -139,7 +138,31 @@ const {mode} = useContext(Context)
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
+                {
+                  storeInvoices.map((invoice) =>{
+                    return (
+                    <TableRow key={invoice?._id}>
+                      <TableCell>
+                        <div className="font-medium">{invoice?.client}</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">
+                          {invoice?.year}
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden xl:table-column">{invoice?.invoiceType}</TableCell>
+                      <TableCell className="hidden xl:table-column">
+                        <Badge className="text-xs" variant="outline">
+                          {invoice?.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                        {invoice?.invoiceDate}
+                      </TableCell>
+                      <TableCell className="text-right">${invoice?.total}</TableCell>
+                    </TableRow>
+                    )
+                  })
+                }
+                  {/* <TableRow>
                     <TableCell>
                       <div className="font-medium">Liam Johnson</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
@@ -158,87 +181,8 @@ const {mode} = useContext(Context)
                       2023-06-23
                     </TableCell>
                     <TableCell className="text-right">$250.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Olivia Smith</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        olivia@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Refund
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Declined
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-24
-                    </TableCell>
-                    <TableCell className="text-right">$150.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Noah Williams</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        noah@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Subscription
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-25
-                    </TableCell>
-                    <TableCell className="text-right">$350.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Emma Brown</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        emma@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Sale
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-26
-                    </TableCell>
-                    <TableCell className="text-right">$450.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        liam@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      Sale
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-27
-                    </TableCell>
-                    <TableCell className="text-right">$550.00</TableCell>
-                  </TableRow>
+                  </TableRow> */}
+                  
                 </TableBody>
               </Table>
             </CardContent>

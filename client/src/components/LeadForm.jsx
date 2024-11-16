@@ -100,11 +100,11 @@ const LeadForm = () => {
                 >
                   {({ setFieldValue, values }) => (
                     <Form className="px-4 sm:px-6 flex flex-col gap-4">
-                      <DialogTitle>Branch</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Branch</DialogTitle>
                       <Field name="leadBranch">
                         {({ field }) => (
                           <Select onValueChange={(value) => setFieldValue(field.name, value)} value={field.value}>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger className="w-full bg-transparent border-gray-500 border">
                               <SelectValue placeholder="Select a Company" />
                             </SelectTrigger>
                             <SelectContent>
@@ -117,11 +117,11 @@ const LeadForm = () => {
                       </Field>
                       <ErrorMessage name="leadBranch" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Type</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Type</DialogTitle>
                       <Field name="leadType">
                         {({ field }) => (
                           <Select onValueChange={(value) => setFieldValue(field.name, value)} value={field.value}>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger className="w-full bg-transparent border-gray-500 border">
                               <SelectValue placeholder="Select a Type" />
                             </SelectTrigger>
                             <SelectContent>
@@ -135,15 +135,15 @@ const LeadForm = () => {
                       </Field>
                       <ErrorMessage name="leadType" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Name</DialogTitle>
-                      <Field name="leadName" as={Input} />
+                      <DialogTitle className={"text-gray-400"}>Name</DialogTitle>
+                      <Field name="leadName" as={Input} className="bg-transparent border-gray-500 border" />
                       <ErrorMessage name="leadName" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Status</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Status</DialogTitle>
                       <Field name="leadStatus">
                         {({ field }) => (
                           <Select onValueChange={(value) => setFieldValue(field.name, value)} value={field.value}>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger className="w-full bg-transparent border-gray-500 border">
                               <SelectValue placeholder="Select a Status" />
                             </SelectTrigger>
                             <SelectContent>
@@ -163,11 +163,11 @@ const LeadForm = () => {
                       </Field>
                       <ErrorMessage name="leadStatus" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Source</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Source</DialogTitle>
                       <Field name="leadSource">
                         {({ field }) => (
                           <Select onValueChange={(value) => setFieldValue(field.name, value)} value={field.value}>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger className="w-full bg-transparent border-gray-500 border">
                               <SelectValue placeholder="Select a Source" />
                             </SelectTrigger>
                             <SelectContent>
@@ -188,14 +188,14 @@ const LeadForm = () => {
                       </Field>
                       <ErrorMessage name="leadSource" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Country</DialogTitle>
-                      <Popover>
-                        <PopoverTrigger asChild>
+                      <DialogTitle className={"text-gray-400"}>Country</DialogTitle>
+                      <Popover className="bg-transparent border-gray-500 border">
+                        <PopoverTrigger asChild className="bg-transparent border-gray-500 border">
                           <Button variant="outline" className="w-full justify-between">
                             {values.leadCountry || "Select country..."}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-full p-0">
+                        <PopoverContent className="w-full p-0 bg-transparent border-gray-500 border">
                           <Command>
                             <CommandInput placeholder="Search country..." />
                             <CommandList>
@@ -223,19 +223,19 @@ const LeadForm = () => {
                       </Popover>
                       <ErrorMessage name="leadCountry" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Phone</DialogTitle>
-                      <Field name="leadPhone" as={Input} type="tel" />
+                      <DialogTitle className={"text-gray-400"}>Phone</DialogTitle>
+                      <Field name="leadPhone" as={Input} type="tel" className="bg-transparent border-gray-500 border" />
                       <ErrorMessage name="leadPhone" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Email</DialogTitle>
-                      <Field name="leadEmail" as={Input} type="email" />
+                      <DialogTitle className={"text-gray-400"}>Email</DialogTitle>
+                      <Field name="leadEmail" as={Input} type="email" className="bg-transparent border-gray-500 border" />
                       <ErrorMessage name="leadEmail" component="div" className="text-red-500 text-sm" />
 
-                      <DialogTitle>Project</DialogTitle>
+                      <DialogTitle className={"text-gray-400"}>Project</DialogTitle>
                       <Field
                         name="leadProject"
                         as="textarea"
-                        className="block w-full px-3 py-2 text-sm"
+                        className="block w-full px-3 py-2 text-sm bg-transparent border-gray-500 border"
                         rows={5}
                       />
                       <ErrorMessage name="leadProject" component="div" className="text-red-500 text-sm" />

@@ -95,7 +95,7 @@ const CompanyForm = () => {
                         onValueChange={(value) => setGetSinglePeopleId(value)}
                         value={getSinglePeopleId}
                       >
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full bg-transparent border-gray-500 border">
                           <SelectValue placeholder="Select a People" />
                         </SelectTrigger>
                         <SelectContent>
@@ -119,7 +119,7 @@ const CompanyForm = () => {
                         onValueChange={(value) => setGetSingleCompanyId(value)}
                         value={getSingleCompanyId}
                       >
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full bg-transparent border-gray-500 border">
                           <SelectValue placeholder="Select a Company" />
                         </SelectTrigger>
                         <SelectContent>

@@ -28,7 +28,7 @@ import { Context } from "./context/Context";
 export default function App() {
   const { user } = useContext(Context);
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full h-screen bg-black">
       <Routes>
         {/* Public Routes */}
         <Route element={<PublicRoutes />}>

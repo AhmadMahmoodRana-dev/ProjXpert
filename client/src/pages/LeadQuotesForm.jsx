@@ -5,13 +5,21 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Context } from "@/context/Context";
+import { darkBackground, lightBackground } from "@/components/Colors";
 
 const LeadQuotesForm = () => {
-  const { showInvoiceButton, setLeadQuotes, storeLeadData, singleLeadQuote,updateLeadQuotes } = useContext(Context);
-  
+  const {
+    showInvoiceButton,
+    setLeadQuotes,
+    storeLeadData,
+    singleLeadQuote,
+    updateLeadQuotes,
+    mode,
+  } = useContext(Context);
+
   // State for initial form data
   const [initialData, setInitialData] = useState({
-    client: "",
+    client: "aaa",
     number: "",
     year: new Date().getFullYear(),
     currency: "USD",
@@ -82,19 +90,31 @@ const LeadQuotesForm = () => {
     currency: Yup.string().required("Currency is required"),
     date: Yup.date().required("Date is required"),
     expireDate: Yup.date().required("Expire Date is required"),
-    items: Yup.array().of(
-      Yup.object({
-        itemName: Yup.string().required("Item Name is required"),
-        quantity: Yup.number().min(1, "Quantity must be at least 1").required("Quantity is required"),
-        price: Yup.number().min(0, "Price must be non-negative").required("Price is required"),
-      })
-    ).required("At least one item is required"),
-    tax: Yup.number().min(0, "Tax must be non-negative").required("Tax is required"),
+    items: Yup.array()
+      .of(
+        Yup.object({
+          itemName: Yup.string().required("Item Name is required"),
+          quantity: Yup.number()
+            .min(1, "Quantity must be at least 1")
+            .required("Quantity is required"),
+          price: Yup.number()
+            .min(0, "Price must be non-negative")
+            .required("Price is required"),
+        })
+      )
+      .required("At least one item is required"),
+    tax: Yup.number()
+      .min(0, "Tax must be non-negative")
+      .required("Tax is required"),
   });
 
   return (
-    <div className="w-full h-auto flex justify-center items-center py-4">
-      <div className="w-[92%] bg-[#ededed] p-4">
+    <div
+      className={`w-full h-auto flex justify-center items-center py-4 ${
+        mode ? darkBackground : lightBackground
+      }`}
+    >
+      <div className={`w-[92%] p-4 ${mode ? darkBackground : lightBackground}`}>
         <Formik
           enableReinitialize
           initialValues={initialData}
@@ -102,7 +122,7 @@ const LeadQuotesForm = () => {
           onSubmit={(values) => {
             console.log("Form values:", values);
             if (showInvoiceButton) {
-              updateLeadQuotes(values); 
+              updateLeadQuotes(values);
             } else {
               setLeadQuotes(values);
             }
@@ -126,91 +146,180 @@ const LeadQuotesForm = () => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Client Field */}
                   <div>
-                    <label htmlFor="client" className="block text-sm font-medium">
+                    <label
+                      htmlFor="client"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Client
                     </label>
-                    <Field as="select" name="client" className="py-2 px-2 border w-full rounded-sm">
+                    <Field
+                      as="select"
+                      name="client"
+                      className="py-2 px-2 border bg-transparent border-gray-600 text-gray-400 w-full rounded-sm"
+                    >
+                      <option value={"ahmad"}>Ahmad </option>
                       {storeLeadData.map((option) => (
                         <option key={option._id} value={option.name}>
                           {option.name}
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="client" component="div" className="text-red-600 text-sm" />
+                    <ErrorMessage
+                      name="client"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Invoice Number */}
                   <div>
-                    <label htmlFor="number" className="block text-sm font-medium">
+                    <label
+                      htmlFor="number"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Number
                     </label>
-                    <Field name="number" type="number" as={Input} />
-                    <ErrorMessage name="number" component="div" className="text-red-600 text-sm" />
+                    <Field
+                      name="number"
+                      type="number"
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
+                    <ErrorMessage
+                      name="number"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Status */}
                   <div>
-                    <label htmlFor="status" className="block text-sm font-medium">
+                    <label
+                      htmlFor="status"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Status
                     </label>
-                    <Field as="select" name="status" className="py-2 px-2 border w-full rounded-sm">
+                    <Field
+                      as="select"
+                      name="status"
+                      className="py-2 px-2 border bg-transparent border-gray-600 text-gray-400 w-full rounded-sm"
+                    >
                       {statusOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="status" component="div" className="text-red-600 text-sm" />
+                    <ErrorMessage
+                      name="status"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Year */}
                   <div>
-                    <label htmlFor="year" className="block text-sm font-medium">
+                    <label
+                      htmlFor="year"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Year
                     </label>
-                    <Field name="year" type="number" as={Input} />
-                    <ErrorMessage name="year" component="div" className="text-red-600 text-sm" />
+                    <Field
+                      name="year"
+                      type="number"
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
+                    <ErrorMessage
+                      name="year"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Currency */}
                   <div>
-                    <label htmlFor="currency" className="block text-sm font-medium">
+                    <label
+                      htmlFor="currency"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Currency
                     </label>
-                    <Field as="select" name="currency" className="py-2 px-2 border w-full">
+                    <Field
+                      as="select"
+                      name="currency"
+                      className="py-2 px-2 border bg-transparent border-gray-600 text-gray-400 w-full"
+                    >
                       {currencyOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="currency" component="div" className="text-red-600 text-sm" />
+                    <ErrorMessage
+                      name="currency"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Date */}
                   <div>
-                    <label htmlFor="date" className="block text-sm font-medium">
+                    <label
+                      htmlFor="date"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Date
                     </label>
-                    <Field name="date" type="date" as={Input} />
-                    <ErrorMessage name="date" component="div" className="text-red-600 text-sm" />
+                    <Field
+                      name="date"
+                      type="date"
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
+                    <ErrorMessage
+                      name="date"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Expire Date */}
                   <div>
-                    <label htmlFor="expireDate" className="block text-sm font-medium">
+                    <label
+                      htmlFor="expireDate"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Expire Date
                     </label>
-                    <Field name="expireDate" type="date" as={Input} />
-                    <ErrorMessage name="expireDate" component="div" className="text-red-600 text-sm" />
+                    <Field
+                      name="expireDate"
+                      type="date"
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
+                    <ErrorMessage
+                      name="expireDate"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   {/* Note */}
                   <div className="col-span-2">
-                    <label htmlFor="note" className="block text-sm font-medium">
+                    <label
+                      htmlFor="note"
+                      className="block py-2 text-gray-400 text-sm font-medium"
+                    >
                       Note
                     </label>
-                    <Field name="note" as={Textarea} />
+                    <Field
+                      name="note"
+                      as={Textarea}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
                   </div>
                 </div>
 
@@ -219,44 +328,84 @@ const LeadQuotesForm = () => {
                   {({ push, remove }) => (
                     <div>
                       {values.items.map((item, index) => (
-                        <div key={index} className="grid grid-cols-5 gap-4 mb-4">
+                        <div
+                          key={index}
+                          className="grid grid-cols-5 gap-4 mb-4"
+                        >
                           {/* Item Name */}
                           <div>
-                            <label className="block text-sm font-medium">Item Name</label>
-                            <Field name={`items.${index}.itemName`} as={Input} />
-                            <ErrorMessage name={`items.${index}.itemName`} component="div" className="text-red-600 text-sm" />
+                            <label className="block py-2 text-gray-400 text-sm font-medium">
+                              Item Name
+                            </label>
+                            <Field
+                              name={`items.${index}.itemName`}
+                              as={Input}
+                              className="bg-transparent border-gray-600 text-gray-400"
+                            />
+                            <ErrorMessage
+                              name={`items.${index}.itemName`}
+                              component="div"
+                              className="text-red-600 text-sm"
+                            />
                           </div>
 
                           {/* Description */}
                           <div>
-                            <label className="block text-sm font-medium">Description</label>
-                            <Field name={`items.${index}.descriptionName`} as={Input} />
+                            <label className="block py-2 text-gray-400 text-sm font-medium">
+                              Description
+                            </label>
+                            <Field
+                              name={`items.${index}.descriptionName`}
+                              as={Input}
+                              className="bg-transparent border-gray-600 text-gray-400"
+                            />
                           </div>
 
                           {/* Quantity */}
                           <div>
-                            <label className="block text-sm font-medium">Quantity</label>
+                            <label className="block py-2 text-gray-400 text-sm font-medium">
+                              Quantity
+                            </label>
                             <Field
                               name={`items.${index}.quantity`}
                               as={Input}
                               type="number"
+                              className="bg-transparent border-gray-600 text-gray-400"
                             />
-                            <ErrorMessage name={`items.${index}.quantity`} component="div" className="text-red-600 text-sm" />
+                            <ErrorMessage
+                              name={`items.${index}.quantity`}
+                              component="div"
+                              className="text-red-600 text-sm"
+                            />
                           </div>
 
                           {/* Price */}
                           <div>
-                            <label className="block text-sm font-medium">Price</label>
-                            <Field name={`items.${index}.price`} as={Input} type="number" />
-                            <ErrorMessage name={`items.${index}.price`} component="div" className="text-red-600 text-sm" />
+                            <label className="block py-2 text-gray-400 text-sm font-medium">
+                              Price
+                            </label>
+                            <Field
+                              name={`items.${index}.price`}
+                              as={Input}
+                              type="number"
+                              className="bg-transparent border-gray-600 text-gray-400"
+                            />
+                            <ErrorMessage
+                              name={`items.${index}.price`}
+                              component="div"
+                              className="text-red-600 text-sm"
+                            />
                           </div>
 
                           {/* Total */}
                           <div>
-                            <label className="block text-sm font-medium">Total</label>
+                            <label className="block py-2 text-gray-400 text-sm font-medium">
+                              Total
+                            </label>
                             <Field
                               name={`items.${index}.total`}
                               value={item.quantity * item.price}
+                              className="bg-transparent border-gray-600 text-gray-400"
                               readOnly
                               as={Input}
                             />
@@ -264,10 +413,9 @@ const LeadQuotesForm = () => {
 
                           <div className="flex justify-end items-center col-span-5">
                             <Button
-                              variant="ghost"
+                              variant="destructive"
                               type="button"
                               onClick={() => remove(index)}
-                              className="text-red-600"
                             >
                               Remove
                             </Button>
@@ -276,7 +424,6 @@ const LeadQuotesForm = () => {
                       ))}
 
                       <Button
-                        variant="primary"
                         type="button"
                         onClick={() =>
                           push({
@@ -297,23 +444,50 @@ const LeadQuotesForm = () => {
                 {/* Subtotal, Tax, Total */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium">SubTotal</label>
-                    <Field name="subTotal" value={values.subTotal} readOnly as={Input} />
+                    <label className="block py-2 text-gray-400 text-sm font-medium">
+                      SubTotal
+                    </label>
+                    <Field
+                      name="subTotal"
+                      value={values.subTotal}
+                      readOnly
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium">Tax</label>
-                    <Field name="tax" type="number" as={Input} />
-                    <ErrorMessage name="tax" component="div" className="text-red-600 text-sm" />
+                    <label className="block py-2 text-gray-400 text-sm font-medium">
+                      Tax
+                    </label>
+                    <Field
+                      name="tax"
+                      type="number"
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
+                    <ErrorMessage
+                      name="tax"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium">Total</label>
-                    <Field name="total" value={values.total} readOnly as={Input} />
+                    <label className="block py-2 text-gray-400 text-sm font-medium">
+                      Total
+                    </label>
+                    <Field
+                      name="total"
+                      value={values.total}
+                      readOnly
+                      as={Input}
+                      className="bg-transparent border-gray-600 text-gray-400"
+                    />
                   </div>
                 </div>
 
-                <Button variant="primary" type="submit">
+                <Button type="submit">
                   {showInvoiceButton ? "Update Invoice" : "Save Quotes"}
                 </Button>
               </Form>

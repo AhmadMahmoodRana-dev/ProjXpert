@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Context } from "@/context/Context";
+import { darkBackground, lightBackground } from "@/components/Colors";
 
 const InvoicesForm = () => {
-  const { showInvoiceButton, setInvoice, storeCustomerData, singleInvoice,updateInvoice } = useContext(Context);
+  const { showInvoiceButton, setInvoice, storeCustomerData, singleInvoice,updateInvoice,mode } = useContext(Context);
   
   // State for initial form data
   const [initialData, setInitialData] = useState({
@@ -93,8 +94,8 @@ const InvoicesForm = () => {
   });
 
   return (
-    <div className="w-full h-auto flex justify-center items-center py-4">
-      <div className="w-[92%] bg-[#ededed] p-4">
+    <div className={`w-full h-auto flex justify-center items-center py-4 ${mode ? darkBackground: lightBackground}`}>
+      <div className={`w-[92%] p-4 ${mode ? darkBackground: lightBackground}`}>
         <Formik
           enableReinitialize
           initialValues={initialData}
@@ -129,7 +130,7 @@ const InvoicesForm = () => {
                     <label htmlFor="client" className="block text-sm font-medium">
                       Client
                     </label>
-                    <Field as="select" name="client" className="py-2 px-2 border w-full rounded-sm">
+                    <Field as="select" name="client" className="py-2 bg-transparent border-gray-600 text-gray-400 px-2 border w-full rounded-sm">
                       {storeCustomerData.map((option) => (
                         <option key={option._id} value={option.name}>
                           {option.name}
@@ -141,19 +142,19 @@ const InvoicesForm = () => {
 
                   {/* Invoice Number */}
                   <div>
-                    <label htmlFor="number" className="block text-sm font-medium">
+                    <label htmlFor="number" className="block text-sm font-medium text-gray-400">
                       Number
                     </label>
-                    <Field name="number" type="number" as={Input} />
+                    <Field name="number" type="number" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                     <ErrorMessage name="number" component="div" className="text-red-600 text-sm" />
                   </div>
 
                   {/* Status */}
                   <div>
-                    <label htmlFor="status" className="block text-sm font-medium">
+                    <label htmlFor="status" className="block text-sm font-medium text-gray-400">
                       Status
                     </label>
-                    <Field as="select" name="status" className="py-2 px-2 border w-full rounded-sm">
+                    <Field as="select" name="status" className="py-2 px-2 border w-full rounded-sm bg-transparent border-gray-600 text-gray-400">
                       {statusOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
@@ -165,19 +166,19 @@ const InvoicesForm = () => {
 
                   {/* Year */}
                   <div>
-                    <label htmlFor="year" className="block text-sm font-medium">
+                    <label htmlFor="year" className="block text-sm font-medium text-gray-400">
                       Year
                     </label>
-                    <Field name="year" type="number" as={Input} />
+                    <Field name="year" type="number" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                     <ErrorMessage name="year" component="div" className="text-red-600 text-sm" />
                   </div>
 
                   {/* Currency */}
                   <div>
-                    <label htmlFor="currency" className="block text-sm font-medium">
+                    <label htmlFor="currency" className="block text-sm font-medium text-gray-400">
                       Currency
                     </label>
-                    <Field as="select" name="currency" className="py-2 px-2 border w-full">
+                    <Field as="select" name="currency" className="py-2 px-2 border w-full bg-transparent border-gray-600 text-gray-400">
                       {currencyOptions.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
@@ -189,28 +190,28 @@ const InvoicesForm = () => {
 
                   {/* Date */}
                   <div>
-                    <label htmlFor="date" className="block text-sm font-medium">
+                    <label htmlFor="date" className="block text-sm font-medium text-gray-400">
                       Date
                     </label>
-                    <Field name="date" type="date" as={Input} />
+                    <Field name="date" type="date" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                     <ErrorMessage name="date" component="div" className="text-red-600 text-sm" />
                   </div>
 
                   {/* Expire Date */}
                   <div>
-                    <label htmlFor="expireDate" className="block text-sm font-medium">
+                    <label htmlFor="expireDate" className="block text-sm font-medium text-gray-400">
                       Expire Date
                     </label>
-                    <Field name="expireDate" type="date" as={Input} />
+                    <Field name="expireDate" type="date" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                     <ErrorMessage name="expireDate" component="div" className="text-red-600 text-sm" />
                   </div>
 
                   {/* Note */}
                   <div className="col-span-2">
-                    <label htmlFor="note" className="block text-sm font-medium">
+                    <label htmlFor="note" className="block text-sm font-medium text-gray-400">
                       Note
                     </label>
-                    <Field name="note" as={Textarea} />
+                    <Field name="note" as={Textarea} className="bg-transparent border-gray-600 text-gray-400" />
                   </div>
                 </div>
 
@@ -222,52 +223,55 @@ const InvoicesForm = () => {
                         <div key={index} className="grid grid-cols-5 gap-4 mb-4">
                           {/* Item Name */}
                           <div>
-                            <label className="block text-sm font-medium">Item Name</label>
-                            <Field name={`items.${index}.itemName`} as={Input} />
+                            <label className="block text-sm font-medium text-gray-400">Item Name</label>
+                            <Field name={`items.${index}.itemName`} as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                             <ErrorMessage name={`items.${index}.itemName`} component="div" className="text-red-600 text-sm" />
                           </div>
 
                           {/* Description */}
                           <div>
-                            <label className="block text-sm font-medium">Description</label>
-                            <Field name={`items.${index}.descriptionName`} as={Input} />
+                            <label className="block text-sm font-medium text-gray-400">Description</label>
+                            <Field name={`items.${index}.descriptionName`} as={Input}  className="bg-transparent border-gray-600 text-gray-400 " />
                           </div>
 
                           {/* Quantity */}
                           <div>
-                            <label className="block text-sm font-medium">Quantity</label>
+                            <label className="block text-sm font-medium text-gray-400">Quantity</label>
                             <Field
                               name={`items.${index}.quantity`}
                               as={Input}
                               type="number"
+                              className="bg-transparent border-gray-600 text-gray-400"
                             />
                             <ErrorMessage name={`items.${index}.quantity`} component="div" className="text-red-600 text-sm" />
                           </div>
 
                           {/* Price */}
                           <div>
-                            <label className="block text-sm font-medium">Price</label>
-                            <Field name={`items.${index}.price`} as={Input} type="number" />
+                            <label className="block text-sm font-medium text-gray-400">Price</label>
+                            <Field name={`items.${index}.price`} as={Input} type="number" 
+                            className="bg-transparent border-gray-600 text-gray-400" />
                             <ErrorMessage name={`items.${index}.price`} component="div" className="text-red-600 text-sm" />
                           </div>
 
                           {/* Total */}
                           <div>
-                            <label className="block text-sm font-medium">Total</label>
+                            <label className="block text-sm font-medium 
+                            text-gray-400">Total</label>
                             <Field
                               name={`items.${index}.total`}
                               value={item.quantity * item.price}
                               readOnly
+                              className="bg-transparent border-gray-600 text-gray-400"
                               as={Input}
                             />
                           </div>
 
                           <div className="flex justify-end items-center col-span-5">
                             <Button
-                              variant="ghost"
+                              variant="destructive"
                               type="button"
                               onClick={() => remove(index)}
-                              className="text-red-600"
                             >
                               Remove
                             </Button>
@@ -276,7 +280,6 @@ const InvoicesForm = () => {
                       ))}
 
                       <Button
-                        variant="primary"
                         type="button"
                         onClick={() =>
                           push({
@@ -297,23 +300,23 @@ const InvoicesForm = () => {
                 {/* Subtotal, Tax, Total */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium">SubTotal</label>
-                    <Field name="subTotal" value={values.subTotal} readOnly as={Input} />
+                    <label className="block text-gray-400 text-sm font-medium">SubTotal</label>
+                    <Field name="subTotal" value={values.subTotal} readOnly as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium">Tax</label>
-                    <Field name="tax" type="number" as={Input} />
+                    <label className="block text-gray-400 text-sm font-medium">Tax</label>
+                    <Field name="tax" type="number" as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                     <ErrorMessage name="tax" component="div" className="text-red-600 text-sm" />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium">Total</label>
-                    <Field name="total" value={values.total} readOnly as={Input} />
+                    <label className="block text-gray-400 text-sm font-medium">Total</label>
+                    <Field name="total" value={values.total} readOnly as={Input} className="bg-transparent border-gray-600 text-gray-400" />
                   </div>
                 </div>
 
-                <Button variant="primary" type="submit">
+                <Button  type="submit">
                   {showInvoiceButton ? "Update Invoice" : "Save Invoice"}
                 </Button>
               </Form>
