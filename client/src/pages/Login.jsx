@@ -26,7 +26,7 @@ const Login = () => {
   };
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 w-full bg-white">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
@@ -55,7 +55,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 px-2"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#20bb59] placeholder:text-[#20bb59] focus:ring-2 focus:ring-inset focus:ring-[#20bb59] sm:text-sm/6 px-2"
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#20bb59] placeholder:text-[#20bb59] focus:ring-2 focus:ring-inset focus:ring-[#20bb59] sm:text-sm/6 px-2"
                 />
               </div>
             </div>
@@ -86,7 +86,7 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md border border-[#20bb59] px-3 py-1.5 text-sm/6 font-semibold text-[#20bb59] hover:text-white hover:border-white shadow-sm hover:bg-[#20bb59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
               >
                 Sign in
               </button>

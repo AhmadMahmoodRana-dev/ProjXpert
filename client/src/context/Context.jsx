@@ -1,13 +1,13 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Context = createContext();
 
 const ContextProvider = (props) => {
   const navigate = useNavigate();
   const [countryData, setCountryData] = useState([]);
-
   const [mode, setMode] = useState(() => {
     const savedMode = localStorage.getItem("mode");
     return savedMode ? JSON.parse(savedMode) : false;
@@ -110,10 +110,10 @@ const ContextProvider = (props) => {
   const [updateLeadQuotesId, setUpdateLeadQuotesId] = useState("");
   const [quotesLeadSearchTerm, setQuotesLeadSearchTerm] = useState("");
 
-// ## USERS 
-const [allUser,setAllUser] = useState([])
-const [user, setUser] = useState(null);
-const [openUserForm,setOpenUserForm] = useState(false)
+  // ## USERS
+  const [allUser, setAllUser] = useState([]);
+  const [user, setUser] = useState(null);
+  const [openUserForm, setOpenUserForm] = useState(false);
   // ### PEOPLE FORM API ###
 
   // post
@@ -131,16 +131,19 @@ const [openUserForm,setOpenUserForm] = useState(false)
           phone: val.phone,
           email: val.email,
           type: "people",
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
       setOpenPersonForm(false);
+      toast.success("Successfully Add People !")
       getPeople();
       console.log("Form submitted", result);
     } catch (error) {
+      toast.error(error)
       console.log("Error", error);
     }
   };
@@ -151,7 +154,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-people`,{
+        `http://localhost:1337/api/form/get-people`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -168,7 +172,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-people/${id}`,{
+        `http://localhost:1337/api/form/delete-people/${id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -187,7 +192,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-people/${people._id}`,{
+        `http://localhost:1337/api/form/get-single-people/${people._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -215,7 +221,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           country: value.country,
           phone: value.phone,
           email: value.email,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -233,7 +240,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
   const getPeopleDetail = async (id) => {
     const token = localStorage.getItem("token");
     const result = await axios.get(
-      `http://localhost:1337/api/form/get-single-people/${id}`,{
+      `http://localhost:1337/api/form/get-single-people/${id}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -264,7 +272,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           phone: val.phone,
           email: val.email,
           type: "company",
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -284,7 +293,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-company`,{
+        `http://localhost:1337/api/form/get-company`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -301,7 +311,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-company/${id}`,{
+        `http://localhost:1337/api/form/delete-company/${id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -320,7 +331,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-company/${company._id}`,{
+        `http://localhost:1337/api/form/get-single-company/${company._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -349,7 +361,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           country: val.country,
           phone: val.phone,
           email: val.email,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -365,7 +378,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
   const getCompanyDetail = async (id) => {
     const token = localStorage.getItem("token");
     const result = await axios.get(
-      `http://localhost:1337/api/form/get-single-company/${id}`,{
+      `http://localhost:1337/api/form/get-single-company/${id}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -398,7 +412,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           phone: val.leadPhone,
           email: val.leadEmail,
           project: val.leadProject,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -418,7 +433,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-lead`,{
+        `http://localhost:1337/api/form/get-lead`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -435,7 +451,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-lead/${id}`,{
+        `http://localhost:1337/api/form/delete-lead/${id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -454,7 +471,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-lead/${Lead._id}`,{
+        `http://localhost:1337/api/form/get-single-lead/${Lead._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -503,7 +521,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
   const getLeadDetail = async (id) => {
     const token = localStorage.getItem("token");
     const result = await axios.get(
-      `http://localhost:1337/api/form/get-single-lead/${id}`,{
+      `http://localhost:1337/api/form/get-single-lead/${id}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -522,24 +541,29 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-company/${getSingleCompanyId}`,{
+        `http://localhost:1337/api/form/get-single-company/${getSingleCompanyId}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
       data
-        ? await axios.post(`http://localhost:1337/api/form/post-customer`, {
-            name: data.name,
-            country: data.country,
-            phone: data.phone,
-            email: data.email,
-            type: data.type,
-          },{
-            headers: {
-              Authorization: `Bearer ${token}`,
+        ? await axios.post(
+            `http://localhost:1337/api/form/post-customer`,
+            {
+              name: data.name,
+              country: data.country,
+              phone: data.phone,
+              email: data.email,
+              type: data.type,
             },
-          })
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
         : console.log("null");
     } catch (error) {
       console.log("Error fetching company data:", error);
@@ -556,7 +580,7 @@ const [openUserForm,setOpenUserForm] = useState(false)
           },
         }
       );
-  
+
       if (data) {
         await axios.post(
           `http://localhost:1337/api/form/post-customer`,
@@ -581,15 +605,14 @@ const [openUserForm,setOpenUserForm] = useState(false)
       console.error("Error in storeSingleCustomerPeople:", error);
     }
   };
-  
-
 
   // ## GET DATA
   const getCustomerData = async () => {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-customer`,{
+        `http://localhost:1337/api/form/get-customer`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -605,7 +628,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const result = await axios.delete(
-        `http://localhost:1337/api/form/delete-customer/${customerId}`,{
+        `http://localhost:1337/api/form/delete-customer/${customerId}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -624,7 +648,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form//get-customer/${customer.name}`,{
+        `http://localhost:1337/api/form//get-customer/${customer.name}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -649,7 +674,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
       const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-invoice`,
-        invoice,{
+        invoice,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -669,7 +695,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-invoice`,{
+        `http://localhost:1337/api/form/get-invoice`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -687,7 +714,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-invoice/${invoiceId}`,{
+        `http://localhost:1337/api/form/delete-invoice/${invoiceId}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -705,7 +733,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`,{
+        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -725,7 +754,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-invoice/${invoice}`,{
+        `http://localhost:1337/api/form/get-single-invoice/${invoice}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -743,7 +773,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`,{
+        `http://localhost:1337/api/form/get-single-invoice/${invoice._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -768,7 +799,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
         `http://localhost:1337/api/form/update-invoice/${id}`,
         {
           paidAmount: value.amount,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -807,7 +839,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           subTotal: value.subTotal,
           tax: value.tax,
           total: value.total,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -831,7 +864,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-expensecategory`,{
+        `http://localhost:1337/api/form/get-expensecategory`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -849,7 +883,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
       const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-expensecategory`,
-        expensecategory,{
+        expensecategory,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -870,7 +905,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-expensecategory/${Id}`,{
+        `http://localhost:1337/api/form/delete-expensecategory/${Id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -889,7 +925,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`,{
+        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -907,7 +944,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`,{
+        `http://localhost:1337/api/form/get-single-expensecategory/${ExpenseCategory._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -933,7 +971,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           description: val.description,
           color: val.color,
           enabled: val.enabled,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -954,7 +993,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-productcategory`,{
+        `http://localhost:1337/api/form/get-productcategory`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -972,7 +1012,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
       const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-productcategory`,
-        Productcategory,{
+        Productcategory,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -993,7 +1034,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-productcategory/${Id}`,{
+        `http://localhost:1337/api/form/delete-productcategory/${Id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1012,7 +1054,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`,{
+        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1030,7 +1073,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`,{
+        `http://localhost:1337/api/form/get-single-productcategory/${ProductCategory._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1056,7 +1100,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           description: val.description,
           color: val.color,
           enabled: val.enabled,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1078,7 +1123,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
       const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-expense`,
-        expense,{
+        expense,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1095,7 +1141,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-expense`,{
+        `http://localhost:1337/api/form/get-expense`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1112,11 +1159,14 @@ const [openUserForm,setOpenUserForm] = useState(false)
   const deleteExpense = async (Id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:1337/api/form/delete-expense/${Id}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-expense/${Id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("Expense deleted successfully!");
       getExpense();
     } catch (error) {
@@ -1130,7 +1180,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`,{
+        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1147,7 +1198,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`,{
+        `http://localhost:1337/api/form/get-single-expense/${Expense._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1175,7 +1227,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           total: val.total,
           description: val.description,
           ref: val.ref,
-        },{
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1198,7 +1251,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
       const token = localStorage.getItem("token");
       const result = await axios.post(
         `http://localhost:1337/api/form/post-product`,
-        Product,{
+        Product,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1215,7 +1269,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-product`,{
+        `http://localhost:1337/api/form/get-product`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1232,11 +1287,14 @@ const [openUserForm,setOpenUserForm] = useState(false)
   const deleteProduct = async (Id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:1337/api/form/delete-product/${Id}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `http://localhost:1337/api/form/delete-product/${Id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("Product deleted successfully!");
       getProduct();
     } catch (error) {
@@ -1250,7 +1308,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-product/${Product._id}`,{
+        `http://localhost:1337/api/form/get-single-product/${Product._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1267,7 +1326,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-product/${Product._id}`,{
+        `http://localhost:1337/api/form/get-single-product/${Product._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1365,7 +1425,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:1337/api/form/delete-lead-quotes/${LeadQuotes}`, {
+        `http://localhost:1337/api/form/delete-lead-quotes/${LeadQuotes}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1384,7 +1445,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`, {
+        `http://localhost:1337/api/form/get-single-quote-lead/${LeadQuotes._id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1427,7 +1489,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
           subTotal: value.subTotal,
           tax: value.tax,
           total: value.total,
-        }, {
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1466,11 +1529,10 @@ const [openUserForm,setOpenUserForm] = useState(false)
     getExpense();
     getProduct();
     getLeadQuotes();
-    getUsers()
+    getUsers();
   }, []);
 
   // 33333333333              AUTHENTICATION       3333333333333333
-
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -1482,18 +1544,20 @@ const [openUserForm,setOpenUserForm] = useState(false)
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post("http://localhost:1337/api/form/login", {
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        "http://localhost:1337/api/form/login",
+        {
+          email,
+          password,
+        }
+      );
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       setUser({ role: data.role });
-      window.location.reload();  
+      window.location.reload();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
   };
 
   const logout = () => {
@@ -1502,8 +1566,8 @@ const [openUserForm,setOpenUserForm] = useState(false)
     setUser(null);
   };
 
-// ## GET USERS
-const getUsers = async ( ) =>{
+  // ## GET USERS
+  const getUsers = async () => {
     const token = localStorage.getItem("token");
     const { data } = await axios.get(
       "http://localhost:1337/api/form/get-users",
@@ -1515,27 +1579,23 @@ const getUsers = async ( ) =>{
     );
     setAllUser(data);
     console.log("Users fetched successfully", data);
- 
-}
+  };
 
-//  DELETE USERS
-const deleteUser = async (user) => {
-  try {
-    const token = localStorage.getItem("token");
-    await axios.delete(
-      `http://localhost:1337/api/form/delete-user/${user}`, {
+  //  DELETE USERS
+  const deleteUser = async (user) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:1337/api/form/delete-user/${user}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    console.log("user deleted successfully!");
-    getUsers();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+      });
+      console.log("user deleted successfully!");
+      getUsers();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // ######################################################################################################################################
 
@@ -1725,9 +1785,9 @@ const deleteUser = async (user) => {
     logout,
     allUser,
     getUsers,
-    openUserForm,setOpenUserForm,
-    deleteUser
-
+    openUserForm,
+    setOpenUserForm,
+    deleteUser,
   };
 
   return (
